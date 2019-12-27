@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ConformalPredictionCalibrator-Node extension for KNIME Workbench
+Bundle-SymbolicName: se.redfield.cp; singleton:=true
+Bundle-Version: 0.0.1.qualifier
+Bundle-ClassPath: conformalpredictioncalibrator.jar
+Bundle-Activator: se.redfield.cp.ConformalPredictionPlugin
+Bundle-Vendor: Redfield AB
+Require-Bundle: org.eclipse.core.runtime,
+ org.knime.workbench.core,
+ org.knime.workbench.repository,
+ org.knime.base
+Bundle-ActivationPolicy: lazy
+Export-Package: se.redfield.cp
+
