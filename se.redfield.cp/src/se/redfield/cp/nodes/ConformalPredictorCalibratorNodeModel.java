@@ -28,16 +28,6 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
-/**
- * This is an example implementation of the node model of the
- * "ConformalPredictionCalibrator" node.
- * 
- * This example node performs simple number formatting
- * ({@link String#format(String, Object...)}) using a user defined format string
- * on all double columns of its input table.
- *
- * @author Redfield AB
- */
 public class ConformalPredictorCalibratorNodeModel extends NodeModel {
 
 	/**
@@ -49,7 +39,7 @@ public class ConformalPredictorCalibratorNodeModel extends NodeModel {
 
 	private static final String KEY_COLUMN_NAME = "columnName";
 
-	private static final String P_COLUMN_DEFAULT_NAME = "Calibration P";
+	public static final String P_COLUMN_DEFAULT_NAME = "Calibration P";
 	private static final String SCORE_COLUMN_DEFAULT_NAME = "Calibration Score";
 
 	private final SettingsModelString columnNameSettings = createColumnNameSettingsModel();
