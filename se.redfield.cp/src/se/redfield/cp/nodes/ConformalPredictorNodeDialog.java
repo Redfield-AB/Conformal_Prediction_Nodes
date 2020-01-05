@@ -13,6 +13,6 @@ public class ConformalPredictorNodeDialog extends DefaultNodeSettingsPane {
 
 		SettingsModelString columnSettings = ConformalPredictorNodeModel.createColumnNameSettingsModel();
 		addDialogComponent(new DialogComponentColumnNameSelection(columnSettings, "Column:",
-				ConformalPredictorNodeModel.PORT_PREDICTION_TABLE, DataValue.class));
+				ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE, DataValue.class));
 	}
 }

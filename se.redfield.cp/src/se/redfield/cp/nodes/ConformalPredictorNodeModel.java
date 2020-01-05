@@ -2,7 +2,11 @@ package se.redfield.cp.nodes;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import org.knime.core.data.DataCell;
+import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -28,7 +32,7 @@ public class ConformalPredictorNodeModel extends NodeModel {
 
 	private static final String CALIBRATION_P_COLUMN_DEFAULT_NAME = "P";
 	private static final String CALIBRATION_RANK_COLUMN_DEFAULT_NAME = "Rank";
-	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Index (%s)";
+	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
 	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "Score (%s)";
 
 	private final SettingsModelString columnNameSettings = createColumnNameSettingsModel();
@@ -45,7 +49,11 @@ public class ConformalPredictorNodeModel extends NodeModel {
 	}
 
 	public String getProbabilityColumnName(String val) {
-		return String.format(String.format("P (%s=%s)", getSelectedColumnName(), val));
+		return getProbabilityColumnName(getSelectedColumnName(), val);
+	}
+
+	public String getProbabilityColumnName(String column, String val) {
+		return String.format(String.format("P (%s=%s)", column, val));
 	}
 
 	public String getSelectedColumnName() {
@@ -81,6 +89,14 @@ public class ConformalPredictorNodeModel extends NodeModel {
 			attemptAutoconfig(inSpecs[PORT_CALIBRATION_TABLE]);
 		}
 
+		if (getSelectedColumnName().isEmpty()) {
+			throw new InvalidSettingsException("Class column is not selected");
+		}
+
+		validateTableSpecs(inSpecs[PORT_CALIBRATION_TABLE], "Calibration table");
+		validateTableSpecs(inSpecs[PORT_PREDICTION_TABLE], "Prediction table");
+		checkAllClassesPresent(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
+
 		calibrator = new Calibrator(this);
 		predictor = new Predictor(this, calibrator);
 
@@ -88,8 +104,56 @@ public class ConformalPredictorNodeModel extends NodeModel {
 				predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]) };
 	}
 
+	private void validateTableSpecs(DataTableSpec spec, String tableName) throws InvalidSettingsException {
+		try {
+			validateTableSpecs(getSelectedColumnName(), spec);
+		} catch (InvalidSettingsException e) {
+			throw new InvalidSettingsException(tableName + " : " + e.getMessage());
+		}
+	}
+
+	private void validateTableSpecs(String selectedColumn, DataTableSpec spec) throws InvalidSettingsException {
+		DataColumnSpec columnSpec = spec.getColumnSpec(selectedColumn);
+		if (!columnSpec.getDomain().hasValues()) {
+			throw new InvalidSettingsException("Insufficient domain information for column: " + selectedColumn);
+		}
+
+		Set<DataCell> values = columnSpec.getDomain().getValues();
+		for (DataCell cell : values) {
+			String value = cell.toString();
+			String pColumnName = getProbabilityColumnName(selectedColumn, value);
+			if (!spec.containsName(pColumnName)) {
+				throw new InvalidSettingsException("Probability column not found: " + pColumnName);
+			}
+		}
+	}
+
+	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
+			throws InvalidSettingsException {
+		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getSelectedColumnName()).getDomain()
+				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getSelectedColumnName()).getDomain()
+				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+
+		for (String val : predictionValues) {
+			if (!calibrationClasses.contains(val)) {
+				throw new InvalidSettingsException(
+						String.format("Class '%s' is missing in the calibration table", val));
+			}
+		}
+	}
+
 	private void attemptAutoconfig(DataTableSpec spec) {
-		// TODO
+		String[] columnNames = spec.getColumnNames();
+		for (String column : columnNames) {
+			try {
+				validateTableSpecs(column, spec);
+				columnNameSettings.setStringValue(column);
+				setWarningMessage(String.format("Node autoconfigured with '%s' column", column));
+			} catch (InvalidSettingsException e) {
+				// ignore
+			}
+		}
 	}
 
 	@Override
