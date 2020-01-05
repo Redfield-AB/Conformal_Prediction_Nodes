@@ -18,9 +18,6 @@
          point="org.knime.workbench.repository.nodes">
       <node
             category-path="/"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory"/>
-      <node
-            category-path="/"
             factory-class="se.redfield.cp.nodes.ConformalPredictorNodeFactory">
       </node>
       <node

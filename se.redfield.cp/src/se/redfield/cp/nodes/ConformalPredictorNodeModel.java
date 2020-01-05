@@ -19,7 +19,7 @@ import se.redfield.cp.Calibrator;
 import se.redfield.cp.Predictor;
 
 public class ConformalPredictorNodeModel extends NodeModel {
-	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorCalibratorNodeModel.class);
+	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorNodeModel.class);
 
 	public static final int PORT_CALIBRATION_TABLE = 0;
 	public static final int PORT_PREDICTION_TABLE = 1;
