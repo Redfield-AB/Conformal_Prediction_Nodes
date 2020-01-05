@@ -23,6 +23,11 @@
             category-path="/"
             factory-class="se.redfield.cp.nodes.ConformalPredictorNodeFactory">
       </node>
+      <node
+            category-path="/"
+            deprecated="false"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorClassifierNodeFactory">
+      </node>
    </extension>
    
 </plugin>

@@ -28,6 +28,8 @@ public class ConformalPredictorNodeModel extends NodeModel {
 
 	private static final String CALIBRATION_P_COLUMN_DEFAULT_NAME = "P";
 	private static final String CALIBRATION_RANK_COLUMN_DEFAULT_NAME = "Rank";
+	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Index (%s)";
+	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "Score (%s)";
 
 	private final SettingsModelString columnNameSettings = createColumnNameSettingsModel();
 
@@ -58,6 +60,14 @@ public class ConformalPredictorNodeModel extends NodeModel {
 		return CALIBRATION_RANK_COLUMN_DEFAULT_NAME;
 	}
 
+	public String getPredictionRankColumnFormat() {
+		return PREDICTION_RANK_COLUMN_DEFAULT_FORMAT;
+	}
+
+	public String getPredictionScoreColumnFormat() {
+		return PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT;
+	}
+
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
 		calibrator.process(inData[PORT_CALIBRATION_TABLE], exec);
@@ -67,11 +77,19 @@ public class ConformalPredictorNodeModel extends NodeModel {
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
+		if (getSelectedColumnName().isEmpty()) {
+			attemptAutoconfig(inSpecs[PORT_CALIBRATION_TABLE]);
+		}
+
 		calibrator = new Calibrator(this);
 		predictor = new Predictor(this, calibrator);
 
 		return new DataTableSpec[] { calibrator.createOutputSpec(inSpecs[PORT_CALIBRATION_TABLE]),
 				predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]) };
+	}
+
+	private void attemptAutoconfig(DataTableSpec spec) {
+		// TODO
 	}
 
 	@Override

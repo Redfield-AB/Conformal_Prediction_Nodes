@@ -47,10 +47,10 @@ public class Predictor {
 	}
 
 	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
-		DataColumnSpec indexCol = new DataColumnSpecCreator(String.format("Index (%s)", value), LongCell.TYPE)
-				.createSpec();
-		DataColumnSpec scoreCol = new DataColumnSpecCreator(String.format("Score (%s)", value), DoubleCell.TYPE)
-				.createSpec();
+		DataColumnSpec indexCol = new DataColumnSpecCreator(String.format(model.getPredictionRankColumnFormat(), value),
+				LongCell.TYPE).createSpec();
+		DataColumnSpec scoreCol = new DataColumnSpecCreator(
+				String.format(model.getPredictionScoreColumnFormat(), value), DoubleCell.TYPE).createSpec();
 		return new DataColumnSpec[] { indexCol, scoreCol };
 	}
 
