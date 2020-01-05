@@ -11,5 +11,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.knime.workbench.repository,
  org.knime.base
 Bundle-ActivationPolicy: lazy
-Export-Package: se.redfield.cp
+Export-Package: se.redfield.cp,
+ se.redfield.cp.nodes,
+ se.redfield.cp.utils
 
