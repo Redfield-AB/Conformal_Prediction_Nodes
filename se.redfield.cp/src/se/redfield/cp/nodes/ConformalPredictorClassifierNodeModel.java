@@ -36,8 +36,11 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	private static final double DEFAULT_SCORE_THRESHOLD = 0.8;
 	public static final String DEFAULT_SCORE_COLUMN_PATTERN = "^Score \\((?<value>.+)\\)$";
+	private static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 
 	private static final SettingsModelDoubleBounded scoreThresholdSettings = createScoreThresholdSettings();
+
+	private ColumnRearranger rearranger;
 
 	static SettingsModelDoubleBounded createScoreThresholdSettings() {
 		return new SettingsModelDoubleBounded(KEY_SCORE_THRESHOLD, DEFAULT_SCORE_THRESHOLD, 0, 1);
@@ -55,32 +58,40 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		return DEFAULT_SCORE_COLUMN_PATTERN;
 	}
 
+	private String getClassesColumnName() {
+		return DEFAULT_CLASSES_COLUMN_NAME;
+	}
+
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		BufferedDataTable inTable = inData[0];
-		ColumnRearranger rearranger = createRearranger(inTable.getDataTableSpec());
-		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inTable, rearranger, exec) };
+		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inData[0], rearranger, exec) };
 	}
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		return new DataTableSpec[] { createOutTableSpec(inSpecs[0]) };
+		Map<String, Integer> scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern()).match(inSpecs[0]);
+		if (scoreColumns.isEmpty()) {
+			throw new InvalidSettingsException("No Score columns found in provided table");
+		}
+
+		rearranger = createRearranger(inSpecs[0], scoreColumns);
+
+		return new DataTableSpec[] { rearranger.createSpec() };
 	}
 
-	private ColumnRearranger createRearranger(DataTableSpec inSpec) {
-		ColumnRearranger rearranger = new ColumnRearranger(inSpec);
-		rearranger.append(new ClassifierCellFactory(inSpec));
-		return rearranger;
+	private ColumnRearranger createRearranger(DataTableSpec inSpec, Map<String, Integer> scoreColumns) {
+		ColumnRearranger r = new ColumnRearranger(inSpec);
+		r.append(new ClassifierCellFactory(scoreColumns));
+		return r;
 	}
 
 	private class ClassifierCellFactory extends AbstractCellFactory {
 
 		private Map<String, Integer> scoreColumns;
 
-		public ClassifierCellFactory(DataTableSpec inTableSpec) {
+		public ClassifierCellFactory(Map<String, Integer> scoreColumns) {
 			super(createClassColumnSpec());
-			ColumnPatternExtractor extractor = new ColumnPatternExtractor(getScoreColumnPattern());
-			scoreColumns = extractor.match(inTableSpec);
+			this.scoreColumns = scoreColumns;
 		}
 
 		@Override
@@ -97,17 +108,9 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	}
 
-	private DataTableSpec createOutTableSpec(DataTableSpec inSpec) {
-		DataColumnSpec[] colls = new DataColumnSpec[inSpec.getNumColumns() + 1];
-		for (int i = 0; i < colls.length - 1; i++) {
-			colls[i] = inSpec.getColumnSpec(i);
-		}
-		colls[colls.length - 1] = createClassColumnSpec();
-		return new DataTableSpec(colls);
-	}
-
 	private DataColumnSpec createClassColumnSpec() {
-		return new DataColumnSpecCreator("Classes", SetCell.getCollectionType(StringCell.TYPE)).createSpec();
+		return new DataColumnSpecCreator(getClassesColumnName(), SetCell.getCollectionType(StringCell.TYPE))
+				.createSpec();
 	}
 
 	@Override
@@ -141,8 +144,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected void reset() {
-		// TODO Auto-generated method stub
-
+		rearranger = null;
 	}
 
 }
