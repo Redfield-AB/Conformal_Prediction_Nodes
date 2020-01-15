@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
@@ -34,12 +35,20 @@ public class Predictor {
 
 	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs) {
 		List<DataColumnSpec> colls = new ArrayList<>();
-		for (int i = 0; i < inPredictionTableSpecs.getNumColumns(); i++) {
-			colls.add(inPredictionTableSpecs.getColumnSpec(i));
-		}
-
 		Set<DataCell> values = inPredictionTableSpecs.getColumnSpec(model.getSelectedColumnName()).getDomain()
 				.getValues();
+
+		if (model.getKeepAllColumns()) {
+			for (int i = 0; i < inPredictionTableSpecs.getNumColumns(); i++) {
+				colls.add(inPredictionTableSpecs.getColumnSpec(i));
+			}
+		} else {
+			colls.add(inPredictionTableSpecs.getColumnSpec(model.getSelectedColumnName()));
+			for (DataCell v : values) {
+				colls.add(inPredictionTableSpecs.getColumnSpec(model.getProbabilityColumnName(v.toString())));
+			}
+		}
+
 		for (DataCell v : values) {
 			colls.addAll(Arrays.asList(createScoreColumnsSpecs(v.toString())));
 		}
@@ -60,6 +69,11 @@ public class Predictor {
 				.getDomain().getValues();
 
 		BufferedDataTable cur = inPredictionTable;
+
+		if (!model.getKeepAllColumns()) {
+			cur = stripPredictionTable(inPredictionTable, exec);
+		}
+
 		for (DataCell v : values) {
 			String val = v.toString();
 			String pColumn = model.getProbabilityColumnName(val);
@@ -73,6 +87,18 @@ public class Predictor {
 			cur = exec.createColumnRearrangeTable(sorted, r, exec);
 		}
 		return cur;
+	}
+
+	private BufferedDataTable stripPredictionTable(BufferedDataTable inTable, ExecutionContext exec)
+			throws CanceledExecutionException {
+		List<String> columns = inTable.getDataTableSpec().getColumnSpec(model.getSelectedColumnName()).getDomain()
+				.getValues().stream().map(c -> model.getProbabilityColumnName(c.toString()))
+				.collect(Collectors.toList());
+		columns.add(model.getSelectedColumnName());
+
+		ColumnRearranger r = new ColumnRearranger(inTable.getDataTableSpec());
+		r.keepOnly(columns.toArray(new String[] {}));
+		return exec.createColumnRearrangeTable(inTable, r, exec);
 	}
 
 	private ColumnRearranger createRearranger(DataTableSpec spec, String value, List<Double> probabilities) {

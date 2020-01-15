@@ -17,6 +17,7 @@ import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.Calibrator;
@@ -29,6 +30,7 @@ public class ConformalPredictorNodeModel extends NodeModel {
 	public static final int PORT_PREDICTION_TABLE = 1;
 
 	private static final String KEY_COLUMN_NAME = "columnName";
+	private static final String KEY_KEEP_ALL_COLUMNS = "keepAllColumns";
 
 	private static final String CALIBRATION_P_COLUMN_DEFAULT_NAME = "P";
 	private static final String CALIBRATION_RANK_COLUMN_DEFAULT_NAME = "Rank";
@@ -36,12 +38,17 @@ public class ConformalPredictorNodeModel extends NodeModel {
 	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "Score (%s)";
 
 	private final SettingsModelString columnNameSettings = createColumnNameSettingsModel();
+	private final SettingsModelBoolean keepAllColumnsSettings = createKeepAllColumnsSettingsModel();
 
 	private Calibrator calibrator;
 	private Predictor predictor;
 
 	static SettingsModelString createColumnNameSettingsModel() {
 		return new SettingsModelString(KEY_COLUMN_NAME, "");
+	}
+
+	static SettingsModelBoolean createKeepAllColumnsSettingsModel() {
+		return new SettingsModelBoolean(KEY_KEEP_ALL_COLUMNS, false);
 	}
 
 	protected ConformalPredictorNodeModel() {
@@ -58,6 +65,10 @@ public class ConformalPredictorNodeModel extends NodeModel {
 
 	public String getSelectedColumnName() {
 		return columnNameSettings.getStringValue();
+	}
+
+	public boolean getKeepAllColumns() {
+		return keepAllColumnsSettings.getBooleanValue();
 	}
 
 	public String getCalibrationProbabilityColumnName() {
@@ -159,16 +170,19 @@ public class ConformalPredictorNodeModel extends NodeModel {
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
 		columnNameSettings.saveSettingsTo(settings);
+		keepAllColumnsSettings.saveSettingsTo(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		columnNameSettings.validateSettings(settings);
+		keepAllColumnsSettings.validateSettings(settings);
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		columnNameSettings.loadSettingsFrom(settings);
+		keepAllColumnsSettings.loadSettingsFrom(settings);
 	}
 
 	@Override
