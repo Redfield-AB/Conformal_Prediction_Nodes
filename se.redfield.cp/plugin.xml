@@ -25,6 +25,10 @@
             deprecated="false"
             factory-class="se.redfield.cp.nodes.ConformalPredictorClassifierNodeFactory">
       </node>
+      <node
+            category-path="/"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorLoopEndNodeFactory">
+      </node>
    </extension>
    
 </plugin>
