@@ -29,6 +29,10 @@
             category-path="/"
             factory-class="se.redfield.cp.nodes.ConformalPredictorLoopEndNodeFactory">
       </node>
+      <node
+            category-path="/"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory">
+      </node>
    </extension>
    
 </plugin>
