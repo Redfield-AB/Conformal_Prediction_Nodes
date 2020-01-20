@@ -39,6 +39,7 @@ import org.knime.core.node.workflow.LoopStartNodeTerminator;
 import se.redfield.cp.utils.KnimeUtils;
 
 public class ConformalPredictorLoopEndNodeModel extends NodeModel implements LoopEndNode {
+	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorLoopEndNodeModel.class);
 
 	public static final int PORT_CALIBRATION_TABLE = 0;
@@ -56,6 +57,7 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	private int iteration;
 	private BufferedDataContainer calibrationContainer;
 	private BufferedDataContainer predictionContainer;
+	private BufferedDataContainer modelContainer;
 
 	protected ConformalPredictorLoopEndNodeModel() {
 		super(3, 3);
@@ -73,13 +75,15 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
+		BufferedDataTable inModelTable = inData[PORT_MODEL_TABLE];
 
 		if (calibrationContainer == null) {
 			iteration = 0;
 			calibrationContainer = exec
-					.createDataContainer(createCalibrationTableSpec(inCalibrationTable.getDataTableSpec()));
+					.createDataContainer(appendIterationColumn(inCalibrationTable.getDataTableSpec()));
 			predictionContainer = exec
 					.createDataContainer(createConcatenatedTableSpec(inPredictionTable.getDataTableSpec()));
+			modelContainer = exec.createDataContainer(appendIterationColumn(inModelTable.getDataTableSpec()));
 		}
 
 		for (DataRow row : inCalibrationTable) {
@@ -92,13 +96,19 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 					row, new StringCell(row.getKey().getString())));
 		}
 
+		for (DataRow row : inModelTable) {
+			modelContainer.addRowToTable(new AppendedColumnRow(KnimeUtils.createRowKey(row.getKey(), iteration), row,
+					new IntCell(iteration)));
+		}
+
 		boolean terminateLoop = ((LoopStartNodeTerminator) getLoopStartNode()).terminateLoop();
 		if (terminateLoop) {
 			calibrationContainer.close();
 			predictionContainer.close();
+			modelContainer.close();
 
 			return new BufferedDataTable[] { calibrationContainer.getTable(), collectPredictionTable(exec),
-					inData[PORT_MODEL_TABLE] };
+					modelContainer.getTable() };
 		} else {
 			iteration++;
 			continueLoop();
@@ -158,13 +168,13 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		return new DataTableSpec[] { createCalibrationTableSpec(inSpecs[PORT_CALIBRATION_TABLE]), null,
-				inSpecs[PORT_MODEL_TABLE] };
+		return new DataTableSpec[] { appendIterationColumn(inSpecs[PORT_CALIBRATION_TABLE]), null,
+				appendIterationColumn(inSpecs[PORT_MODEL_TABLE]) };// TODO prediction table spec
 	}
 
-	private DataTableSpec createCalibrationTableSpec(DataTableSpec inSpec) {
+	private DataTableSpec appendIterationColumn(DataTableSpec inSpec) {
 		DataColumnSpec iterColumn = new DataColumnSpecCreator(getIterationColumnName(), IntCell.TYPE).createSpec();
-		return new DataTableSpec(inSpec, new DataTableSpec(iterColumn));
+		return KnimeUtils.createSpec(inSpec, iterColumn);
 	}
 
 	@Override
