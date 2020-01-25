@@ -27,8 +27,8 @@
     <ports>
         <inPort index="0" name="Data Table">Data Table</inPort>
         
-        <outPort index="0" name="Test Table">Test Table</outPort>
+        <outPort index="0" name="Training Table">Training Table</outPort>
         <outPort index="1" name="Calibration Table">Calibration Table</outPort>
-        <outPort index="2" name="Training Table">Training Table</outPort>
+        <outPort index="2" name="Test Table">Test Table</outPort>
     </ports>    
 </knimeNode>

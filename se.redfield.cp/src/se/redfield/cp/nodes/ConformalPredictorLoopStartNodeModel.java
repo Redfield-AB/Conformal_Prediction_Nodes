@@ -78,7 +78,7 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 		BufferedDataTable trainingSetTable = parts2[1];
 
 		iteration++;
-		return new BufferedDataTable[] { testSetTable, calibrationSetTable, trainingSetTable };
+		return new BufferedDataTable[] { trainingSetTable, calibrationSetTable, testSetTable };
 	}
 
 	@Override
