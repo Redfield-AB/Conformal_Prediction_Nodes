@@ -23,14 +23,22 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
+import org.knime.core.node.port.PortObjectSpec;
+import org.knime.core.node.streamable.InputPortRole;
+import org.knime.core.node.streamable.OutputPortRole;
+import org.knime.core.node.streamable.PartitionInfo;
+import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
 public class ConformalPredictorClassifierNodeModel extends NodeModel {
+	@SuppressWarnings("unused")
+	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
 
 	private static final String KEY_SCORE_THRESHOLD = "scoreThreshold";
 
@@ -111,6 +119,22 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	private DataColumnSpec createClassColumnSpec() {
 		return new DataColumnSpecCreator(getClassesColumnName(), SetCell.getCollectionType(StringCell.TYPE))
 				.createSpec();
+	}
+
+	@Override
+	public StreamableOperator createStreamableOperator(PartitionInfo partitionInfo, PortObjectSpec[] inSpecs)
+			throws InvalidSettingsException {
+		return rearranger.createStreamableFunction();
+	}
+
+	@Override
+	public InputPortRole[] getInputPortRoles() {
+		return new InputPortRole[] { InputPortRole.DISTRIBUTED_STREAMABLE };
+	}
+
+	@Override
+	public OutputPortRole[] getOutputPortRoles() {
+		return new OutputPortRole[] { OutputPortRole.DISTRIBUTED };
 	}
 
 	@Override
