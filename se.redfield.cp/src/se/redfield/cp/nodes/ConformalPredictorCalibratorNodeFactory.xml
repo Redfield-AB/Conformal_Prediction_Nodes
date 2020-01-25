@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knimeNode icon="./icons/default.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>Conformal Predictor</name>
+    <name>Conformal Predictor Calibrator</name>
     
     <shortDescription>
         
@@ -28,6 +28,6 @@
         <inPort index="0" name="Calibration Table">Calibration Table</inPort>
         <inPort index="1" name="Prediction Table">Prediction Table</inPort>
         
-        <outPort index="0" name="Prediction Table">Prediction Table</outPort>
+        <outPort index="0" name="Calibration Table">Calibration Table</outPort>
     </ports>    
 </knimeNode>

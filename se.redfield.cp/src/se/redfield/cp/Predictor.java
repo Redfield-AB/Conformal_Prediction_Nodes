@@ -2,9 +2,10 @@ package se.redfield.cp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
@@ -26,45 +27,29 @@ import se.redfield.cp.nodes.ConformalPredictorNodeModel;
 public class Predictor {
 
 	private ConformalPredictorNodeModel model;
-	private Calibrator calibrator;
 
-	public Predictor(ConformalPredictorNodeModel model, Calibrator calibrator) {
+	public Predictor(ConformalPredictorNodeModel model) {
 		this.model = model;
-		this.calibrator = calibrator;
 	}
 
 	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs) {
-		List<DataColumnSpec> colls = new ArrayList<>();
+		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
+		if (!model.getKeepAllColumns()) {
+			r.keepOnly(model.getRequiredColumnNames(inPredictionTableSpecs));
+		}
+
 		Set<DataCell> values = inPredictionTableSpecs.getColumnSpec(model.getSelectedColumnName()).getDomain()
 				.getValues();
-
-		if (model.getKeepAllColumns()) {
-			for (int i = 0; i < inPredictionTableSpecs.getNumColumns(); i++) {
-				colls.add(inPredictionTableSpecs.getColumnSpec(i));
-			}
-		} else {
-			colls.add(inPredictionTableSpecs.getColumnSpec(model.getSelectedColumnName()));
-			for (DataCell v : values) {
-				colls.add(inPredictionTableSpecs.getColumnSpec(model.getProbabilityColumnName(v.toString())));
-			}
-		}
-
 		for (DataCell v : values) {
-			colls.addAll(Arrays.asList(createScoreColumnsSpecs(v.toString())));
+			r.append(new ScoreCellFactory(v.toString(), inPredictionTableSpecs, null));
 		}
-		return new DataTableSpec(colls.toArray(new DataColumnSpec[] {}));
+
+		return r.createSpec();
 	}
 
-	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
-		DataColumnSpec indexCol = new DataColumnSpecCreator(String.format(model.getPredictionRankColumnFormat(), value),
-				LongCell.TYPE).createSpec();
-		DataColumnSpec scoreCol = new DataColumnSpecCreator(
-				String.format(model.getPredictionScoreColumnFormat(), value), DoubleCell.TYPE).createSpec();
-		return new DataColumnSpec[] { indexCol, scoreCol };
-	}
-
-	public BufferedDataTable process(BufferedDataTable inPredictionTable, ExecutionContext exec)
-			throws CanceledExecutionException {
+	public BufferedDataTable process(BufferedDataTable inPredictionTable, BufferedDataTable inCalibrationTable,
+			ExecutionContext exec) throws CanceledExecutionException {
+		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
 		Set<DataCell> values = inPredictionTable.getDataTableSpec().getColumnSpec(model.getSelectedColumnName())
 				.getDomain().getValues();
 
@@ -82,30 +67,60 @@ public class Predictor {
 					new boolean[] { false });
 			BufferedDataTable sorted = sorter.sort(exec);
 
-			ColumnRearranger r = createRearranger(sorted.getDataTableSpec(), val,
-					calibrator.getCalibrationProbabilities().get(val));
+			ColumnRearranger r = createRearranger(sorted.getDataTableSpec(), val, calibrationProbabilities.get(val));
 			cur = exec.createColumnRearrangeTable(sorted, r, exec);
 		}
 		return cur;
 	}
 
+	private Map<String, List<Double>> collectCalibrationProbabilities(BufferedDataTable inCalibrationTable,
+			ExecutionContext exec) throws CanceledExecutionException {
+		BufferedDataTableSorter sorter = new BufferedDataTableSorter(inCalibrationTable,
+				Arrays.asList(model.getSelectedColumnName(), model.getCalibrationProbabilityColumnName()),
+				new boolean[] { true, false });
+		BufferedDataTable sortedTable = sorter.sort(exec);
+
+		Map<String, List<Double>> result = new HashMap<>();
+		String prevValue = null;
+		List<Double> curProbabilities = null;
+		int columnIndex = sortedTable.getDataTableSpec().findColumnIndex(model.getSelectedColumnName());
+		int probabilityIndex = sortedTable.getDataTableSpec()
+				.findColumnIndex(model.getCalibrationProbabilityColumnName());
+
+		for (DataRow row : sortedTable) {
+			String value = row.getCell(columnIndex).toString();
+			if (prevValue == null || !prevValue.equals(value)) {
+				prevValue = value;
+
+				curProbabilities = new ArrayList<>();
+				result.put(value, curProbabilities);
+			}
+
+			Double probability = ((DoubleValue) row.getCell(probabilityIndex)).getDoubleValue();
+			curProbabilities.add(probability);
+		}
+		return result;
+	}
+
 	private BufferedDataTable stripPredictionTable(BufferedDataTable inTable, ExecutionContext exec)
 			throws CanceledExecutionException {
-		List<String> columns = inTable.getDataTableSpec().getColumnSpec(model.getSelectedColumnName()).getDomain()
-				.getValues().stream().map(c -> model.getProbabilityColumnName(c.toString()))
-				.collect(Collectors.toList());
-		columns.add(model.getSelectedColumnName());
-
 		ColumnRearranger r = new ColumnRearranger(inTable.getDataTableSpec());
-		r.keepOnly(columns.toArray(new String[] {}));
+		r.keepOnly(model.getRequiredColumnNames(inTable.getDataTableSpec()));
 		return exec.createColumnRearrangeTable(inTable, r, exec);
 	}
 
 	private ColumnRearranger createRearranger(DataTableSpec spec, String value, List<Double> probabilities) {
 		ColumnRearranger r = new ColumnRearranger(spec);
-		int pColumnIndex = spec.findColumnIndex(model.getProbabilityColumnName(value));
-		r.append(new ScoreCellFactory(value, pColumnIndex, probabilities));
+		r.append(new ScoreCellFactory(value, spec, probabilities));
 		return r;
+	}
+
+	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
+		DataColumnSpec indexCol = new DataColumnSpecCreator(String.format(model.getPredictionRankColumnFormat(), value),
+				LongCell.TYPE).createSpec();
+		DataColumnSpec scoreCol = new DataColumnSpecCreator(
+				String.format(model.getPredictionScoreColumnFormat(), value), DoubleCell.TYPE).createSpec();
+		return new DataColumnSpec[] { indexCol, scoreCol };
 	}
 
 	private class ScoreCellFactory extends AbstractCellFactory {
@@ -114,9 +129,9 @@ public class Predictor {
 		private List<Double> probabilities;
 		private int currentIndex;
 
-		public ScoreCellFactory(String value, int pColumnIndex, List<Double> probabilities) {
+		public ScoreCellFactory(String value, DataTableSpec inSpec, List<Double> probabilities) {
 			super(createScoreColumnsSpecs(value));
-			this.pColumnIndex = pColumnIndex;
+			this.pColumnIndex = inSpec.findColumnIndex(model.getProbabilityColumnName(value));
 			this.probabilities = probabilities;
 			this.currentIndex = 0;
 		}
