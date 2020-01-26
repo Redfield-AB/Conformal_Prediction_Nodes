@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
+import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
@@ -13,6 +14,7 @@ import org.knime.core.node.NodeLogger;
 import se.redfield.cp.Predictor;
 
 public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeModel {
+	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorNodeModel.class);
 
 	public static final int PORT_CALIBRATION_TABLE = 0;
@@ -60,6 +62,12 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 			throw new InvalidSettingsException(
 					String.format("Probability columns '%s' is missing from the calibration table",
 							getCalibrationProbabilityColumnName()));
+		}
+
+		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getSelectedColumnName());
+		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+			throw new InvalidSettingsException(
+					"Calibration table: insufficient domain information for column: " + getSelectedColumnName());
 		}
 
 		checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
