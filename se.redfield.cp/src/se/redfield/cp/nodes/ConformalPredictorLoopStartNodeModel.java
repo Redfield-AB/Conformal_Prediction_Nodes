@@ -28,6 +28,9 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 	public static final String KEY_TEST_PARTITION = "testPartition";
 	public static final String KEY_CALIBRATION_PARTITION = "calibrationPartition";
 
+	private static final String FW_ITERATION = "iteration";
+	private static final String FW_ITERATIONS_NUM = "iterationsNum";
+
 	private final SettingsModelIntegerBounded iterationsSettings = createIterationSettings();
 	private final SamplingNodeSettings testPartitionSettings = new SamplingNodeSettings();
 	private final SamplingNodeSettings calibrationPartitionSettings = new SamplingNodeSettings();
@@ -76,6 +79,9 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 		BufferedDataTable[] parts2 = calibrationSetPartitioner.partition(parts1[1], exec);
 		BufferedDataTable calibrationSetTable = parts2[0];
 		BufferedDataTable trainingSetTable = parts2[1];
+
+		pushFlowVariableInt(FW_ITERATION, iteration);
+		pushFlowVariableInt(FW_ITERATIONS_NUM, getIterationsNum());
 
 		iteration++;
 		return new BufferedDataTable[] { trainingSetTable, calibrationSetTable, testSetTable };
