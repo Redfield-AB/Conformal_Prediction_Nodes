@@ -6,10 +6,19 @@ import java.util.stream.Collectors;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.port.PortObjectSpec;
+import org.knime.core.node.streamable.InputPortRole;
+import org.knime.core.node.streamable.OutputPortRole;
+import org.knime.core.node.streamable.PartitionInfo;
+import org.knime.core.node.streamable.PortInput;
+import org.knime.core.node.streamable.PortObjectInput;
+import org.knime.core.node.streamable.PortOutput;
+import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.Predictor;
 
@@ -39,8 +48,11 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		return new BufferedDataTable[] {
-				predictor.process(inData[PORT_PREDICTION_TABLE], inData[PORT_CALIBRATION_TABLE], exec) };
+		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
+		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
+		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), inCalibrationTable, exec);
+
+		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inPredictionTable, r, exec) };
 	}
 
 	@Override
@@ -86,6 +98,32 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 						String.format("Class '%s' is missing in the calibration table", val));
 			}
 		}
+	}
+
+	@Override
+	public InputPortRole[] getInputPortRoles() {
+		return new InputPortRole[] { InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, InputPortRole.DISTRIBUTED_STREAMABLE };
+	}
+
+	@Override
+	public OutputPortRole[] getOutputPortRoles() {
+		return new OutputPortRole[] { OutputPortRole.DISTRIBUTED };
+	}
+
+	@Override
+	public StreamableOperator createStreamableOperator(PartitionInfo partitionInfo, PortObjectSpec[] inSpecs)
+			throws InvalidSettingsException {
+		return new StreamableOperator() {
+
+			@Override
+			public void runFinal(PortInput[] inputs, PortOutput[] outputs, ExecutionContext exec) throws Exception {
+				BufferedDataTable inCalibrationTable = (BufferedDataTable) ((PortObjectInput) inputs[PORT_CALIBRATION_TABLE])
+						.getPortObject();
+				ColumnRearranger rearranger = predictor.createRearranger((DataTableSpec) inSpecs[PORT_PREDICTION_TABLE],
+						inCalibrationTable, exec);
+				rearranger.createStreamableFunction(PORT_PREDICTION_TABLE, 0).runFinal(inputs, outputs, exec);
+			}
+		};
 	}
 
 }

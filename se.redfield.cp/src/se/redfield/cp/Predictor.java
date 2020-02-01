@@ -2,6 +2,7 @@ package se.redfield.cp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,30 +48,22 @@ public class Predictor {
 		return r.createSpec();
 	}
 
-	public BufferedDataTable process(BufferedDataTable inPredictionTable, BufferedDataTable inCalibrationTable,
+	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
-		Set<DataCell> values = inPredictionTable.getDataTableSpec().getColumnSpec(model.getSelectedColumnName())
-				.getDomain().getValues();
+		Set<DataCell> values = predictionTableSpec.getColumnSpec(model.getSelectedColumnName()).getDomain().getValues();
 
-		BufferedDataTable cur = inPredictionTable;
+		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 
 		if (!model.getKeepAllColumns()) {
-			cur = stripPredictionTable(inPredictionTable, exec);
+			r.keepOnly(model.getRequiredColumnNames(predictionTableSpec));
 		}
 
 		for (DataCell v : values) {
 			String val = v.toString();
-			String pColumn = model.getProbabilityColumnName(val);
-
-			BufferedDataTableSorter sorter = new BufferedDataTableSorter(cur, Arrays.asList(pColumn),
-					new boolean[] { false });
-			BufferedDataTable sorted = sorter.sort(exec);
-
-			ColumnRearranger r = createRearranger(sorted.getDataTableSpec(), val, calibrationProbabilities.get(val));
-			cur = exec.createColumnRearrangeTable(sorted, r, exec);
+			r.append(new ScoreCellFactory(val, predictionTableSpec, calibrationProbabilities.get(val)));
 		}
-		return cur;
+		return r;
 	}
 
 	private Map<String, List<Double>> collectCalibrationProbabilities(BufferedDataTable inCalibrationTable,
@@ -102,19 +95,6 @@ public class Predictor {
 		return result;
 	}
 
-	private BufferedDataTable stripPredictionTable(BufferedDataTable inTable, ExecutionContext exec)
-			throws CanceledExecutionException {
-		ColumnRearranger r = new ColumnRearranger(inTable.getDataTableSpec());
-		r.keepOnly(model.getRequiredColumnNames(inTable.getDataTableSpec()));
-		return exec.createColumnRearrangeTable(inTable, r, exec);
-	}
-
-	private ColumnRearranger createRearranger(DataTableSpec spec, String value, List<Double> probabilities) {
-		ColumnRearranger r = new ColumnRearranger(spec);
-		r.append(new ScoreCellFactory(value, spec, probabilities));
-		return r;
-	}
-
 	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
 		DataColumnSpec indexCol = new DataColumnSpecCreator(String.format(model.getPredictionRankColumnFormat(), value),
 				LongCell.TYPE).createSpec();
@@ -127,13 +107,11 @@ public class Predictor {
 
 		private int pColumnIndex;
 		private List<Double> probabilities;
-		private int currentIndex;
 
 		public ScoreCellFactory(String value, DataTableSpec inSpec, List<Double> probabilities) {
 			super(createScoreColumnsSpecs(value));
 			this.pColumnIndex = inSpec.findColumnIndex(model.getProbabilityColumnName(value));
 			this.probabilities = probabilities;
-			this.currentIndex = 0;
 		}
 
 		@Override
@@ -144,11 +122,16 @@ public class Predictor {
 			return new DataCell[] { new LongCell(rank), new DoubleCell(score) };
 		}
 
-		private int getRank(double p) {
-			while (currentIndex < probabilities.size() && probabilities.get(currentIndex) >= p) {
-				currentIndex++;
+		protected int getRank(double p) {
+			int idx = Collections.binarySearch(probabilities, p, Collections.reverseOrder());
+			if (idx < 0) {
+				idx = -(idx + 1);
 			}
-			return currentIndex > 0 ? currentIndex - 1 : currentIndex;
+			while (idx < probabilities.size() && probabilities.get(idx) >= p) {
+				idx++;
+			}
+			return idx > 0 ? idx - 1 : idx;
 		}
 	}
+
 }
