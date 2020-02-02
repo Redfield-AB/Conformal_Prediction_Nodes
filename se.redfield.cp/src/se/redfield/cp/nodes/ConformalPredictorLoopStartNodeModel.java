@@ -73,10 +73,11 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		BufferedDataTable[] parts1 = testSetPartitioner.partition(inData[0], exec);
+		BufferedDataTable[] parts1 = testSetPartitioner.partition(inData[0], exec.createSubExecutionContext(0.5));
 		BufferedDataTable testSetTable = parts1[0];
 
-		BufferedDataTable[] parts2 = calibrationSetPartitioner.partition(parts1[1], exec);
+		BufferedDataTable[] parts2 = calibrationSetPartitioner.partition(parts1[1],
+				exec.createSubExecutionContext(0.5));
 		BufferedDataTable calibrationSetTable = parts2[0];
 		BufferedDataTable trainingSetTable = parts2[1];
 

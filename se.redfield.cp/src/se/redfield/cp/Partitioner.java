@@ -46,6 +46,7 @@ public class Partitioner {
 		BufferedDataContainer putAllContainer = null;
 
 		long count = 0;
+		long totalCount = inTable.size();
 		for (DataRow row : inTable) {
 			BufferedDataContainer curContainer = null;
 
@@ -65,6 +66,9 @@ public class Partitioner {
 
 			curContainer.addRowToTable(row);
 			count += 1;
+
+			exec.checkCanceled();
+			exec.setProgress((double) count / totalCount);
 		}
 
 		matchContainer.close();

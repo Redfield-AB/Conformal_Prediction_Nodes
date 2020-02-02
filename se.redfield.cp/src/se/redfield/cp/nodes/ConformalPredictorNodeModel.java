@@ -50,9 +50,11 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
-		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), inCalibrationTable, exec);
+		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), inCalibrationTable,
+				exec.createSubExecutionContext(0.1));
 
-		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inPredictionTable, r, exec) };
+		return new BufferedDataTable[] {
+				exec.createColumnRearrangeTable(inPredictionTable, r, exec.createSubProgress(0.9)) };
 	}
 
 	@Override

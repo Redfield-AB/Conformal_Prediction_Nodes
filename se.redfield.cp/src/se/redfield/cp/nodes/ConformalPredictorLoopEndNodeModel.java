@@ -158,13 +158,16 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 			initContainers(inCalibrationTable, inPredictionTable, inModelTable, exec);
 		}
 
-		appendTable(calibrationContainer, inCalibrationTable);
-		appendTable(predictionContainer, inPredictionTable, row -> new StringCell(row.getKey().getString()));
-		appendTable(modelContainer, inModelTable);
-
 		boolean terminateLoop = ((LoopStartNodeTerminator) getLoopStartNode()).terminateLoop();
+		double maxSubProgress = terminateLoop ? 0.25 : 0.33;
+
+		appendTable(calibrationContainer, inCalibrationTable, exec.createSubExecutionContext(maxSubProgress));
+		appendTable(predictionContainer, inPredictionTable, exec.createSubExecutionContext(maxSubProgress),
+				row -> new StringCell(row.getKey().getString()));
+		appendTable(modelContainer, inModelTable, exec.createSubExecutionContext(maxSubProgress));
+
 		if (terminateLoop) {
-			return collectResults(exec);
+			return collectResults(exec.createSubExecutionContext(maxSubProgress));
 		} else {
 			iteration++;
 			continueLoop();
@@ -182,16 +185,22 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		}
 	}
 
-	private void appendTable(BufferedDataContainer cont, BufferedDataTable table) {
-		appendTable(cont, table, row -> new IntCell(iteration));
+	private void appendTable(BufferedDataContainer cont, BufferedDataTable table, ExecutionContext exec)
+			throws CanceledExecutionException {
+		appendTable(cont, table, exec, row -> new IntCell(iteration));
 	}
 
-	private void appendTable(BufferedDataContainer cont, BufferedDataTable table,
-			Function<DataRow, DataCell> appendedCell) {
+	private void appendTable(BufferedDataContainer cont, BufferedDataTable table, ExecutionContext exec,
+			Function<DataRow, DataCell> appendedCell) throws CanceledExecutionException {
 		if (cont != null) {
+			long count = 0;
+			long totalCount = table.size();
 			for (DataRow row : table) {
 				cont.addRowToTable(new AppendedColumnRow(KnimeUtils.createRowKey(row.getKey(), iteration), row,
 						appendedCell.apply(row)));
+
+				exec.checkCanceled();
+				exec.setProgress((double) count++ / totalCount);
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package se.redfield.cp;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -18,10 +17,10 @@ import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.LongCell;
-import org.knime.core.data.sort.BufferedDataTableSorter;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
+import org.knime.core.node.ExecutionMonitor;
 
 import se.redfield.cp.nodes.ConformalPredictorNodeModel;
 
@@ -68,30 +67,36 @@ public class Predictor {
 
 	private Map<String, List<Double>> collectCalibrationProbabilities(BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
-		BufferedDataTableSorter sorter = new BufferedDataTableSorter(inCalibrationTable,
-				Arrays.asList(model.getSelectedColumnName(), model.getCalibrationProbabilityColumnName()),
-				new boolean[] { true, false });
-		BufferedDataTable sortedTable = sorter.sort(exec);
-
 		Map<String, List<Double>> result = new HashMap<>();
-		String prevValue = null;
-		List<Double> curProbabilities = null;
-		int columnIndex = sortedTable.getDataTableSpec().findColumnIndex(model.getSelectedColumnName());
-		int probabilityIndex = sortedTable.getDataTableSpec()
+		int valIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(model.getSelectedColumnName());
+		int probIndex = inCalibrationTable.getDataTableSpec()
 				.findColumnIndex(model.getCalibrationProbabilityColumnName());
 
-		for (DataRow row : sortedTable) {
-			String value = row.getCell(columnIndex).toString();
-			if (prevValue == null || !prevValue.equals(value)) {
-				prevValue = value;
+		long rowCount = inCalibrationTable.size();
+		long index = 0;
+		ExecutionMonitor progress = exec.createSubProgress(0.5);
 
-				curProbabilities = new ArrayList<>();
-				result.put(value, curProbabilities);
-			}
+		for (DataRow row : inCalibrationTable) {
+			String val = row.getCell(valIndex).toString();
+			double probability = ((DoubleValue) row.getCell(probIndex)).getDoubleValue();
 
-			Double probability = ((DoubleValue) row.getCell(probabilityIndex)).getDoubleValue();
-			curProbabilities.add(probability);
+			List<Double> probabilities = result.computeIfAbsent(val, key -> new ArrayList<>());
+			probabilities.add(probability);
+
+			exec.checkCanceled();
+			progress.setProgress((double) index++ / rowCount);
 		}
+
+		index = 0;
+		progress = exec.createSubProgress(0.5);
+
+		for (List<Double> p : result.values()) {
+			Collections.sort(p, Collections.reverseOrder());
+
+			exec.checkCanceled();
+			progress.setProgress((double) index++ / result.size());
+		}
+
 		return result;
 	}
 

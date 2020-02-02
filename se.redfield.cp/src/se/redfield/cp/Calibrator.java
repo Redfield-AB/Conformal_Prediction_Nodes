@@ -48,17 +48,17 @@ public class Calibrator {
 		appendProbabilityRearranger.append(createPCellFactory(inCalibrationTable.getDataTableSpec()));
 
 		BufferedDataTable appendedProbabilityTable = exec.createColumnRearrangeTable(inCalibrationTable,
-				appendProbabilityRearranger, exec);
+				appendProbabilityRearranger, exec.createSubProgress(0.25));
 
 		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable,
 				Arrays.asList(model.getSelectedColumnName(), model.getCalibrationProbabilityColumnName()),
 				new boolean[] { true, false });
-		BufferedDataTable sortedTable = sorter.sort(exec);
+		BufferedDataTable sortedTable = sorter.sort(exec.createSubExecutionContext(0.5));
 
 		ColumnRearranger appendScoreRearranger = new ColumnRearranger(sortedTable.getDataTableSpec());
 		appendScoreRearranger.append(createScoreCellFactory(sortedTable.getSpec()));
 
-		return exec.createColumnRearrangeTable(sortedTable, appendScoreRearranger, exec);
+		return exec.createColumnRearrangeTable(sortedTable, appendScoreRearranger, exec.createSubProgress(0.25));
 	}
 
 	private CellFactory createPCellFactory(DataTableSpec inputTableSpec) {
