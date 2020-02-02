@@ -1,33 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knimeNode icon="./icons/default.png" type="LoopEnd" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>Conformal Predictor Loop End</name>
+    <name>Conformal Prediction Loop End</name>
     
     <shortDescription>
         
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
-        
-        
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+        <intro>
+        	Aggregates the results of conformal prediction: calibration tables, processed prediction table and models (optional).
+        </intro>
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Calibration Table">Calibration Table</inPort>
-        <inPort index="1" name="Prediction Table">Prediction Table</inPort>
-        <inPort index="2" name="Model">Model</inPort>
+        <inPort index="0" name="Calibration Table">Calibration table created by Conformal Calibrator node</inPort>
+        <inPort index="1" name="Prediction Table">
+        	Scored prediction table based on test table. 
+        	This table is built with aggregated calibration table, with calculated median P values and Scores.
+        </inPort>
+        <inPort index="2" name="Model">(Optional) Additional port for models or any other auxiliary tables.</inPort>
         
         <outPort index="0" name="Calibration Table">Calibration Table</outPort>
         <outPort index="1" name="Prediction Table">Prediction Table</outPort>

@@ -1,32 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knimeNode icon="./icons/default.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>Conformal Predictor Classifier</name>
+    <name>Conformal Classifier</name>
     
     <shortDescription>
         
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
+        <intro>
+        	Produces predictions based on the calibration table and the significance level provided by the user.
+			The significance level defines the tolerable percentage of the prediction errors.
+        </intro>
         
         
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+        <option name="Score Threshold">Score Threshold</option>
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Prediction Table">Prediction Table</inPort>
+        <inPort index="0" name="Input">Table with calibrated predictions</inPort>
         
-        <outPort index="0" name="Prediction Table">Prediction Table</outPort>
+        <outPort index="0" name="Output">Table with ranked predictions and classes</outPort>
     </ports>    
 </knimeNode>

@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <knimeNode icon="./icons/default.png" type="LoopStart" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>Conformal Predictor Loop Start</name>
+    <name>Conformal Prediction Loop Start</name>
     
     <shortDescription>
         
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
+        <intro>
+        	Splits the input table into three new tables: training, calibration/cross-validation and test.
+			First goes training and test split, then the rest of the training table is split into training and calibration/cross-validation.
+			The last procedure is repeated several times for every loop iteration. Test set is created only once and always remains the same during all iterations.
+        </intro>
         
         
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+        <option name="Number of cross-validation iterations">
+        	Defines the number of training/calibration splits and number of loop iterations.
+        </option>
+        <option name="Training/Test split">
+        	Similar to Partitioning node splits input table into two datasets. This split is done once for all loop iterations.
+        </option>
+        <option name="Training/Calibration split">
+        	Similar to Partitioning node splits training set into two datasets - training and calibration. This split is done for every loop iteration.
+        </option>
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Data Table">Data Table</inPort>
+        <inPort index="0" name="Table to partition">Table to partition</inPort>
         
         <outPort index="0" name="Training Table">Training Table</outPort>
         <outPort index="1" name="Calibration Table">Calibration Table</outPort>

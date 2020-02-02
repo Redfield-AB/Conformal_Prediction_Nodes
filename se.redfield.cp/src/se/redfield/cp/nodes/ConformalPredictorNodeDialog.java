@@ -15,7 +15,7 @@ public class ConformalPredictorNodeDialog extends DefaultNodeSettingsPane {
 
 		SettingsModelString columnSettings = ConformalPredictorNodeModel.createColumnNameSettingsModel();
 		SettingsModelBoolean keepAllSettings = ConformalPredictorNodeModel.createKeepAllColumnsSettingsModel();
-		addDialogComponent(new DialogComponentColumnNameSelection(columnSettings, "Column:",
+		addDialogComponent(new DialogComponentColumnNameSelection(columnSettings, "Target column:",
 				ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE, DataValue.class));
 		addDialogComponent(new DialogComponentBoolean(keepAllSettings, "Keep All Columns"));
 	}

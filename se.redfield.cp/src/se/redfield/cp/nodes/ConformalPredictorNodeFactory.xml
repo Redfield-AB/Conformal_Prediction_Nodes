@@ -7,27 +7,22 @@
     </shortDescription>
     
     <fullDescription>
-        <intro>Insert long description here...</intro>
-        
-        
-        <option name="short name of first option (like in the dialog)">description of first option</option>
-        <option name="short name of second option (like in the dialog)">description of second option</option>
-        <!-- possibly more options that can also be grouped by tabs -->
-        <!--
-        <tab name="Standard Options">
-            <option name="short name of first option (like in the dialog)">description of first option</option>
-            <option name="short name of second option (like in the dialog)">description of second option</option>
-        </tab>
-        <tab name="Advanced Options">
-            <option name="short name of first advanced option (like in the dialog)">description of first advanced option</option>
-        </tab>
-        -->
+        <intro>
+        	Calculates the table with P values and Scores for test data based on the provided calibration table.
+        </intro>
+            
+        <option name="Target column">
+        	A column with target column that is being predicted.
+        </option>
+        <option name="Keep All Columns">
+        	If checked all columns from input table will be also included into output table along with calibration columns.
+        </option>
     </fullDescription>
     
     <ports>
         <inPort index="0" name="Calibration Table">Calibration Table</inPort>
-        <inPort index="1" name="Prediction Table">Prediction Table</inPort>
+        <inPort index="1" name="Prediction Table">Table with predictions and class probabilities. Target variable must have the same domain as the calibration table.</inPort>
         
-        <outPort index="0" name="Prediction Table">Prediction Table</outPort>
+        <outPort index="0" name="Output">Table with calibrated predictions.</outPort>
     </ports>    
 </knimeNode>
