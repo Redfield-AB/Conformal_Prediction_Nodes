@@ -50,9 +50,9 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	public static final int PORT_PREDICTION_TABLE = 1;
 	public static final int PORT_MODEL_TABLE = 2;
 
-	private static final String P_COLUMN_REGEX = "^P \\((.+=.+)\\)$";
-	private static final String RANK_COLUMN_REGEX = "^Rank \\((.+)\\)$";
-	private static final String SCORE_COLUMN_REGEX = "^Score \\((.+)\\)$";
+	public static final String P_COLUMN_REGEX = "^P \\((.+=.+)\\)$";
+	public static final String RANK_COLUMN_REGEX = "^Rank \\((.+)\\)$";
+	public static final String SCORE_COLUMN_REGEX = "^P-value \\((?<value>.+)\\)$";
 
 	private static final String ORIGINAL_ROWID_COLUMN_NAME = "Group ID";
 

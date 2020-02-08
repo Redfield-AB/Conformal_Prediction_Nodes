@@ -129,13 +129,15 @@ public class Predictor {
 
 		protected int getRank(double p) {
 			int idx = Collections.binarySearch(probabilities, p, Collections.reverseOrder());
-			if (idx < 0) {
-				idx = -(idx + 1);
+			if (idx < 0) {// insertion index
+				return -(idx + 1);
+			} else {// exact match found
+				// finding the first occurrence
+				while (idx >= 0 && probabilities.get(idx) == p) {
+					idx -= 1;
+				}
+				return idx + 1;
 			}
-			while (idx < probabilities.size() && probabilities.get(idx) >= p) {
-				idx++;
-			}
-			return idx > 0 ? idx - 1 : idx;
 		}
 	}
 

@@ -12,22 +12,21 @@ import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.def.StringCell;
 
-import se.redfield.cp.nodes.ConformalPredictorClassifierNodeModel;
+import se.redfield.cp.nodes.ConformalPredictorLoopEndNodeModel;
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
 class ColumnPatternExctractorTest {
 
 	@Test
 	void test() {
-		DataColumnSpec c1 = new DataColumnSpecCreator("Score (1)", StringCell.TYPE).createSpec();
-		DataColumnSpec c2 = new DataColumnSpecCreator("Score(2)", StringCell.TYPE).createSpec();
-		DataColumnSpec c3 = new DataColumnSpecCreator("Score ()", StringCell.TYPE).createSpec();
-		DataColumnSpec c4 = new DataColumnSpecCreator("Score (4)", StringCell.TYPE).createSpec();
+		DataColumnSpec c1 = new DataColumnSpecCreator("P-value (1)", StringCell.TYPE).createSpec();
+		DataColumnSpec c2 = new DataColumnSpecCreator("P-value(2)", StringCell.TYPE).createSpec();
+		DataColumnSpec c3 = new DataColumnSpecCreator("P-value ()", StringCell.TYPE).createSpec();
+		DataColumnSpec c4 = new DataColumnSpecCreator("P-value (4)", StringCell.TYPE).createSpec();
 		DataColumnSpec c5 = new DataColumnSpecCreator("Some string", StringCell.TYPE).createSpec();
 		DataTableSpec spec = new DataTableSpec(c1, c2, c3, c4, c5);
 
-		ColumnPatternExtractor e = new ColumnPatternExtractor(
-				ConformalPredictorClassifierNodeModel.DEFAULT_SCORE_COLUMN_PATTERN);
+		ColumnPatternExtractor e = new ColumnPatternExtractor(ConformalPredictorLoopEndNodeModel.SCORE_COLUMN_REGEX);
 
 		Map<String, Integer> match = e.match(spec);
 		assertThat(match.size(), is(2));

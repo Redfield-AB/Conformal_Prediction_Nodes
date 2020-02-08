@@ -43,7 +43,6 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	private static final String KEY_SCORE_THRESHOLD = "scoreThreshold";
 
 	private static final double DEFAULT_SCORE_THRESHOLD = 0.8;
-	public static final String DEFAULT_SCORE_COLUMN_PATTERN = "^Score \\((?<value>.+)\\)$";
 	private static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 
 	private static final SettingsModelDoubleBounded scoreThresholdSettings = createScoreThresholdSettings();
@@ -63,7 +62,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	}
 
 	private String getScoreColumnPattern() {
-		return DEFAULT_SCORE_COLUMN_PATTERN;
+		return ConformalPredictorLoopEndNodeModel.SCORE_COLUMN_REGEX;
 	}
 
 	private String getClassesColumnName() {
