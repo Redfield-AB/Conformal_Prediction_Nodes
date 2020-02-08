@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/default.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./icons/predictor.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Conformal Predictor</name>
     
     <shortDescription>
-        
+        Calculates the table with P values and Scores for test data based on the provided calibration table.
     </shortDescription>
     
     <fullDescription>

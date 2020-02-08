@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/default.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./icons/calibrator.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Conformal Calibrator</name>
     
     <shortDescription>
-        
+        Creates a calibration table with ranking for further calibration of the test data sets.
     </shortDescription>
     
     <fullDescription>

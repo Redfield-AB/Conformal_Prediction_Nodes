@@ -12,6 +12,6 @@ public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsP
 		SettingsModelDoubleBounded scoreThresholdSettings = ConformalPredictorClassifierNodeModel
 				.createScoreThresholdSettings();
 
-		addDialogComponent(new DialogComponentNumber(scoreThresholdSettings, "Score Threshold", 0.01));
+		addDialogComponent(new DialogComponentNumber(scoreThresholdSettings, "Significance level", 0.01));
 	}
 }

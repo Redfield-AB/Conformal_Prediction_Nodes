@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/default.png" type="LoopStart" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./icons/loop_start.png" type="LoopStart" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Conformal Prediction Loop Start</name>
     
     <shortDescription>
-        
+        Splits the input table into three new tables: training, calibration/cross-validation and test.
     </shortDescription>
     
     <fullDescription>

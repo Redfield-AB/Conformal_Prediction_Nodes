@@ -17,26 +17,34 @@
    <extension
          point="org.knime.workbench.repository.nodes">
       <node
-            category-path="/"
+            category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorNodeFactory">
       </node>
       <node
-            category-path="/"
-            deprecated="false"
+            category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorClassifierNodeFactory">
       </node>
       <node
-            category-path="/"
+            category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorLoopEndNodeFactory">
       </node>
       <node
-            category-path="/"
+            category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory">
       </node>
       <node
-            category-path="/"
+            category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory">
       </node>
+   </extension>
+   <extension
+         point="org.knime.workbench.repository.categories">
+      <category
+            icon="icons/redfield_logo.png"
+            level-id="conformalPrediction"
+            name="Conformal prediction"
+            path="/community">
+      </category>
    </extension>
    
 </plugin>
