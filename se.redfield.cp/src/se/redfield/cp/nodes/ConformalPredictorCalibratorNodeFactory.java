@@ -29,7 +29,7 @@ public class ConformalPredictorCalibratorNodeFactory extends NodeFactory<Conform
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new ConformalPredictorNodeDialog();
+		return new ConformalPredictorCalibratorNodeDialog();
 	}
 
 }

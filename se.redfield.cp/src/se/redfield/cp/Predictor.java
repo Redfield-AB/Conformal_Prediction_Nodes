@@ -101,11 +101,17 @@ public class Predictor {
 	}
 
 	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
-		DataColumnSpec indexCol = new DataColumnSpecCreator(String.format(model.getPredictionRankColumnFormat(), value),
-				LongCell.TYPE).createSpec();
-		DataColumnSpec scoreCol = new DataColumnSpecCreator(
-				String.format(model.getPredictionScoreColumnFormat(), value), DoubleCell.TYPE).createSpec();
-		return new DataColumnSpec[] { indexCol, scoreCol };
+		List<DataColumnSpec> columns = new ArrayList<>();
+
+		if (model.getIncludeRankColumn()) {
+			columns.add(new DataColumnSpecCreator(String.format(model.getPredictionRankColumnFormat(), value),
+					LongCell.TYPE).createSpec());
+		}
+		columns.add(
+				new DataColumnSpecCreator(String.format(model.getPredictionScoreColumnFormat(), value), DoubleCell.TYPE)
+						.createSpec());
+
+		return columns.toArray(new DataColumnSpec[] {});
 	}
 
 	private class ScoreCellFactory extends AbstractCellFactory {
@@ -124,7 +130,13 @@ public class Predictor {
 			double p = ((DoubleValue) row.getCell(pColumnIndex)).getDoubleValue();
 			int rank = getRank(p);
 			double score = ((double) probabilities.size() - rank) / (probabilities.size() + 1);
-			return new DataCell[] { new LongCell(rank), new DoubleCell(score) };
+			DoubleCell scoreCell = new DoubleCell(score);
+
+			if (model.getIncludeRankColumn()) {
+				return new DataCell[] { new LongCell(rank), scoreCell };
+			} else {
+				return new DataCell[] { scoreCell };
+			}
 		}
 
 		protected int getRank(double p) {

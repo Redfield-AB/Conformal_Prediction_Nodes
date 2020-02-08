@@ -25,11 +25,15 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 
 	private static final String KEY_COLUMN_NAME = "columnName";
 	private static final String KEY_KEEP_ALL_COLUMNS = "keepAllColumns";
+	private static final String KEY_KEEP_ID_COLUMN = "keepIdColumn";
+	private static final String KEY_ID_COLUMN = "idColumn";
 
 	private static final String CALIBRATION_P_COLUMN_DEFAULT_NAME = "P";
 
 	private final SettingsModelString columnNameSettings = createColumnNameSettingsModel();
 	private final SettingsModelBoolean keepAllColumnsSettings = createKeepAllColumnsSettingsModel();
+	private final SettingsModelBoolean keepIdColumnSettings = createKeepIdColumnSettings();
+	private final SettingsModelString idColumnSettings = createIdColumnSettings();
 
 	static SettingsModelString createColumnNameSettingsModel() {
 		return new SettingsModelString(KEY_COLUMN_NAME, "");
@@ -37,6 +41,14 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 
 	static SettingsModelBoolean createKeepAllColumnsSettingsModel() {
 		return new SettingsModelBoolean(KEY_KEEP_ALL_COLUMNS, false);
+	}
+
+	static SettingsModelBoolean createKeepIdColumnSettings() {
+		return new SettingsModelBoolean(KEY_KEEP_ID_COLUMN, false);
+	}
+
+	static SettingsModelString createIdColumnSettings() {
+		return new SettingsModelString(KEY_ID_COLUMN, "");
 	}
 
 	protected AbstractConformalPredictorNodeModel(int nrInDataPorts, int nrOutDataPorts) {
@@ -59,6 +71,14 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		return keepAllColumnsSettings.getBooleanValue();
 	}
 
+	public boolean getKeepIdColumn() {
+		return keepIdColumnSettings.getBooleanValue();
+	}
+
+	public String getIdColumn() {
+		return idColumnSettings.getStringValue();
+	}
+
 	public String getCalibrationProbabilityColumnName() {
 		return CALIBRATION_P_COLUMN_DEFAULT_NAME;
 	}
@@ -70,6 +90,10 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 
 		if (getSelectedColumnName().isEmpty()) {
 			throw new InvalidSettingsException("Class column is not selected");
+		}
+
+		if (!getKeepAllColumns() && getKeepIdColumn() && getIdColumn().isEmpty()) {
+			throw new InvalidSettingsException("Id column is not selected");
 		}
 
 		validateTableSpecs(getSelectedColumnName(), spec);
@@ -102,12 +126,19 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 				throw new InvalidSettingsException("Probability column not found: " + pColumnName);
 			}
 		}
+
+		if (!getKeepAllColumns() && getKeepIdColumn() && !spec.containsName(getIdColumn())) {
+			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
+		}
 	}
 
 	public String[] getRequiredColumnNames(DataTableSpec spec) {
 		List<String> columns = spec.getColumnSpec(getSelectedColumnName()).getDomain().getValues().stream()
 				.map(c -> getProbabilityColumnName(c.toString())).collect(Collectors.toList());
 		columns.add(getSelectedColumnName());
+		if (!getKeepAllColumns() && getKeepIdColumn()) {
+			columns.add(getIdColumn());
+		}
 		return columns.toArray(new String[] {});
 	}
 
@@ -115,18 +146,24 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	protected void saveSettingsTo(NodeSettingsWO settings) {
 		columnNameSettings.saveSettingsTo(settings);
 		keepAllColumnsSettings.saveSettingsTo(settings);
+		keepIdColumnSettings.saveSettingsTo(settings);
+		idColumnSettings.saveSettingsTo(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		columnNameSettings.validateSettings(settings);
 		keepAllColumnsSettings.validateSettings(settings);
+		keepIdColumnSettings.validateSettings(settings);
+		idColumnSettings.validateSettings(settings);
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		columnNameSettings.loadSettingsFrom(settings);
 		keepAllColumnsSettings.loadSettingsFrom(settings);
+		keepIdColumnSettings.loadSettingsFrom(settings);
+		idColumnSettings.loadSettingsFrom(settings);
 	}
 
 	@Override

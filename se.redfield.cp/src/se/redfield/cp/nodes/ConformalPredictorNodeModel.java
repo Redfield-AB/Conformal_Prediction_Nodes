@@ -11,6 +11,9 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.streamable.InputPortRole;
 import org.knime.core.node.streamable.OutputPortRole;
@@ -32,10 +35,21 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
 	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "P-value (%s)";
 
+	private static final String KEY_INCLUDE_RANK_COLUMN = "includeRankColumn";
+
 	private final Predictor predictor = new Predictor(this);
+	private final SettingsModelBoolean includeRankSettings = createIncludeRankSettings();
+
+	static SettingsModelBoolean createIncludeRankSettings() {
+		return new SettingsModelBoolean(KEY_INCLUDE_RANK_COLUMN, true);
+	}
 
 	protected ConformalPredictorNodeModel() {
 		super(2, 1);
+	}
+
+	public boolean getIncludeRankColumn() {
+		return includeRankSettings.getBooleanValue();
 	}
 
 	public String getPredictionRankColumnFormat() {
@@ -128,4 +142,21 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 		};
 	}
 
+	@Override
+	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
+		super.loadValidatedSettingsFrom(settings);
+		includeRankSettings.loadSettingsFrom(settings);
+	}
+
+	@Override
+	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
+		super.validateSettings(settings);
+		includeRankSettings.validateSettings(settings);
+	}
+
+	@Override
+	protected void saveSettingsTo(NodeSettingsWO settings) {
+		super.saveSettingsTo(settings);
+		includeRankSettings.saveSettingsTo(settings);
+	}
 }
