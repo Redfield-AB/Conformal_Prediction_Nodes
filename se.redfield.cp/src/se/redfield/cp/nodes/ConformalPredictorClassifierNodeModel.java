@@ -43,7 +43,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	private static final String KEY_SCORE_THRESHOLD = "scoreThreshold";
 
 	private static final double DEFAULT_SCORE_THRESHOLD = 0.8;
-	private static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
+	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 
 	private static final SettingsModelDoubleBounded scoreThresholdSettings = createScoreThresholdSettings();
 

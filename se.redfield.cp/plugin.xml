@@ -36,6 +36,10 @@
             category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory">
       </node>
+      <node
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorScorerNodeFactory">
+      </node>
    </extension>
    <extension
          point="org.knime.workbench.repository.categories">
