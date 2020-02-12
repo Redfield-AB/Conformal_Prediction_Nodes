@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.StringValue;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -24,6 +25,8 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 
 	private final SettingsModelString targetColumnSettings = createTargetColumnSettings();
 	private final SettingsModelString classesColumnSettings = createClassesColumnSettings();
+	private final SettingsModelString stringSeparatorSettings = ConformalPredictorClassifierNodeModel
+			.createStringSeparatorSettings();
 
 	private final Scorer scorer = new Scorer(this);
 
@@ -47,6 +50,10 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		return classesColumnSettings.getStringValue();
 	}
 
+	public String getStringSeparator() {
+		return stringSeparatorSettings.getStringValue();
+	}
+
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		if (getTargetColumn().isEmpty() || getClassesColumn().isEmpty()) {
@@ -63,6 +70,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 			for (DataColumnSpec c : spec) {
 				if (c.getDomain().hasValues() && !c.getDomain().getValues().isEmpty()
 						&& c.getDomain().getValues().size() < valuesNum) {
+					valuesNum = c.getDomain().getValues().size();
 					targetColumnSettings.setStringValue(c.getName());
 				}
 			}
@@ -89,8 +97,11 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		}
 
 		DataColumnSpec classesColumn = spec.getColumnSpec(getClassesColumn());
-		if (!classesColumn.getType().isCollectionType()) {
+		if (!classesColumn.getType().isCollectionType() && !classesColumn.getType().isCompatible(StringValue.class)) {
 			throw new InvalidSettingsException("Classes column has unsupported data type: " + classesColumn.getType());
+		}
+		if (classesColumn.getType().isCompatible(StringValue.class) && getStringSeparator().isEmpty()) {
+			throw new InvalidSettingsException("String separator is empty");
 		}
 	}
 
@@ -103,18 +114,21 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 	protected void saveSettingsTo(NodeSettingsWO settings) {
 		targetColumnSettings.saveSettingsTo(settings);
 		classesColumnSettings.saveSettingsTo(settings);
+		stringSeparatorSettings.saveSettingsTo(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetColumnSettings.validateSettings(settings);
 		classesColumnSettings.validateSettings(settings);
+		stringSeparatorSettings.validateSettings(settings);
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetColumnSettings.loadSettingsFrom(settings);
 		classesColumnSettings.loadSettingsFrom(settings);
+		stringSeparatorSettings.loadSettingsFrom(settings);
 	}
 
 	@Override

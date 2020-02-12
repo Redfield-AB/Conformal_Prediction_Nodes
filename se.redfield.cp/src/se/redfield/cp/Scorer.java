@@ -3,7 +3,9 @@ package se.redfield.cp;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -110,8 +112,9 @@ public class Scorer {
 	private Set<String> getClasses(DataCell cell) {
 		if (cell.getType().isCollectionType()) {
 			return ((CollectionDataValue) cell).stream().map(DataCell::toString).collect(toSet());
+		} else {
+			return new HashSet<>(Arrays.asList(cell.toString().split(model.getStringSeparator())));
 		}
-		throw new RuntimeException("Unsupported column type: " + cell.getType());
 	}
 
 	private class ClassScores {
