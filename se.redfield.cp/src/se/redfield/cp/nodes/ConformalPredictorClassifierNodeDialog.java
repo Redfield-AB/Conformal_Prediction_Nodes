@@ -20,6 +20,7 @@ public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsP
 		SettingsModelString stringSeparatorSettings = ConformalPredictorClassifierNodeModel
 				.createStringSeparatorSettings();
 
+		stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue());
 		classesAsStringSettings
 				.addChangeListener(e -> stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue()));
 

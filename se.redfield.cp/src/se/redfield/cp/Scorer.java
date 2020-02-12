@@ -39,13 +39,15 @@ public class Scorer {
 	public DataTableSpec createOutputSpec() {
 		List<DataColumnSpec> specs = new ArrayList<>();
 		specs.add(new DataColumnSpecCreator("Target", StringCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("TP_Exclusive", LongCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("TP_Inclusive", LongCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("TP_Total", LongCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("FN", LongCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("Total", LongCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("Accuracy (Simple)", DoubleCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("Accuracy (Advanced)", DoubleCell.TYPE).createSpec());
+		if (model.isAdditionalInfoMode()) {
+			specs.add(new DataColumnSpecCreator("Exact match", LongCell.TYPE).createSpec());
+			specs.add(new DataColumnSpecCreator("Soft match", LongCell.TYPE).createSpec());
+			specs.add(new DataColumnSpecCreator("Total match", LongCell.TYPE).createSpec());
+			specs.add(new DataColumnSpecCreator("Error", LongCell.TYPE).createSpec());
+			specs.add(new DataColumnSpecCreator("Total", LongCell.TYPE).createSpec());
+		}
+		specs.add(new DataColumnSpecCreator("Accuracy (strict)", DoubleCell.TYPE).createSpec());
+		specs.add(new DataColumnSpecCreator("Accuracy (soft)", DoubleCell.TYPE).createSpec());
 		return new DataTableSpec(specs.toArray(new DataColumnSpec[] {}));
 	}
 
@@ -99,11 +101,13 @@ public class Scorer {
 	private DataRow createRow(ClassScores score, long idx) {
 		List<DataCell> cells = new ArrayList<>();
 		cells.add(new StringCell(score.getTarget()));
-		cells.add(new LongCell(score.getTpExclusive()));
-		cells.add(new LongCell(score.getTpInclusive()));
-		cells.add(new LongCell(score.getTotalTp()));
-		cells.add(new LongCell(score.getFn()));
-		cells.add(new LongCell(score.getTotal()));
+		if (model.isAdditionalInfoMode()) {
+			cells.add(new LongCell(score.getTpExclusive()));
+			cells.add(new LongCell(score.getTpInclusive()));
+			cells.add(new LongCell(score.getTotalTp()));
+			cells.add(new LongCell(score.getFn()));
+			cells.add(new LongCell(score.getTotal()));
+		}
 		cells.add(new DoubleCell(score.getAccuracySimple()));
 		cells.add(new DoubleCell(score.getAccuracyAdvanced()));
 		return new DefaultRow(RowKey.createRowKey(idx), cells);

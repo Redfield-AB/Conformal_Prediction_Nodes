@@ -45,7 +45,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
 
-	private static final String KEY_SCORE_THRESHOLD = "scoreThreshold";
+	private static final String KEY_SCORE_THRESHOLD = "significanceLevel";
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 

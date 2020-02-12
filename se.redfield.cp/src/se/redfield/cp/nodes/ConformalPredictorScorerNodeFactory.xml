@@ -1,21 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/default.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./icons/scorer.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Conformal Scorer</name>
     
     <shortDescription>
-        
+        Compares predictions made by Conformal Classifier with actual values.
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	
+        	Compares predictions made by Conformal Classifier with actual values. There are two types of scoring:
+        	<ul>
+        		<li>
+        			strict – counts number of correct predictions for every single class, ignoring "Null" class and mixed classes.
+        			Calculated as <tt>Exact_match/(Exact_match + Error)</tt>
+        			See <b>Additional prediction information</b> option section for parameters description.
+        		</li>
+        		<li>
+        			soft - counts the number of correct predictions for both single class and mixed classes, ignoring "Null".
+        	 		If a record belongs to a mixed class it is considered to be correct.
+        	 		Calculated as <tt>Total_match/Total</tt>
+        			See <b>Additional prediction information</b> option section for parameters description.	
+        		</li>
+        	</ul>
         </intro>
-            
+        <option name="Target column">
+        	A column that contains the real classes of the data.
+        </option>
+        <option name="Classes">
+        	A column that contains predictions produced by Conformal Classifier. Could be both collection or string column type.
+        </option>
+        <option name="Additional prediction information">
+        	Includes additional columns with some prediction metrics to the output table.
+        	<ul>
+        		<li>Exact match – number of correct predictions that belong to one class, and not belong to any mixed class.</li>
+        		<li>Soft match - number of correct predictions that belong to one of the mixed classes.</li>
+        		<li>Total match – Exact_match + Soft_match.</li>
+        		<li>Error – number of predictions that does not match real target class.</li>
+        		<li>Total – total number of records that belongs to the current target class.</li>
+        	</ul>
+        </option>
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Prediction Table">Prediction Table</inPort>
+        <inPort index="0" name="Input">Table with ranked predictions and classes.</inPort>
         
-        <outPort index="0" name="Accuracy Table">Accuracy Table</outPort>
+        <outPort index="0" name="Output">The accuracy statistics table.</outPort>
     </ports>    
 </knimeNode>

@@ -14,6 +14,7 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.Scorer;
@@ -22,11 +23,13 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 
 	private static final String KEY_TARGET_COLUMN = "targetColumn";
 	private static final String KEY_CLASSES_COLUMN = "classesColumn";
+	private static final String KEY_ADDITIONAL_INFO = "additionalInfo";
 
 	private final SettingsModelString targetColumnSettings = createTargetColumnSettings();
 	private final SettingsModelString classesColumnSettings = createClassesColumnSettings();
 	private final SettingsModelString stringSeparatorSettings = ConformalPredictorClassifierNodeModel
 			.createStringSeparatorSettings();
+	private final SettingsModelBoolean additionalInforSettings = createAdditionalInfoSettings();
 
 	private final Scorer scorer = new Scorer(this);
 
@@ -36,6 +39,10 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 
 	static SettingsModelString createClassesColumnSettings() {
 		return new SettingsModelString(KEY_CLASSES_COLUMN, "");
+	}
+
+	static SettingsModelBoolean createAdditionalInfoSettings() {
+		return new SettingsModelBoolean(KEY_ADDITIONAL_INFO, true);
 	}
 
 	protected ConformalPredictorScorerNodeModel() {
@@ -52,6 +59,10 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 
 	public String getStringSeparator() {
 		return stringSeparatorSettings.getStringValue();
+	}
+
+	public boolean isAdditionalInfoMode() {
+		return additionalInforSettings.getBooleanValue();
 	}
 
 	@Override
@@ -115,6 +126,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		targetColumnSettings.saveSettingsTo(settings);
 		classesColumnSettings.saveSettingsTo(settings);
 		stringSeparatorSettings.saveSettingsTo(settings);
+		additionalInforSettings.saveSettingsTo(settings);
 	}
 
 	@Override
@@ -122,6 +134,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		targetColumnSettings.validateSettings(settings);
 		classesColumnSettings.validateSettings(settings);
 		stringSeparatorSettings.validateSettings(settings);
+		additionalInforSettings.validateSettings(settings);
 	}
 
 	@Override
@@ -129,6 +142,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		targetColumnSettings.loadSettingsFrom(settings);
 		classesColumnSettings.loadSettingsFrom(settings);
 		stringSeparatorSettings.loadSettingsFrom(settings);
+		additionalInforSettings.loadSettingsFrom(settings);
 	}
 
 	@Override

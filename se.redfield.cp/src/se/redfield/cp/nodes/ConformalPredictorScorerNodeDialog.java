@@ -8,8 +8,10 @@ import org.knime.core.data.collection.CollectionDataValue;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
 import org.knime.core.node.defaultnodesettings.DialogComponentString;
+import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane {
@@ -26,6 +28,7 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 		classesColumnSettings = ConformalPredictorScorerNodeModel.createClassesColumnSettings();
 		SettingsModelString stringSeparatorSettings = ConformalPredictorClassifierNodeModel
 				.createStringSeparatorSettings();
+		SettingsModelBoolean additionalInfoSettings = ConformalPredictorScorerNodeModel.createAdditionalInfoSettings();
 
 		stringSeparatorComp = new DialogComponentString(stringSeparatorSettings, "String separator:");
 		stringSeparatorComp.getComponentPanel().setVisible(false);
@@ -37,6 +40,8 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 		addDialogComponent(new DialogComponentColumnNameSelection(classesColumnSettings, "Classes column:", 0,
 				CollectionDataValue.class, StringValue.class));
 		addDialogComponent(stringSeparatorComp);
+		createNewGroup("Output");
+		addDialogComponent(new DialogComponentBoolean(additionalInfoSettings, "Additional prediction information"));
 	}
 
 	private void calcStringSeparatorVisibility() {
