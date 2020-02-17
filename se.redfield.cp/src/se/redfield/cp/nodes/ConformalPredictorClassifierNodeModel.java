@@ -70,7 +70,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 
-	private static final double DEFAULT_SCORE_THRESHOLD = 0.8;
+	private static final double DEFAULT_SCORE_THRESHOLD = 0.2;
 	private static final String DEFAULT_SEPARATOR = ";";
 	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 

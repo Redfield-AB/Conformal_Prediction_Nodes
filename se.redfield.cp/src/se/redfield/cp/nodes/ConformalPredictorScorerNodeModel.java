@@ -46,8 +46,8 @@ import se.redfield.cp.Scorer;
  * <li>Error – number of predictions that does not match real target class.</li>
  * <li>Total – total number of records that belongs to the current target
  * class.</li>
- * <li>Accuracy (strict) = Exact_match/(Exact_match + Error)</li>
- * <li>Accuracy (soft) = Total_match/Total</li>
+ * <li>Efficiency = Exact_match/(Exact_match + Error)</li>
+ * <li>Validity = Total_match/Total</li>
  * </ul>
  * 
  *

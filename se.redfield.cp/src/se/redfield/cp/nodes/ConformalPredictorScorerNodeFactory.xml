@@ -11,12 +11,12 @@
         	Compares predictions made by Conformal Classifier with actual values. There are two types of scoring:
         	<ul>
         		<li>
-        			strict – counts number of correct predictions for every single class, ignoring "Null" class and mixed classes.
+        			Efficiency – counts number of correct predictions for every single class, ignoring "Null" class and mixed classes.
         			Calculated as <tt>Exact_match/(Exact_match + Error)</tt>
         			See <b>Additional prediction information</b> option section for parameters description.
         		</li>
         		<li>
-        			soft - counts the number of correct predictions for both single class and mixed classes, ignoring "Null".
+        			Validity - counts the number of correct predictions for both single class and mixed classes, ignoring "Null".
         	 		If a record belongs to a mixed class it is considered to be correct.
         	 		Calculated as <tt>Total_match/Total</tt>
         			See <b>Additional prediction information</b> option section for parameters description.	

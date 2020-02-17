@@ -69,8 +69,8 @@ public class Scorer {
 			specs.add(new DataColumnSpecCreator("Error", LongCell.TYPE).createSpec());
 			specs.add(new DataColumnSpecCreator("Total", LongCell.TYPE).createSpec());
 		}
-		specs.add(new DataColumnSpecCreator("Accuracy (strict)", DoubleCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("Accuracy (soft)", DoubleCell.TYPE).createSpec());
+		specs.add(new DataColumnSpecCreator("Efficiency", DoubleCell.TYPE).createSpec());
+		specs.add(new DataColumnSpecCreator("Validity", DoubleCell.TYPE).createSpec());
 		return new DataTableSpec(specs.toArray(new DataColumnSpec[] {}));
 	}
 
@@ -85,8 +85,8 @@ public class Scorer {
 	 * <li>Error – number of predictions that does not match real target class.</li>
 	 * <li>Total – total number of records that belongs to the current target
 	 * class.</li>
-	 * <li>Accuracy (strict) = Exact_match/(Exact_match + Error)</li>
-	 * <li>Accuracy (soft) = Total_match/Total</li>
+	 * <li>Efficiency = Exact_match/(Exact_match + Error)</li>
+	 * <li>Validity = Total_match/Total</li>
 	 * </ul>
 	 * 
 	 * @param inTable Input table.
@@ -165,8 +165,8 @@ public class Scorer {
 			cells.add(new LongCell(score.getFn()));
 			cells.add(new LongCell(score.getTotal()));
 		}
-		cells.add(new DoubleCell(score.getAccuracySimple()));
-		cells.add(new DoubleCell(score.getAccuracyAdvanced()));
+		cells.add(new DoubleCell(score.getEfficiency()));
+		cells.add(new DoubleCell(score.getValidity()));
 		return new DefaultRow(RowKey.createRowKey(idx), cells);
 	}
 
@@ -239,11 +239,11 @@ public class Scorer {
 			return tpExclusive + tpInclusive;
 		}
 
-		public double getAccuracySimple() {
+		public double getEfficiency() {
 			return (double) tpExclusive / (tpExclusive + fn);
 		}
 
-		public double getAccuracyAdvanced() {
+		public double getValidity() {
 			return (double) getTotalTp() / total;
 		}
 	}

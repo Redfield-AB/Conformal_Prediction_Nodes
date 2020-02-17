@@ -94,7 +94,8 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	private ColumnAggregator[] columnAggregators;
 
 	protected ConformalPredictorLoopEndNodeModel() {
-		super(new PortType[] { BufferedDataTable.TYPE, BufferedDataTable.TYPE, BufferedDataTable.TYPE_OPTIONAL },
+		super(new PortType[] { BufferedDataTable.TYPE_OPTIONAL, BufferedDataTable.TYPE,
+				BufferedDataTable.TYPE_OPTIONAL },
 				new PortType[] { BufferedDataTable.TYPE, BufferedDataTable.TYPE, BufferedDataTable.TYPE_OPTIONAL });
 	}
 
@@ -135,6 +136,9 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	 * @return Result spec.
 	 */
 	private DataTableSpec appendIterationColumn(DataTableSpec inSpec) {
+		if (inSpec == null) {
+			return null;
+		}
 		DataColumnSpec iterColumn = new DataColumnSpecCreator(getIterationColumnName(), IntCell.TYPE).createSpec();
 		return KnimeUtils.createSpec(inSpec, iterColumn);
 	}
@@ -147,9 +151,6 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	 * @return Result spec.
 	 */
 	private DataTableSpec createModelTableSpec(DataTableSpec inSpec) {
-		if (inSpec == null) {
-			return null;
-		}
 		return appendIterationColumn(inSpec);
 	}
 
@@ -254,7 +255,10 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	 */
 	private void initContainers(BufferedDataTable inCalibrationTable, BufferedDataTable inPredictionTable,
 			BufferedDataTable inModelTable, ExecutionContext exec) {
-		calibrationContainer = exec.createDataContainer(appendIterationColumn(inCalibrationTable.getDataTableSpec()));
+		if (inCalibrationTable != null) {
+			calibrationContainer = exec
+					.createDataContainer(appendIterationColumn(inCalibrationTable.getDataTableSpec()));
+		}
 		predictionContainer = exec
 				.createDataContainer(createConcatenatedTableSpec(inPredictionTable.getDataTableSpec()));
 		if (inModelTable != null) {
@@ -310,16 +314,26 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	 * @throws CanceledExecutionException
 	 */
 	private BufferedDataTable[] collectResults(ExecutionContext exec) throws CanceledExecutionException {
-		calibrationContainer.close();
-		predictionContainer.close();
-		if (modelContainer != null) {
-			modelContainer.close();
+		return new BufferedDataTable[] { getFromContainer(calibrationContainer, exec), collectPredictionTable(exec),
+				getFromContainer(modelContainer, exec) };
+	}
+
+	/**
+	 * Fetches table from nullable {@link BufferedDataContainer}. Closes container
+	 * and returns {@link BufferedDataTable}.
+	 * 
+	 * @param container {@link BufferedDataContainer} to fetch table from. Could be
+	 *                  null.
+	 * @param exec      Execution context
+	 * @return {@link BufferedDataTable} from provided container or Void table in
+	 *         case container is null
+	 */
+	private BufferedDataTable getFromContainer(BufferedDataContainer container, ExecutionContext exec) {
+		if (container == null) {
+			return exec.createVoidTable(new DataTableSpec());
 		}
-
-		BufferedDataTable outModelTable = modelContainer == null ? exec.createVoidTable(new DataTableSpec())
-				: modelContainer.getTable();
-
-		return new BufferedDataTable[] { calibrationContainer.getTable(), collectPredictionTable(exec), outModelTable };
+		container.close();
+		return container.getTable();
 	}
 
 	/**
@@ -331,7 +345,7 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	 * @throws CanceledExecutionException
 	 */
 	private BufferedDataTable collectPredictionTable(ExecutionContext exec) throws CanceledExecutionException {
-		BufferedDataTable table = predictionContainer.getTable();
+		BufferedDataTable table = getFromContainer(predictionContainer, exec);
 		List<String> groupByCols = getGroupByCols();
 
 		GlobalSettings globalSettings = GlobalSettings.builder()
