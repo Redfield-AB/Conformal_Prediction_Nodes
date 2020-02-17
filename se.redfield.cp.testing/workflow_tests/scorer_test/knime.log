@@ -3196,3 +3196,1222 @@ Configure succeeded. (Table Difference Checker)
 2020-02-17 04:22:12,995 : DEBUG : main : FileReaderNodeModel : File Reader : 0:13:0:1 : Removing all (0) views from model.
 2020-02-17 04:22:12,995 : DEBUG : main : Node : File Reader : 0:13:0:1 : clean output ports.
 2020-02-17 04:22:12,995 : DEBUG : main : WorkflowManager : scorer_test : 0 : Project "scorer_test 0" removed (2 remaining)
+2020-02-17 20:19:02,043 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,053 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,065 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,079 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,084 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,091 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,098 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,108 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,112 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,122 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,128 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,134 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,140 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,145 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,151 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,157 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,185 : DEBUG : ModalContext : FileReaderNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,191 : DEBUG : ModalContext : ConformalPredictorLoopStartNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,198 : DEBUG : ModalContext : RandomForestClassificationLearnerNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,203 : DEBUG : ModalContext : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,208 : DEBUG : ModalContext : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,212 : DEBUG : ModalContext : ConformalPredictorCalibratorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,218 : DEBUG : ModalContext : ConformalPredictorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,223 : DEBUG : ModalContext : ConformalPredictorLoopEndNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:19:02,240 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(1) to node 2:13:0:3(1)
+2020-02-17 20:19:02,240 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:10(1) to node 2:13:0:11(2)
+2020-02-17 20:19:02,240 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:8(1) to node 2:13:0:10(2)
+2020-02-17 20:19:02,240 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:11(1)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:1(1) to node 2:13:0:2(1)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:10(1)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(2) to node 2:13:0:4(2)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:11(2) to node 2:13:0:13(1)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:4(1)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(3) to node 2:13:0:8(2)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:8(1)
+2020-02-17 20:19:02,241 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:4(1) to node 2:13:0:9(1)
+2020-02-17 20:19:02,253 : DEBUG : ModalContext : WorkflowDataRepository : Conformal Prediction Loop Start : 2:13:0:2 : Adding handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 1 in total
+2020-02-17 20:19:02,473 : DEBUG : ModalContext : Node : Conformal Scorer : 2:15 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:19:02,479 : DEBUG : ModalContext : Node : Conformal Scorer : 2:27 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:19:02,495 : DEBUG : ModalContext : Node : Conformal Scorer : 2:19 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:19:02,502 : DEBUG : ModalContext : Node : Table Difference Checker : 2:17 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:19:02,503 : DEBUG : ModalContext : Node : Table Difference Checker : 2:29 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:19:02,506 : DEBUG : ModalContext : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:19:02,506 : DEBUG : ModalContext : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test"  with no errors
+2020-02-17 20:19:10,511 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:19:10,542 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:19:16,652 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforePreExecution
+2020-02-17 20:19:16,653 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: PREEXECUTE
+2020-02-17 20:19:16,653 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:19:16,653 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : WorkflowDataRepository : Conformal Scorer : 2:19 : Adding handler 72e829b7-0d10-4308-8c8a-576de3d102a2 (Conformal Scorer 2:19: <no directory>) - 2 in total
+2020-02-17 20:19:16,653 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforeExecution
+2020-02-17 20:19:16,653 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: EXECUTING
+2020-02-17 20:19:16,654 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : LocalNodeExecutionJob : Conformal Scorer : 2:19 : Conformal Scorer 2:19 Start execute
+2020-02-17 20:19:16,713 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : Buffer : Conformal Scorer : 2:19 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_7919521553769373343.tmp", 0 remaining
+2020-02-17 20:19:16,714 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : Buffer : Conformal Scorer : 2:19 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5777120575218878162.tmp", 0 remaining
+2020-02-17 20:19:16,715 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : BufferSettings : Conformal Scorer : 2:19 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:19:16,729 : INFO  : KNIME-Worker-1-Conformal Scorer 2:19 : LocalNodeExecutionJob : Conformal Scorer : 2:19 : Conformal Scorer 2:19 End execute (0 secs)
+2020-02-17 20:19:16,729 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforePostExecution
+2020-02-17 20:19:16,729 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: POSTEXECUTE
+2020-02-17 20:19:16,729 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doAfterExecute - success
+2020-02-17 20:19:16,730 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: EXECUTED
+2020-02-17 20:19:16,731 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:19:16,731 : DEBUG : KNIME-Worker-1-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Table Difference Checker 2:21 has new state: CONFIGURED_QUEUED
+2020-02-17 20:19:16,731 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doBeforePreExecution
+2020-02-17 20:19:16,731 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: PREEXECUTE
+2020-02-17 20:19:16,731 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : WorkflowDataRepository : Table Difference Checker : 2:21 : Adding handler 3ced8467-1fb7-4a19-b80a-aca4432c865b (Table Difference Checker 2:21: <no directory>) - 3 in total
+2020-02-17 20:19:16,731 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doBeforeExecution
+2020-02-17 20:19:16,732 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: EXECUTING
+2020-02-17 20:19:16,732 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : LocalNodeExecutionJob : Table Difference Checker : 2:21 : Table Difference Checker 2:21 Start execute
+2020-02-17 20:19:16,736 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : Node : Table Difference Checker : 2:21 : reset
+2020-02-17 20:19:16,736 : ERROR : KNIME-Worker-5-Table Difference Checker 2:21 : Node : Table Difference Checker : 2:21 : Execute failed: Expected column named 'Accuracy (strict)' at position 6 in test table
+java.lang.IllegalStateException: Expected column named 'Accuracy (strict)' at position 6 in test table
+	at org.knime.testing.internal.nodes.differ.DifferenceCheckerNodeModel.checkTableSpecs(DifferenceCheckerNodeModel.java:332)
+	at org.knime.testing.internal.nodes.differ.DifferenceCheckerNodeModel.execute(DifferenceCheckerNodeModel.java:150)
+	at org.knime.core.node.NodeModel.execute(NodeModel.java:737)
+	at org.knime.core.node.NodeModel.executeModel(NodeModel.java:571)
+	at org.knime.core.node.Node.invokeFullyNodeModelExecute(Node.java:1236)
+	at org.knime.core.node.Node.execute(Node.java:1016)
+	at org.knime.core.node.workflow.NativeNodeContainer.performExecuteNode(NativeNodeContainer.java:557)
+	at org.knime.core.node.exec.LocalNodeExecutionJob.mainExecute(LocalNodeExecutionJob.java:95)
+	at org.knime.core.node.workflow.NodeExecutionJob.internalRun(NodeExecutionJob.java:218)
+	at org.knime.core.node.workflow.NodeExecutionJob.run(NodeExecutionJob.java:124)
+	at org.knime.core.util.ThreadUtils$RunnableWithContextImpl.runWithContext(ThreadUtils.java:334)
+	at org.knime.core.util.ThreadUtils$RunnableWithContext.run(ThreadUtils.java:210)
+	at java.util.concurrent.Executors$RunnableAdapter.call(Unknown Source)
+	at java.util.concurrent.FutureTask.run(Unknown Source)
+	at org.knime.core.util.ThreadPool$MyFuture.run(ThreadPool.java:123)
+	at org.knime.core.util.ThreadPool$Worker.run(ThreadPool.java:246)
+2020-02-17 20:19:16,739 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doBeforePostExecution
+2020-02-17 20:19:16,739 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: POSTEXECUTE
+2020-02-17 20:19:16,740 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doAfterExecute - failure
+2020-02-17 20:19:16,740 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : Node : Table Difference Checker : 2:21 : reset
+2020-02-17 20:19:16,740 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : Node : Table Difference Checker : 2:21 : clean output ports.
+2020-02-17 20:19:16,740 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : WorkflowDataRepository : Table Difference Checker : 2:21 : Removing handler 3ced8467-1fb7-4a19-b80a-aca4432c865b (Table Difference Checker 2:21: <no directory>) - 2 remaining
+2020-02-17 20:19:16,740 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: IDLE
+2020-02-17 20:19:16,741 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:19:16,741 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: CONFIGURED
+2020-02-17 20:19:16,742 : DEBUG : KNIME-Worker-5-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : scorer_test 2 has new state: CONFIGURED
+2020-02-17 20:19:16,742 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:19:23,545 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:19 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:19:23,553 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:19 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:19:55,319 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Predictor : 2:13:0:10 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:19:55,327 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Predictor : 2:13:0:10 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:01,656 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Prediction Loop Start : 2:13:0:2 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:01,663 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Prediction Loop Start : 2:13:0:2 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:06,049 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Prediction Loop Start : 2:13:0:2 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:06,055 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Prediction Loop Start : 2:13:0:2 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:10,288 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Prediction Loop Start : 2:13:0:2 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:10,294 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Prediction Loop Start : 2:13:0:2 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:25,489 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Classifier : 2:18 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:25,496 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Classifier : 2:18 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:33,727 : DEBUG : AWT-EventQueue-0 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5777120575218878162.tmp", 0 remaining
+2020-02-17 20:20:39,086 : DEBUG : main : Node : Table Difference Checker : 2:21 : reset
+2020-02-17 20:20:39,086 : DEBUG : main : Node : Table Difference Checker : 2:21 : clean output ports.
+2020-02-17 20:20:39,087 : DEBUG : main : NodeContainer :  :  : Table Difference Checker 2:21 has new state: IDLE
+2020-02-17 20:20:39,087 : DEBUG : main : Node : Conformal Scorer : 2:19 : reset
+2020-02-17 20:20:39,087 : DEBUG : main : Node : Conformal Scorer : 2:19 : clean output ports.
+2020-02-17 20:20:39,088 : DEBUG : main : WorkflowDataRepository :  :  : Removing handler 72e829b7-0d10-4308-8c8a-576de3d102a2 (Conformal Scorer 2:19: <no directory>) - 1 remaining
+2020-02-17 20:20:39,088 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:19 has new state: IDLE
+2020-02-17 20:20:39,089 : DEBUG : main : Node : Conformal Scorer : 2:19 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:20:39,090 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:19 has new state: CONFIGURED
+2020-02-17 20:20:39,090 : DEBUG : main : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:20:39,090 : DEBUG : main : NodeContainer :  :  : Table Difference Checker 2:21 has new state: CONFIGURED
+2020-02-17 20:20:42,383 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:19 has new state: CONFIGURED_MARKEDFOREXEC
+2020-02-17 20:20:42,383 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:19 has new state: CONFIGURED_QUEUED
+2020-02-17 20:20:42,384 : DEBUG : main : NodeContainer :  :  : scorer_test 2 has new state: EXECUTING
+2020-02-17 20:20:42,384 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:20:42,384 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforePreExecution
+2020-02-17 20:20:42,384 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: PREEXECUTE
+2020-02-17 20:20:42,384 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : WorkflowDataRepository : Conformal Scorer : 2:19 : Adding handler 2e1ab162-8490-461e-b3f5-cb4ec27f391e (Conformal Scorer 2:19: <no directory>) - 2 in total
+2020-02-17 20:20:42,384 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforeExecution
+2020-02-17 20:20:42,384 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: EXECUTING
+2020-02-17 20:20:42,385 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : LocalNodeExecutionJob : Conformal Scorer : 2:19 : Conformal Scorer 2:19 Start execute
+2020-02-17 20:20:42,389 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : Buffer : Conformal Scorer : 2:19 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5777120575218878162.tmp", 0 remaining
+2020-02-17 20:20:42,390 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : BufferSettings : Conformal Scorer : 2:19 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:42,391 : INFO  : KNIME-Worker-10-Conformal Scorer 2:19 : LocalNodeExecutionJob : Conformal Scorer : 2:19 : Conformal Scorer 2:19 End execute (0 secs)
+2020-02-17 20:20:42,391 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforePostExecution
+2020-02-17 20:20:42,391 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: POSTEXECUTE
+2020-02-17 20:20:42,392 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doAfterExecute - success
+2020-02-17 20:20:42,392 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: EXECUTED
+2020-02-17 20:20:42,393 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:20:42,393 : DEBUG : KNIME-Worker-10-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : scorer_test 2 has new state: CONFIGURED
+2020-02-17 20:20:42,393 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:20:46,498 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:19 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:20:46,507 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:19 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:21:33,584 : DEBUG : main : Node : Table Difference Checker : 2:21 : reset
+2020-02-17 20:21:33,584 : DEBUG : main : Node : Table Difference Checker : 2:21 : clean output ports.
+2020-02-17 20:21:33,585 : DEBUG : main : NodeContainer : Conformal Scorer : 2:19 : Table Difference Checker 2:21 has new state: IDLE
+2020-02-17 20:21:33,585 : DEBUG : main : Node : Conformal Scorer : 2:19 : reset
+2020-02-17 20:21:33,585 : DEBUG : main : Node : Conformal Scorer : 2:19 : clean output ports.
+2020-02-17 20:21:33,585 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:19 : Removing handler 2e1ab162-8490-461e-b3f5-cb4ec27f391e (Conformal Scorer 2:19: <no directory>) - 1 remaining
+2020-02-17 20:21:33,587 : DEBUG : main : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: IDLE
+2020-02-17 20:21:33,588 : DEBUG : main : Node : Conformal Scorer : 2:19 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:21:33,589 : DEBUG : main : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: CONFIGURED
+2020-02-17 20:21:33,589 : DEBUG : main : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:21:33,590 : DEBUG : main : NodeContainer : Conformal Scorer : 2:19 : Table Difference Checker 2:21 has new state: CONFIGURED
+2020-02-17 20:21:44,107 : DEBUG : main : Node : Table Difference Checker : 2:21 : reset
+2020-02-17 20:21:44,108 : DEBUG : main : Node : Table Difference Checker : 2:21 : clean output ports.
+2020-02-17 20:21:44,108 : DEBUG : main : NodeContainer : Conformal Scorer : 2:20 : Table Difference Checker 2:21 has new state: IDLE
+2020-02-17 20:21:44,108 : DEBUG : main : Node : Conformal Scorer : 2:20 : reset
+2020-02-17 20:21:44,108 : DEBUG : main : Node : Conformal Scorer : 2:20 : clean output ports.
+2020-02-17 20:21:44,110 : DEBUG : main : Buffer : Conformal Scorer : 2:20 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_1188575425594686091.tmp", 0 remaining
+2020-02-17 20:21:44,112 : DEBUG : main : NodeContainer : Conformal Scorer : 2:20 : Setting dirty flag on Conformal Scorer 2:20
+2020-02-17 20:21:44,112 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_1188575425594686091.tmp"
+2020-02-17 20:21:44,112 : DEBUG : main : NodeContainer : Conformal Scorer : 2:20 : Conformal Scorer 2:20 has new state: IDLE
+2020-02-17 20:21:44,113 : DEBUG : main : Node : Conformal Scorer : 2:20 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:21:44,114 : DEBUG : main : NodeContainer : Conformal Scorer : 2:20 : Conformal Scorer 2:20 has new state: CONFIGURED
+2020-02-17 20:21:44,115 : WARN  : main : Node : Table Difference Checker : 2:21 : No checker configured for column 'Efficiency'
+2020-02-17 20:21:44,115 : DEBUG : main : NodeContainer : Conformal Scorer : 2:20 : scorer_test 2 has new state: IDLE
+2020-02-17 20:21:50,599 : DEBUG : main : Node : Table Difference Checker : 2:17 : reset
+2020-02-17 20:21:50,599 : DEBUG : main : Node : Table Difference Checker : 2:17 : clean output ports.
+2020-02-17 20:21:50,600 : DEBUG : main : NodeContainer :  :  : Setting dirty flag on Table Difference Checker 2:17
+2020-02-17 20:21:50,600 : DEBUG : main : NodeContainer :  :  : Table Difference Checker 2:17 has new state: IDLE
+2020-02-17 20:21:50,600 : DEBUG : main : Node : Conformal Scorer : 2:16 : reset
+2020-02-17 20:21:50,600 : DEBUG : main : Node : Conformal Scorer : 2:16 : clean output ports.
+2020-02-17 20:21:50,600 : DEBUG : main : NodeContainer :  :  : Setting dirty flag on Conformal Scorer 2:16
+2020-02-17 20:21:50,601 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:16 has new state: IDLE
+2020-02-17 20:21:50,602 : DEBUG : main : Node : Conformal Scorer : 2:16 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:21:50,602 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:16 has new state: CONFIGURED
+2020-02-17 20:21:50,603 : WARN  : main : Node : Table Difference Checker : 2:17 : No checker configured for column 'Efficiency'
+2020-02-17 20:21:58,006 : DEBUG : main : Node : Table Difference Checker : 2:29 : reset
+2020-02-17 20:21:58,006 : DEBUG : main : Node : Table Difference Checker : 2:29 : clean output ports.
+2020-02-17 20:21:58,007 : DEBUG : main : NodeContainer :  :  : Setting dirty flag on Table Difference Checker 2:29
+2020-02-17 20:21:58,007 : DEBUG : main : NodeContainer :  :  : Table Difference Checker 2:29 has new state: IDLE
+2020-02-17 20:21:58,007 : DEBUG : main : Node : Conformal Scorer : 2:28 : reset
+2020-02-17 20:21:58,007 : DEBUG : main : Node : Conformal Scorer : 2:28 : clean output ports.
+2020-02-17 20:21:58,008 : DEBUG : main : NodeContainer :  :  : Setting dirty flag on Conformal Scorer 2:28
+2020-02-17 20:21:58,008 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:28 has new state: IDLE
+2020-02-17 20:21:58,009 : DEBUG : main : Node : Conformal Scorer : 2:28 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:21:58,009 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:28 has new state: CONFIGURED
+2020-02-17 20:21:58,010 : WARN  : main : Node : Table Difference Checker : 2:29 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:07,474 : DEBUG : main : Node : Table Difference Checker : 2:25 : reset
+2020-02-17 20:22:07,474 : DEBUG : main : Node : Table Difference Checker : 2:25 : clean output ports.
+2020-02-17 20:22:07,474 : DEBUG : main : NodeContainer : Conformal Scorer : 2:24 : Setting dirty flag on Table Difference Checker 2:25
+2020-02-17 20:22:07,475 : DEBUG : main : NodeContainer : Conformal Scorer : 2:24 : Table Difference Checker 2:25 has new state: IDLE
+2020-02-17 20:22:07,475 : DEBUG : main : Node : Conformal Scorer : 2:24 : reset
+2020-02-17 20:22:07,475 : DEBUG : main : Node : Conformal Scorer : 2:24 : clean output ports.
+2020-02-17 20:22:07,475 : DEBUG : main : NodeContainer : Conformal Scorer : 2:24 : Setting dirty flag on Conformal Scorer 2:24
+2020-02-17 20:22:07,476 : DEBUG : main : NodeContainer : Conformal Scorer : 2:24 : Conformal Scorer 2:24 has new state: IDLE
+2020-02-17 20:22:07,477 : DEBUG : main : Node : Conformal Scorer : 2:24 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:22:07,478 : DEBUG : main : NodeContainer : Conformal Scorer : 2:24 : Conformal Scorer 2:24 has new state: CONFIGURED
+2020-02-17 20:22:07,478 : WARN  : main : Node : Table Difference Checker : 2:25 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:14,667 : DEBUG : main : Node : Conformal Scorer : 2:23 : reset
+2020-02-17 20:22:14,667 : DEBUG : main : Node : Conformal Scorer : 2:23 : clean output ports.
+2020-02-17 20:22:14,667 : DEBUG : main : NodeContainer : Conformal Scorer : 2:23 : Setting dirty flag on Conformal Scorer 2:23
+2020-02-17 20:22:14,668 : DEBUG : main : NodeContainer : Conformal Scorer : 2:23 : Conformal Scorer 2:23 has new state: IDLE
+2020-02-17 20:22:14,669 : DEBUG : main : Node : Conformal Scorer : 2:23 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:22:14,670 : DEBUG : main : NodeContainer : Conformal Scorer : 2:23 : Conformal Scorer 2:23 has new state: CONFIGURED
+2020-02-17 20:22:14,670 : WARN  : main : Node : Table Difference Checker : 2:25 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:19,867 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:24 has new state: CONFIGURED_MARKEDFOREXEC
+2020-02-17 20:22:19,867 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:24 has new state: CONFIGURED_QUEUED
+2020-02-17 20:22:19,867 : DEBUG : main : NodeContainer :  :  : scorer_test 2 has new state: EXECUTING
+2020-02-17 20:22:19,867 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:22:19,868 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : WorkflowManager : Conformal Scorer : 2:24 : Conformal Scorer 2:24 doBeforePreExecution
+2020-02-17 20:22:19,868 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : NodeContainer : Conformal Scorer : 2:24 : Conformal Scorer 2:24 has new state: PREEXECUTE
+2020-02-17 20:22:19,868 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : WorkflowDataRepository : Conformal Scorer : 2:24 : Adding handler 69fa53b1-0e7a-4901-b45b-6ff818854b4d (Conformal Scorer 2:24: <no directory>) - 2 in total
+2020-02-17 20:22:19,868 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : WorkflowManager : Conformal Scorer : 2:24 : Conformal Scorer 2:24 doBeforeExecution
+2020-02-17 20:22:19,868 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : NodeContainer : Conformal Scorer : 2:24 : Conformal Scorer 2:24 has new state: EXECUTING
+2020-02-17 20:22:19,868 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : LocalNodeExecutionJob : Conformal Scorer : 2:24 : Conformal Scorer 2:24 Start execute
+2020-02-17 20:22:19,880 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : Buffer : Conformal Scorer : 2:24 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_6292154553996556005.tmp", 0 remaining
+2020-02-17 20:22:19,881 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : BufferSettings : Conformal Scorer : 2:24 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:19,883 : INFO  : KNIME-Worker-11-Conformal Scorer 2:24 : LocalNodeExecutionJob : Conformal Scorer : 2:24 : Conformal Scorer 2:24 End execute (0 secs)
+2020-02-17 20:22:19,884 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : WorkflowManager : Conformal Scorer : 2:24 : Conformal Scorer 2:24 doBeforePostExecution
+2020-02-17 20:22:19,884 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : NodeContainer : Conformal Scorer : 2:24 : Conformal Scorer 2:24 has new state: POSTEXECUTE
+2020-02-17 20:22:19,884 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : WorkflowManager : Conformal Scorer : 2:24 : Conformal Scorer 2:24 doAfterExecute - success
+2020-02-17 20:22:19,884 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : NodeContainer : Conformal Scorer : 2:24 : Conformal Scorer 2:24 has new state: EXECUTED
+2020-02-17 20:22:19,885 : WARN  : KNIME-Worker-11-Conformal Scorer 2:24 : Node : Table Difference Checker : 2:25 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:19,885 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:24 : NodeContainer : Conformal Scorer : 2:24 : scorer_test 2 has new state: IDLE
+2020-02-17 20:22:19,885 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:22:22,114 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:28 has new state: CONFIGURED_MARKEDFOREXEC
+2020-02-17 20:22:22,114 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:28 has new state: CONFIGURED_QUEUED
+2020-02-17 20:22:22,115 : DEBUG : main : NodeContainer :  :  : scorer_test 2 has new state: EXECUTING
+2020-02-17 20:22:22,115 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:22:22,115 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : WorkflowManager : Conformal Scorer : 2:28 : Conformal Scorer 2:28 doBeforePreExecution
+2020-02-17 20:22:22,115 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : NodeContainer : Conformal Scorer : 2:28 : Conformal Scorer 2:28 has new state: PREEXECUTE
+2020-02-17 20:22:22,115 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : WorkflowDataRepository : Conformal Scorer : 2:28 : Adding handler 9a12351c-ca81-4451-82d0-26a96540fc42 (Conformal Scorer 2:28: <no directory>) - 3 in total
+2020-02-17 20:22:22,115 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : WorkflowManager : Conformal Scorer : 2:28 : Conformal Scorer 2:28 doBeforeExecution
+2020-02-17 20:22:22,116 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : NodeContainer : Conformal Scorer : 2:28 : Conformal Scorer 2:28 has new state: EXECUTING
+2020-02-17 20:22:22,116 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : LocalNodeExecutionJob : Conformal Scorer : 2:28 : Conformal Scorer 2:28 Start execute
+2020-02-17 20:22:22,133 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : Buffer : Conformal Scorer : 2:28 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5747187242796067117.tmp", 0 remaining
+2020-02-17 20:22:22,134 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : BufferSettings : Conformal Scorer : 2:28 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:22,135 : INFO  : KNIME-Worker-12-Conformal Scorer 2:28 : LocalNodeExecutionJob : Conformal Scorer : 2:28 : Conformal Scorer 2:28 End execute (0 secs)
+2020-02-17 20:22:22,135 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : WorkflowManager : Conformal Scorer : 2:28 : Conformal Scorer 2:28 doBeforePostExecution
+2020-02-17 20:22:22,135 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : NodeContainer : Conformal Scorer : 2:28 : Conformal Scorer 2:28 has new state: POSTEXECUTE
+2020-02-17 20:22:22,135 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : WorkflowManager : Conformal Scorer : 2:28 : Conformal Scorer 2:28 doAfterExecute - success
+2020-02-17 20:22:22,135 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : NodeContainer : Conformal Scorer : 2:28 : Conformal Scorer 2:28 has new state: EXECUTED
+2020-02-17 20:22:22,136 : WARN  : KNIME-Worker-12-Conformal Scorer 2:28 : Node : Table Difference Checker : 2:29 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:22,136 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:28 : NodeContainer : Conformal Scorer : 2:28 : scorer_test 2 has new state: IDLE
+2020-02-17 20:22:22,136 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:22:24,599 : DEBUG : main : NodeContainer :  :  : Setting dirty flag on Conformal Scorer 2:15
+2020-02-17 20:22:24,599 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:15 has new state: CONFIGURED_MARKEDFOREXEC
+2020-02-17 20:22:24,600 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:15 has new state: CONFIGURED_QUEUED
+2020-02-17 20:22:24,600 : DEBUG : main : NodeContainer :  :  : scorer_test 2 has new state: EXECUTING
+2020-02-17 20:22:24,600 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:22:24,600 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doBeforePreExecution
+2020-02-17 20:22:24,600 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Conformal Scorer 2:15 has new state: PREEXECUTE
+2020-02-17 20:22:24,600 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : WorkflowDataRepository : Conformal Scorer : 2:15 : Adding handler 4fdd449e-8d7c-4dab-9dd4-9edeea603114 (Conformal Scorer 2:15: <no directory>) - 4 in total
+2020-02-17 20:22:24,600 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doBeforeExecution
+2020-02-17 20:22:24,601 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Conformal Scorer 2:15 has new state: EXECUTING
+2020-02-17 20:22:24,601 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : LocalNodeExecutionJob : Conformal Scorer : 2:15 : Conformal Scorer 2:15 Start execute
+2020-02-17 20:22:24,618 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : Buffer : Conformal Scorer : 2:15 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_7112966073608754732.tmp", 0 remaining
+2020-02-17 20:22:24,618 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : BufferSettings : Conformal Scorer : 2:15 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:24,620 : INFO  : KNIME-Worker-13-Conformal Scorer 2:15 : LocalNodeExecutionJob : Conformal Scorer : 2:15 : Conformal Scorer 2:15 End execute (0 secs)
+2020-02-17 20:22:24,620 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doBeforePostExecution
+2020-02-17 20:22:24,620 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Conformal Scorer 2:15 has new state: POSTEXECUTE
+2020-02-17 20:22:24,620 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doAfterExecute - success
+2020-02-17 20:22:24,620 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Conformal Scorer 2:15 has new state: EXECUTED
+2020-02-17 20:22:24,621 : WARN  : KNIME-Worker-13-Conformal Scorer 2:15 : Node : Table Difference Checker : 2:17 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:24,621 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : scorer_test 2 has new state: IDLE
+2020-02-17 20:22:24,621 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:22:27,718 : DEBUG : main : Node : Conformal Scorer : 2:15 : reset
+2020-02-17 20:22:27,718 : DEBUG : main : Node : Conformal Scorer : 2:15 : clean output ports.
+2020-02-17 20:22:27,718 : DEBUG : main : WorkflowDataRepository :  :  : Removing handler 4fdd449e-8d7c-4dab-9dd4-9edeea603114 (Conformal Scorer 2:15: <no directory>) - 3 remaining
+2020-02-17 20:22:27,719 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:15 has new state: IDLE
+2020-02-17 20:22:27,719 : DEBUG : main : Node : Conformal Scorer : 2:15 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:22:27,720 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:15 has new state: CONFIGURED
+2020-02-17 20:22:27,720 : WARN  : main : Node : Table Difference Checker : 2:17 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:29,511 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:16 has new state: CONFIGURED_MARKEDFOREXEC
+2020-02-17 20:22:29,511 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:16 has new state: CONFIGURED_QUEUED
+2020-02-17 20:22:29,512 : DEBUG : main : NodeContainer :  :  : scorer_test 2 has new state: EXECUTING
+2020-02-17 20:22:29,512 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:22:29,512 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : WorkflowManager : Conformal Scorer : 2:16 : Conformal Scorer 2:16 doBeforePreExecution
+2020-02-17 20:22:29,512 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : NodeContainer : Conformal Scorer : 2:16 : Conformal Scorer 2:16 has new state: PREEXECUTE
+2020-02-17 20:22:29,512 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : WorkflowDataRepository : Conformal Scorer : 2:16 : Adding handler dd0f95e3-e7e3-4fd6-8681-c2e937f01626 (Conformal Scorer 2:16: <no directory>) - 4 in total
+2020-02-17 20:22:29,512 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : WorkflowManager : Conformal Scorer : 2:16 : Conformal Scorer 2:16 doBeforeExecution
+2020-02-17 20:22:29,512 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : NodeContainer : Conformal Scorer : 2:16 : Conformal Scorer 2:16 has new state: EXECUTING
+2020-02-17 20:22:29,512 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : LocalNodeExecutionJob : Conformal Scorer : 2:16 : Conformal Scorer 2:16 Start execute
+2020-02-17 20:22:29,516 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : Buffer : Conformal Scorer : 2:16 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_7112966073608754732.tmp", 0 remaining
+2020-02-17 20:22:29,517 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : BufferSettings : Conformal Scorer : 2:16 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:29,518 : INFO  : KNIME-Worker-14-Conformal Scorer 2:16 : LocalNodeExecutionJob : Conformal Scorer : 2:16 : Conformal Scorer 2:16 End execute (0 secs)
+2020-02-17 20:22:29,518 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : WorkflowManager : Conformal Scorer : 2:16 : Conformal Scorer 2:16 doBeforePostExecution
+2020-02-17 20:22:29,519 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : NodeContainer : Conformal Scorer : 2:16 : Conformal Scorer 2:16 has new state: POSTEXECUTE
+2020-02-17 20:22:29,519 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : WorkflowManager : Conformal Scorer : 2:16 : Conformal Scorer 2:16 doAfterExecute - success
+2020-02-17 20:22:29,519 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : NodeContainer : Conformal Scorer : 2:16 : Conformal Scorer 2:16 has new state: EXECUTED
+2020-02-17 20:22:29,519 : WARN  : KNIME-Worker-14-Conformal Scorer 2:16 : Node : Table Difference Checker : 2:17 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:29,520 : DEBUG : KNIME-Worker-14-Conformal Scorer 2:16 : NodeContainer : Conformal Scorer : 2:16 : scorer_test 2 has new state: IDLE
+2020-02-17 20:22:29,520 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:22:31,600 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:20 has new state: CONFIGURED_MARKEDFOREXEC
+2020-02-17 20:22:31,600 : DEBUG : main : NodeContainer :  :  : Conformal Scorer 2:20 has new state: CONFIGURED_QUEUED
+2020-02-17 20:22:31,601 : DEBUG : main : NodeContainer :  :  : scorer_test 2 has new state: EXECUTING
+2020-02-17 20:22:31,601 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:22:31,601 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : WorkflowManager : Conformal Scorer : 2:20 : Conformal Scorer 2:20 doBeforePreExecution
+2020-02-17 20:22:31,601 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : NodeContainer : Conformal Scorer : 2:20 : Conformal Scorer 2:20 has new state: PREEXECUTE
+2020-02-17 20:22:31,601 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : WorkflowDataRepository : Conformal Scorer : 2:20 : Adding handler 319de868-6fa5-4adb-8957-9560e670fa4d (Conformal Scorer 2:20: <no directory>) - 5 in total
+2020-02-17 20:22:31,602 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : WorkflowManager : Conformal Scorer : 2:20 : Conformal Scorer 2:20 doBeforeExecution
+2020-02-17 20:22:31,602 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : NodeContainer : Conformal Scorer : 2:20 : Conformal Scorer 2:20 has new state: EXECUTING
+2020-02-17 20:22:31,602 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : LocalNodeExecutionJob : Conformal Scorer : 2:20 : Conformal Scorer 2:20 Start execute
+2020-02-17 20:22:31,604 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : Buffer : Conformal Scorer : 2:20 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5777120575218878162.tmp", 0 remaining
+2020-02-17 20:22:31,605 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:31,606 : INFO  : KNIME-Worker-15-Conformal Scorer 2:20 : LocalNodeExecutionJob : Conformal Scorer : 2:20 : Conformal Scorer 2:20 End execute (0 secs)
+2020-02-17 20:22:31,607 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : WorkflowManager : Conformal Scorer : 2:20 : Conformal Scorer 2:20 doBeforePostExecution
+2020-02-17 20:22:31,607 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : NodeContainer : Conformal Scorer : 2:20 : Conformal Scorer 2:20 has new state: POSTEXECUTE
+2020-02-17 20:22:31,607 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : WorkflowManager : Conformal Scorer : 2:20 : Conformal Scorer 2:20 doAfterExecute - success
+2020-02-17 20:22:31,607 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : NodeContainer : Conformal Scorer : 2:20 : Conformal Scorer 2:20 has new state: EXECUTED
+2020-02-17 20:22:31,607 : WARN  : KNIME-Worker-15-Conformal Scorer 2:20 : Node : Table Difference Checker : 2:21 : No checker configured for column 'Efficiency'
+2020-02-17 20:22:31,608 : DEBUG : KNIME-Worker-15-Conformal Scorer 2:20 : NodeContainer : Conformal Scorer : 2:20 : scorer_test 2 has new state: IDLE
+2020-02-17 20:22:31,608 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:22:33,343 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:33,349 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:36,837 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Conformal Scorer : 2:15 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Conformal Scorer (#15)"
+2020-02-17 20:22:36,854 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Conformal Scorer : 2:16 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Conformal Scorer (#16)"
+2020-02-17 20:22:36,856 : DEBUG : ModalContext : BufferSettings : Conformal Scorer : 2:16 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:36,871 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:17 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#17)"
+2020-02-17 20:22:36,876 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Conformal Scorer : 2:19 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Conformal Scorer (#19)"
+2020-02-17 20:22:36,884 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Conformal Scorer : 2:20 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Conformal Scorer (#20)"
+2020-02-17 20:22:36,886 : DEBUG : ModalContext : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:36,893 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:21 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#21)"
+2020-02-17 20:22:36,901 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Conformal Scorer : 2:23 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Conformal Scorer (#23)"
+2020-02-17 20:22:36,908 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Conformal Scorer : 2:24 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Conformal Scorer (#24)"
+2020-02-17 20:22:36,910 : DEBUG : ModalContext : BufferSettings : Conformal Scorer : 2:24 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:36,918 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:25 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#25)"
+2020-02-17 20:22:36,926 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Conformal Scorer : 2:28 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Conformal Scorer (#28)"
+2020-02-17 20:22:36,928 : DEBUG : ModalContext : BufferSettings : Conformal Scorer : 2:28 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:22:36,933 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:29 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#29)"
+2020-02-17 20:22:49,340 : DEBUG : main : NodeContainer : Table Difference Checker : 2:21 : Setting dirty flag on Table Difference Checker 2:21
+2020-02-17 20:22:49,340 : DEBUG : main : NodeContainer : Table Difference Checker : 2:21 : Setting dirty flag on scorer_test 2
+2020-02-17 20:22:49,341 : DEBUG : main : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:22:49,341 : DEBUG : main : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: CONFIGURED
+2020-02-17 20:22:51,600 : DEBUG : main : NodeContainer : Table Difference Checker : 2:17 : Setting dirty flag on Table Difference Checker 2:17
+2020-02-17 20:22:51,600 : DEBUG : main : Node : Table Difference Checker : 2:17 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:22:51,601 : DEBUG : main : NodeContainer : Table Difference Checker : 2:17 : Table Difference Checker 2:17 has new state: CONFIGURED
+2020-02-17 20:22:54,302 : DEBUG : main : NodeContainer : Table Difference Checker : 2:29 : Setting dirty flag on Table Difference Checker 2:29
+2020-02-17 20:22:54,303 : DEBUG : main : Node : Table Difference Checker : 2:29 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:22:54,304 : DEBUG : main : NodeContainer : Table Difference Checker : 2:29 : Table Difference Checker 2:29 has new state: CONFIGURED
+2020-02-17 20:22:56,153 : DEBUG : main : NodeContainer : Table Difference Checker : 2:25 : Setting dirty flag on Table Difference Checker 2:25
+2020-02-17 20:22:56,154 : DEBUG : main : Node : Table Difference Checker : 2:25 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:22:56,154 : DEBUG : main : NodeContainer : Table Difference Checker : 2:25 : Table Difference Checker 2:25 has new state: CONFIGURED
+2020-02-17 20:22:56,155 : DEBUG : main : NodeContainer : Table Difference Checker : 2:25 : scorer_test 2 has new state: CONFIGURED
+2020-02-17 20:22:57,442 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:17 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#17)"
+2020-02-17 20:22:57,448 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:21 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#21)"
+2020-02-17 20:22:57,452 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:25 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#25)"
+2020-02-17 20:22:57,456 : DEBUG : ModalContext : FileSingleNodeContainerPersistor : Table Difference Checker : 2:29 : Replaced node directory "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test\Table Difference Checker (#29)"
+2020-02-17 20:23:01,890 : DEBUG : main : ProjectWorkflowMap : scorer_test : 2 : Removing "file:/C:/src/knime/runtime-KNIME/workflow_tests/scorer_test/" from project map (1 remaining)
+2020-02-17 20:23:01,892 : DEBUG : main : WorkflowManager : scorer_test : 2 : Removing project "scorer_test 2"
+2020-02-17 20:23:01,895 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:21 : Removing all (0) views from model.
+2020-02-17 20:23:01,895 : DEBUG : main : Node : Table Difference Checker : 2:21 : clean output ports.
+2020-02-17 20:23:01,895 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:25 : Removing all (0) views from model.
+2020-02-17 20:23:01,895 : DEBUG : main : Node : Table Difference Checker : 2:25 : clean output ports.
+2020-02-17 20:23:01,896 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:29 : Removing all (0) views from model.
+2020-02-17 20:23:01,896 : DEBUG : main : Node : Table Difference Checker : 2:29 : clean output ports.
+2020-02-17 20:23:01,896 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:17 : Removing all (0) views from model.
+2020-02-17 20:23:01,896 : DEBUG : main : Node : Table Difference Checker : 2:17 : clean output ports.
+2020-02-17 20:23:01,897 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:20 : Removing all (0) views from model.
+2020-02-17 20:23:01,898 : DEBUG : main : Node : Conformal Scorer : 2:20 : clean output ports.
+2020-02-17 20:23:01,898 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:20 : Removing handler 319de868-6fa5-4adb-8957-9560e670fa4d (Conformal Scorer 2:20: <no directory>) - 4 remaining
+2020-02-17 20:23:01,899 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:19 : Removing all (0) views from model.
+2020-02-17 20:23:01,899 : DEBUG : main : Node : Conformal Scorer : 2:19 : clean output ports.
+2020-02-17 20:23:01,899 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:24 : Removing all (0) views from model.
+2020-02-17 20:23:01,899 : DEBUG : main : Node : Conformal Scorer : 2:24 : clean output ports.
+2020-02-17 20:23:01,899 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:24 : Removing handler 69fa53b1-0e7a-4901-b45b-6ff818854b4d (Conformal Scorer 2:24: <no directory>) - 3 remaining
+2020-02-17 20:23:01,900 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:23 : Removing all (0) views from model.
+2020-02-17 20:23:01,900 : DEBUG : main : Node : Conformal Scorer : 2:23 : clean output ports.
+2020-02-17 20:23:01,900 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:28 : Removing all (0) views from model.
+2020-02-17 20:23:01,900 : DEBUG : main : Node : Conformal Scorer : 2:28 : clean output ports.
+2020-02-17 20:23:01,900 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:28 : Removing handler 9a12351c-ca81-4451-82d0-26a96540fc42 (Conformal Scorer 2:28: <no directory>) - 2 remaining
+2020-02-17 20:23:01,900 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:27 : Removing all (0) views from model.
+2020-02-17 20:23:01,900 : DEBUG : main : Node : Conformal Scorer : 2:27 : clean output ports.
+2020-02-17 20:23:01,901 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:16 : Removing all (0) views from model.
+2020-02-17 20:23:01,901 : DEBUG : main : Node : Conformal Scorer : 2:16 : clean output ports.
+2020-02-17 20:23:01,901 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:16 : Removing handler dd0f95e3-e7e3-4fd6-8681-c2e937f01626 (Conformal Scorer 2:16: <no directory>) - 1 remaining
+2020-02-17 20:23:01,901 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:15 : Removing all (0) views from model.
+2020-02-17 20:23:01,901 : DEBUG : main : Node : Conformal Scorer : 2:15 : clean output ports.
+2020-02-17 20:23:01,902 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:18 : Removing all (0) views from model.
+2020-02-17 20:23:01,902 : DEBUG : main : Node : Conformal Classifier : 2:18 : clean output ports.
+2020-02-17 20:23:01,903 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:22 : Removing all (0) views from model.
+2020-02-17 20:23:01,904 : DEBUG : main : Node : Conformal Classifier : 2:22 : clean output ports.
+2020-02-17 20:23:01,904 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:26 : Removing all (0) views from model.
+2020-02-17 20:23:01,905 : DEBUG : main : Node : Conformal Classifier : 2:26 : clean output ports.
+2020-02-17 20:23:01,905 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:14 : Removing all (0) views from model.
+2020-02-17 20:23:01,905 : DEBUG : main : Node : Conformal Classifier : 2:14 : clean output ports.
+2020-02-17 20:23:01,906 : DEBUG : main : VirtualSubNodeOutputNodeModel : Component Output : 2:13:0:13 : Removing all (0) views from model.
+2020-02-17 20:23:01,906 : DEBUG : main : Node : Component Output : 2:13:0:13 : clean output ports.
+2020-02-17 20:23:01,906 : DEBUG : main : ConformalPredictorLoopEndNodeModel : Conformal Prediction Loop End : 2:13:0:11 : Removing all (0) views from model.
+2020-02-17 20:23:01,906 : DEBUG : main : Node : Conformal Prediction Loop End : 2:13:0:11 : clean output ports.
+2020-02-17 20:23:01,907 : DEBUG : main : ConformalPredictorNodeModel : Conformal Predictor : 2:13:0:10 : Removing all (0) views from model.
+2020-02-17 20:23:01,907 : DEBUG : main : Node : Conformal Predictor : 2:13:0:10 : clean output ports.
+2020-02-17 20:23:01,908 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5777120575218878162.tmp"
+2020-02-17 20:23:01,909 : DEBUG : main : Buffer : Conformal Predictor : 2:13:0:10 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_4810249372225000340.tmp", 0 remaining
+2020-02-17 20:23:01,910 : DEBUG : main : ConformalPredictorCalibratorNodeModel : Conformal Calibrator : 2:13:0:9 : Removing all (0) views from model.
+2020-02-17 20:23:01,910 : DEBUG : main : Node : Conformal Calibrator : 2:13:0:9 : clean output ports.
+2020-02-17 20:23:01,910 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 2:13:0:8 : Removing all (0) views from model.
+2020-02-17 20:23:01,911 : DEBUG : main : Node : Random Forest Predictor : 2:13:0:8 : clean output ports.
+2020-02-17 20:23:01,911 : DEBUG : main : Buffer : Random Forest Predictor : 2:13:0:8 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5311554424442511102.tmp", 0 remaining
+2020-02-17 20:23:01,911 : DEBUG : main : Buffer : Random Forest Predictor : 2:13:0:8 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5311554424442511102.tmp", 0 remaining
+2020-02-17 20:23:01,911 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_6292154553996556005.tmp"
+2020-02-17 20:23:01,912 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 2:13:0:4 : Removing all (0) views from model.
+2020-02-17 20:23:01,912 : DEBUG : main : Node : Random Forest Predictor : 2:13:0:4 : clean output ports.
+2020-02-17 20:23:01,912 : DEBUG : main : TreeEnsembleClassificationLearnerNodeModel : Random Forest Learner : 2:13:0:3 : Removing all (0) views from model.
+2020-02-17 20:23:01,912 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5747187242796067117.tmp"
+2020-02-17 20:23:01,913 : DEBUG : main : Node : Random Forest Learner : 2:13:0:3 : clean output ports.
+2020-02-17 20:23:01,913 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_7112966073608754732.tmp"
+2020-02-17 20:23:01,913 : DEBUG : main : ConformalPredictorLoopStartNodeModel : Conformal Prediction Loop Start : 2:13:0:2 : Removing all (0) views from model.
+2020-02-17 20:23:01,914 : DEBUG : main : Node : Conformal Prediction Loop Start : 2:13:0:2 : clean output ports.
+2020-02-17 20:23:01,915 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_7919521553769373343.tmp"
+2020-02-17 20:23:01,916 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_4810249372225000340.tmp"
+2020-02-17 20:23:01,916 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_5311554424442511102.tmp"
+2020-02-17 20:23:01,917 : DEBUG : main : Buffer : Conformal Prediction Loop Start : 2:13:0:2 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_3545532205171201040.tmp", 0 remaining
+2020-02-17 20:23:01,918 : DEBUG : main : Buffer : Conformal Prediction Loop Start : 2:13:0:2 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_6472434478227011541.tmp", 0 remaining
+2020-02-17 20:23:01,918 : DEBUG : main : Buffer : Conformal Prediction Loop Start : 2:13:0:2 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_1721160787540935136.tmp", 0 remaining
+2020-02-17 20:23:01,918 : DEBUG : main : WorkflowDataRepository : Conformal Prediction Loop Start : 2:13:0:2 : Removing handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 0 remaining
+2020-02-17 20:23:01,918 : DEBUG : main : VirtualSubNodeInputNodeModel : Component Input : 2:13:0:12 : Removing all (0) views from model.
+2020-02-17 20:23:01,918 : DEBUG : main : Node : Component Input : 2:13:0:12 : clean output ports.
+2020-02-17 20:23:01,918 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_3545532205171201040.tmp"
+2020-02-17 20:23:01,919 : DEBUG : main : FileReaderNodeModel : File Reader : 2:13:0:1 : Removing all (0) views from model.
+2020-02-17 20:23:01,919 : DEBUG : main : Node : File Reader : 2:13:0:1 : clean output ports.
+2020-02-17 20:23:01,919 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_6472434478227011541.tmp"
+2020-02-17 20:23:01,920 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6625\knime_container_20200217_1721160787540935136.tmp"
+2020-02-17 20:23:01,920 : DEBUG : main : WorkflowManager : scorer_test : 2 : Project "scorer_test 2" removed (2 remaining)
+2020-02-17 20:23:02,294 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,303 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,308 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,319 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,322 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,329 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,336 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,345 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,348 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,353 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,358 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,365 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,368 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,371 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,378 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,383 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,392 : DEBUG : Worker-3 : FileReaderNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,395 : DEBUG : Worker-3 : ConformalPredictorLoopStartNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,401 : DEBUG : Worker-3 : RandomForestClassificationLearnerNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,405 : DEBUG : Worker-3 : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,409 : DEBUG : Worker-3 : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,413 : DEBUG : Worker-3 : ConformalPredictorCalibratorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,416 : DEBUG : Worker-3 : ConformalPredictorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,420 : DEBUG : Worker-3 : ConformalPredictorLoopEndNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:02,430 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(1) to node 2:13:0:3(1)
+2020-02-17 20:23:02,430 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:10(1) to node 2:13:0:11(2)
+2020-02-17 20:23:02,430 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:8(1) to node 2:13:0:10(2)
+2020-02-17 20:23:02,430 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:11(1)
+2020-02-17 20:23:02,430 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:1(1) to node 2:13:0:2(1)
+2020-02-17 20:23:02,430 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:10(1)
+2020-02-17 20:23:02,430 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(2) to node 2:13:0:4(2)
+2020-02-17 20:23:02,431 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:11(2) to node 2:13:0:13(1)
+2020-02-17 20:23:02,431 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:4(1)
+2020-02-17 20:23:02,431 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(3) to node 2:13:0:8(2)
+2020-02-17 20:23:02,431 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:8(1)
+2020-02-17 20:23:02,431 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:4(1) to node 2:13:0:9(1)
+2020-02-17 20:23:02,440 : DEBUG : Worker-3 : WorkflowDataRepository : Conformal Prediction Loop Start : 2:13:0:2 : Adding handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 1 in total
+2020-02-17 20:23:02,546 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:15 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:02,555 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:27 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:02,562 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:23 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:02,569 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:19 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:02,576 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:17 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:02,577 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:29 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:02,578 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:25 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:02,579 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:02,579 : DEBUG : Worker-3 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test"  with no errors
+2020-02-17 20:23:03,195 : DEBUG : main : ProjectWorkflowMap : scorer_test : 2 : Removing "file:/C:/src/knime/runtime-KNIME/workflow_tests/scorer_test/" from project map (1 remaining)
+2020-02-17 20:23:03,196 : DEBUG : main : WorkflowManager : scorer_test : 2 : Removing project "scorer_test 2"
+2020-02-17 20:23:03,198 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:21 : Removing all (0) views from model.
+2020-02-17 20:23:03,198 : DEBUG : main : Node : Table Difference Checker : 2:21 : clean output ports.
+2020-02-17 20:23:03,199 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:25 : Removing all (0) views from model.
+2020-02-17 20:23:03,199 : DEBUG : main : Node : Table Difference Checker : 2:25 : clean output ports.
+2020-02-17 20:23:03,199 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:29 : Removing all (0) views from model.
+2020-02-17 20:23:03,199 : DEBUG : main : Node : Table Difference Checker : 2:29 : clean output ports.
+2020-02-17 20:23:03,199 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:17 : Removing all (0) views from model.
+2020-02-17 20:23:03,199 : DEBUG : main : Node : Table Difference Checker : 2:17 : clean output ports.
+2020-02-17 20:23:03,199 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:20 : Removing all (0) views from model.
+2020-02-17 20:23:03,200 : DEBUG : main : Node : Conformal Scorer : 2:20 : clean output ports.
+2020-02-17 20:23:03,200 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:19 : Removing all (0) views from model.
+2020-02-17 20:23:03,200 : DEBUG : main : Node : Conformal Scorer : 2:19 : clean output ports.
+2020-02-17 20:23:03,201 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:24 : Removing all (0) views from model.
+2020-02-17 20:23:03,201 : DEBUG : main : Node : Conformal Scorer : 2:24 : clean output ports.
+2020-02-17 20:23:03,201 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:23 : Removing all (0) views from model.
+2020-02-17 20:23:03,201 : DEBUG : main : Node : Conformal Scorer : 2:23 : clean output ports.
+2020-02-17 20:23:03,202 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:28 : Removing all (0) views from model.
+2020-02-17 20:23:03,202 : DEBUG : main : Node : Conformal Scorer : 2:28 : clean output ports.
+2020-02-17 20:23:03,202 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:27 : Removing all (0) views from model.
+2020-02-17 20:23:03,203 : DEBUG : main : Node : Conformal Scorer : 2:27 : clean output ports.
+2020-02-17 20:23:03,203 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:16 : Removing all (0) views from model.
+2020-02-17 20:23:03,203 : DEBUG : main : Node : Conformal Scorer : 2:16 : clean output ports.
+2020-02-17 20:23:03,203 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:15 : Removing all (0) views from model.
+2020-02-17 20:23:03,203 : DEBUG : main : Node : Conformal Scorer : 2:15 : clean output ports.
+2020-02-17 20:23:03,204 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:18 : Removing all (0) views from model.
+2020-02-17 20:23:03,204 : DEBUG : main : Node : Conformal Classifier : 2:18 : clean output ports.
+2020-02-17 20:23:03,204 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:22 : Removing all (0) views from model.
+2020-02-17 20:23:03,205 : DEBUG : main : Node : Conformal Classifier : 2:22 : clean output ports.
+2020-02-17 20:23:03,205 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:26 : Removing all (0) views from model.
+2020-02-17 20:23:03,205 : DEBUG : main : Node : Conformal Classifier : 2:26 : clean output ports.
+2020-02-17 20:23:03,206 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:14 : Removing all (0) views from model.
+2020-02-17 20:23:03,206 : DEBUG : main : Node : Conformal Classifier : 2:14 : clean output ports.
+2020-02-17 20:23:03,206 : DEBUG : main : VirtualSubNodeOutputNodeModel : Component Output : 2:13:0:13 : Removing all (0) views from model.
+2020-02-17 20:23:03,206 : DEBUG : main : Node : Component Output : 2:13:0:13 : clean output ports.
+2020-02-17 20:23:03,207 : DEBUG : main : ConformalPredictorLoopEndNodeModel : Conformal Prediction Loop End : 2:13:0:11 : Removing all (0) views from model.
+2020-02-17 20:23:03,207 : DEBUG : main : Node : Conformal Prediction Loop End : 2:13:0:11 : clean output ports.
+2020-02-17 20:23:03,208 : DEBUG : main : ConformalPredictorNodeModel : Conformal Predictor : 2:13:0:10 : Removing all (0) views from model.
+2020-02-17 20:23:03,208 : DEBUG : main : Node : Conformal Predictor : 2:13:0:10 : clean output ports.
+2020-02-17 20:23:03,208 : DEBUG : main : ConformalPredictorCalibratorNodeModel : Conformal Calibrator : 2:13:0:9 : Removing all (0) views from model.
+2020-02-17 20:23:03,208 : DEBUG : main : Node : Conformal Calibrator : 2:13:0:9 : clean output ports.
+2020-02-17 20:23:03,209 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 2:13:0:8 : Removing all (0) views from model.
+2020-02-17 20:23:03,209 : DEBUG : main : Node : Random Forest Predictor : 2:13:0:8 : clean output ports.
+2020-02-17 20:23:03,209 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 2:13:0:4 : Removing all (0) views from model.
+2020-02-17 20:23:03,209 : DEBUG : main : Node : Random Forest Predictor : 2:13:0:4 : clean output ports.
+2020-02-17 20:23:03,210 : DEBUG : main : TreeEnsembleClassificationLearnerNodeModel : Random Forest Learner : 2:13:0:3 : Removing all (0) views from model.
+2020-02-17 20:23:03,210 : DEBUG : main : Node : Random Forest Learner : 2:13:0:3 : clean output ports.
+2020-02-17 20:23:03,210 : DEBUG : main : ConformalPredictorLoopStartNodeModel : Conformal Prediction Loop Start : 2:13:0:2 : Removing all (0) views from model.
+2020-02-17 20:23:03,211 : DEBUG : main : Node : Conformal Prediction Loop Start : 2:13:0:2 : clean output ports.
+2020-02-17 20:23:03,211 : DEBUG : main : WorkflowDataRepository : Conformal Prediction Loop Start : 2:13:0:2 : Removing handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 0 remaining
+2020-02-17 20:23:03,211 : DEBUG : main : VirtualSubNodeInputNodeModel : Component Input : 2:13:0:12 : Removing all (0) views from model.
+2020-02-17 20:23:03,211 : DEBUG : main : Node : Component Input : 2:13:0:12 : clean output ports.
+2020-02-17 20:23:03,212 : DEBUG : main : FileReaderNodeModel : File Reader : 2:13:0:1 : Removing all (0) views from model.
+2020-02-17 20:23:03,212 : DEBUG : main : Node : File Reader : 2:13:0:1 : clean output ports.
+2020-02-17 20:23:03,213 : DEBUG : main : WorkflowManager : scorer_test : 2 : Project "scorer_test 2" removed (2 remaining)
+2020-02-17 20:23:03,233 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,235 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,238 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,241 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,243 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,248 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,252 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,257 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,260 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,264 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,268 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,272 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,276 : DEBUG : Worker-3 : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,280 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,284 : DEBUG : Worker-3 : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,287 : DEBUG : Worker-3 : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,295 : DEBUG : Worker-3 : FileReaderNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,299 : DEBUG : Worker-3 : ConformalPredictorLoopStartNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,304 : DEBUG : Worker-3 : RandomForestClassificationLearnerNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,307 : DEBUG : Worker-3 : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,311 : DEBUG : Worker-3 : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,314 : DEBUG : Worker-3 : ConformalPredictorCalibratorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,317 : DEBUG : Worker-3 : ConformalPredictorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,321 : DEBUG : Worker-3 : ConformalPredictorLoopEndNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:03,330 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(1) to node 2:13:0:3(1)
+2020-02-17 20:23:03,330 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:10(1) to node 2:13:0:11(2)
+2020-02-17 20:23:03,330 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:8(1) to node 2:13:0:10(2)
+2020-02-17 20:23:03,330 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:11(1)
+2020-02-17 20:23:03,330 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:1(1) to node 2:13:0:2(1)
+2020-02-17 20:23:03,330 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:10(1)
+2020-02-17 20:23:03,331 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(2) to node 2:13:0:4(2)
+2020-02-17 20:23:03,331 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:11(2) to node 2:13:0:13(1)
+2020-02-17 20:23:03,331 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:4(1)
+2020-02-17 20:23:03,331 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(3) to node 2:13:0:8(2)
+2020-02-17 20:23:03,331 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:8(1)
+2020-02-17 20:23:03,331 : DEBUG : Worker-3 : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:4(1) to node 2:13:0:9(1)
+2020-02-17 20:23:03,340 : DEBUG : Worker-3 : WorkflowDataRepository : Conformal Prediction Loop Start : 2:13:0:2 : Adding handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 1 in total
+2020-02-17 20:23:03,412 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:15 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:03,415 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:27 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:03,418 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:23 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:03,422 : DEBUG : Worker-3 : Node : Conformal Scorer : 2:19 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:03,426 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:17 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,427 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:29 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,428 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:25 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,429 : DEBUG : Worker-3 : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,429 : DEBUG : Worker-3 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test"  with no errors
+2020-02-17 20:23:03,552 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforePreExecution
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: PREEXECUTE
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : WorkflowManager : Conformal Scorer : 2:27 : Conformal Scorer 2:27 doBeforePreExecution
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : WorkflowDataRepository : Conformal Scorer : 2:19 : Adding handler 7aa48c90-cd6e-4057-a7a0-a2bba5a61cb4 (Conformal Scorer 2:19: <no directory>) - 2 in total
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : 2020-02-17 20:23:03,553WorkflowDataRepository :  : Conformal ScorerDEBUG : KNIME-Worker-11-Conformal Scorer 2:27 :  : NodeContainer : Conformal Scorer : 2:19 : 2:27 : Adding handler 7aa48c90-cd6e-4057-a7a0-a2bba5a61cb4 (Conformal Scorer 2:19: <no directory>) - 2 in total
+Conformal Scorer 2:27 has new state: PREEXECUTE
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doBeforePreExecution
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : WorkflowDataRepository : Conformal Scorer : 2:27 : Adding handler f8284974-1662-4afe-b24f-0003dee17128 (Conformal Scorer 2:27: <no directory>) - 3 in total
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : WorkflowDataRepository : 2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : Conformal Scorer : NodeContainer : Conformal Scorer : 2:27 : 2:15 : Adding handler f8284974-1662-4afe-b24f-0003dee17128 (Conformal Scorer 2:27: <no directory>) - 3 in total
+Conformal Scorer 2:15 has new state: PREEXECUTE
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : WorkflowManager : Conformal Scorer : 2:23 : Conformal Scorer 2:23 doBeforePreExecution
+2020-02-17 20:23:03,553 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : 2020-02-17 20:23:03,553 : DEBUGWorkflowManager :  : Conformal Scorer : KNIME-Worker-12-Conformal Scorer 2:15 : WorkflowDataRepository2:23 :  : Conformal Scorer 2:23 doBeforePreExecutionConformal Scorer
+ : 2:15 : Adding handler dde037e2-6e1b-48c2-ab77-7352e72abc0c (Conformal Scorer 2:15: <no directory>) - 4 in total
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : NodeContainer : Conformal Scorer : 2:23 : Conformal Scorer 2:23 has new state: PREEXECUTE
+2020-02-17 20:23:03,554 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: EXECUTING
+2020-02-17 20:23:03,554 : DEBUG : KNIME-WFM-Parent-Notifier : Adding handler d5b11a78-17bc-4a04-9c55-48571aa4caf3 (Conformal Scorer 2:23: <no directory>) - 5 in total
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : 2020-02-17 20:23:03,554 : WorkflowDataRepository : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : Conformal Scorer : WorkflowManager : Conformal Scorer : 2:23 : Adding handler d5b11a78-17bc-4a04-9c55-48571aa4caf3 (Conformal Scorer 2:23: <no directory>) - 5 in total
+2:19 : Conformal Scorer 2:19 doBeforeExecution
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: EXECUTING
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : LocalNodeExecutionJob : Conformal Scorer : 2:19 : Conformal Scorer 2:19 Start execute
+2:27 : 2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : LocalNodeExecutionJob : Conformal Scorer : 2:19 : Conformal Scorer 2:19 Start execute
+Conformal Scorer 2:27 doBeforeExecution
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : NodeContainer : Conformal Scorer : 2:27 : Conformal Scorer 2:27 has new state: EXECUTING
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : LocalNodeExecutionJob : Conformal Scorer : 2:27 : Conformal Scorer 2:27 Start execute
+LocalNodeExecutionJob : Conformal Scorer : 2020-02-17 20:23:03,554 : 2:27 : Conformal Scorer 2:27 Start execute
+DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doBeforeExecution
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Conformal Scorer 2:15 has new state: EXECUTING
+2020-02-17 20:23:03,554 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : LocalNodeExecutionJob : Conformal Scorer : 2:15 : Conformal Scorer 2:15 Start execute
+2020-02-17 20:23:03,555 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : WorkflowManager : Conformal Scorer : 2:23 : Conformal Scorer 2:23 doBeforeExecution
+2020-02-17 20:23:03,555 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : NodeContainer : Conformal Scorer : 2:23 : Conformal Scorer 2:23 has new state: EXECUTING
+2020-02-17 20:23:03,555 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : LocalNodeExecutionJob : Conformal Scorer : 2:23 : Conformal Scorer 2:23 Start execute
+2020-02-17 20:23:03,580 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : Buffer : Conformal Scorer : 2:23 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_249376469394771104.tmp", 0 remaining
+2020-02-17 20:23:03,580 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : Buffer : Conformal Scorer : 2:23 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_1242466142886248261.tmp", 0 remaining
+2020-02-17 20:23:03,580Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_6612578763452401914.tmp", 0 remaining
+2020-02-17 20:23:03,581 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : Buffer : Conformal Scorer : 2:19 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_3677207085658355975.tmp", 0 remaining
+2020-02-17 20:23:03,581 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : BufferSettings : Conformal Scorer : 2:27 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:23:03,581 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : BufferSettings : Conformal Scorer : 2:19 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:23:03,581 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : BufferSettings : Conformal Scorer : 2:23 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:23:03,581 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : Buffer : Conformal Scorer : 2:15 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5634252323629799060.tmp", 0 remaining
+2020-02-17 20:23:03,583 : INFO  : KNIME-Worker-11-Conformal Scorer 2:27 : LocalNodeExecutionJob : Conformal Scorer : 2:27 : Conformal Scorer 2:27 End execute (0 secs)
+2020-02-17 20:23:03,583 : INFO  : KNIME-Worker-20-Conformal Scorer 2:19 : LocalNodeExecutionJob : Conformal Scorer : 2:19 : Conformal Scorer 2:19 End execute (0 secs)
+2020-02-17 20:23:03,583 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : WorkflowManager : Conformal Scorer : 2:27 : Conformal Scorer 2:27 doBeforePostExecution
+2:27 : Conformal Scorer 2:27 doBeforePostExecution
+2020-02-17 20:23:03,583 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : BufferSettings : Conformal Scorer : 2:15 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:23:03,583 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : NodeContainer : Conformal Scorer : 2:27 : Conformal Scorer 2:27 has new state: POSTEXECUTE
+2020-02-17 20:23:03,584 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : WorkflowManager : Conformal Scorer : 2:27 : Conformal Scorer 2:27 doAfterExecute - success
+2020-02-17 20:23:03,584 : INFO  : KNIME-Worker-13-Conformal Scorer 2:23 : LocalNodeExecutionJob : Conformal Scorer : 2:23 : Conformal Scorer 2:23 End execute (0 secs)
+2020-02-17 20:23:03,584 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : NodeContainer : Conformal Scorer : 2:27 : Conformal Scorer 2:27 has new state: EXECUTED
+2020-02-17 20:23:03,585 : INFO  : KNIME-Worker-12-Conformal Scorer 2:15 : LocalNodeExecutionJob : Conformal Scorer : 2:15 : Conformal Scorer 2:15 End execute (0 secs)
+2020-02-17 20:23:03,585 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : Node : Table Difference Checker : 2:29 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,585 : DEBUG : KNIME-Worker-11-Conformal Scorer 2:27 : NodeContainer : Conformal Scorer : 2:27 : Table Difference Checker 2:29 has new state: CONFIGURED_QUEUED
+2020-02-17 20:23:03,586 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doBeforePostExecution
+2020-02-17 20:23:03,586 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: POSTEXECUTE
+2020-02-17 20:23:03,586 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : WorkflowManager : Conformal Scorer : 2:19 : Conformal Scorer 2:19 doAfterExecute - success
+2020-02-17 20:23:03,586 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Conformal Scorer 2:19 has new state: EXECUTED
+2020-02-17 20:23:03,587 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,587 : DEBUG : KNIME-Worker-20-Conformal Scorer 2:19 : NodeContainer : Conformal Scorer : 2:19 : Table Difference Checker 2:21 has new state: CONFIGURED_QUEUED
+2020-02-17 20:23:03,587 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : WorkflowManager : Conformal Scorer : 2:23 : Conformal Scorer 2:23 doBeforePostExecution
+2020-02-17 20:23:03,587 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : NodeContainer : Conformal Scorer : 2:23 : Conformal Scorer 2:23 has new state: POSTEXECUTE
+2020-02-17 20:23:03,587 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : WorkflowManager : Conformal Scorer : 2:23 : Conformal Scorer 2:23 doAfterExecute - success
+2020-02-17 20:23:03,588 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : NodeContainer : Conformal Scorer : 2:23 : Conformal Scorer 2:23 has new state: EXECUTED
+2020-02-17 20:23:03,588 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : Node : Table Difference Checker : 2:25 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,588 : DEBUG : KNIME-Worker-13-Conformal Scorer 2:23 : NodeContainer : Conformal Scorer : 2:23 : Table Difference Checker 2:25 has new state: CONFIGURED_QUEUED
+2020-02-17 20:23:03,589 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doBeforePostExecution
+2020-02-17 20:23:03,589 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Conformal Scorer 2:15 has new state: POSTEXECUTE
+2020-02-17 20:23:03,589 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : WorkflowManager : Conformal Scorer : 2:15 : Conformal Scorer 2:15 doAfterExecute - success
+2020-02-17 20:23:03,589 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Conformal Scorer 2:15 has new state: EXECUTED
+2020-02-17 20:23:03,590 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : Node : Table Difference Checker : 2:17 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:03,590 : DEBUG : KNIME-Worker-12-Conformal Scorer 2:15 : NodeContainer : Conformal Scorer : 2:15 : Table Difference Checker 2:17 has new state: CONFIGURED_QUEUED
+2020-02-17 20:23:03,590 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : WorkflowManager : Table Difference Checker : 2:29 : Table Difference Checker 2:29 doBeforePreExecution
+2020-02-17 20:23:03,590 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : NodeContainer : Table Difference Checker : 2:29 : Table Difference Checker 2:29 has new state: PREEXECUTE
+2020-02-17 20:23:03,590 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doBeforePreExecution
+2020-02-17 20:23:03,590 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : WorkflowDataRepository : Table Difference Checker : 2:29 : Adding handler 4ef6d50e-05cc-4481-b286-8354ecdb4630 (Table Difference Checker 2:29: <no directory>) - 6 in total
+2020-02-17 20:23:03,590 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : 2020-02-17 20:23:03,590 : NodeContainer : DEBUGTable Difference Checker :  : 2:21 : KNIME-Worker-14-Table Difference Checker 2:29 : WorkflowDataRepository : Table Difference Checker : 2:29 : Adding handler 4ef6d50e-05cc-4481-b286-8354ecdb4630 (Table Difference Checker 2:29: <no directory>) - 6 in total
+Table Difference Checker 2:21 has new state: PREEXECUTE
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : WorkflowManager : Table Difference Checker : 2:25 : Table Difference Checker 2:25 doBeforePreExecution
+WorkflowManager : Table Difference Checker : 2:25 : Table Difference Checker 2:25 doBeforePreExecution
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : WorkflowDataRepository : Table Difference Checker : 2:21 : Adding handler ac85133e-1b66-424c-a259-ec2720d250ba (Table Difference Checker 2:21: <no directory>) - 7 in total
+ : 2:21 : Adding handler ac85133e-1b66-424c-a259-ec2720d250ba (Table Difference Checker 2:21: <no directory>) - 7 in total
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : NodeContainer : Table Difference Checker : 2:25 : Table Difference Checker 2:25 has new state: PREEXECUTE
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : WorkflowManager : Table Difference Checker : 2:17 : Table Difference Checker 2:17 doBeforePreExecution
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : WorkflowManager : 2020-02-17 20:23:03,591Table Difference Checker :  : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : 2:17 : Table Difference Checker 2:17 doBeforePreExecution
+WorkflowDataRepository : Table Difference Checker : 2:25 : Adding handler 83f3f935-f7a0-49dd-a1e9-91a4f75b8b90 (Table Difference Checker 2:25: <no directory>) - 8 in total
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : NodeContainer : Table Difference Checker : 2:17 : Table Difference Checker 2:17 has new state: PREEXECUTE
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : WorkflowManager : Table Difference Checker : 2:29 : Table Difference Checker 2:29 doBeforeExecution
+2:17 : 2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : WorkflowManager : Table Difference Checker : 2:29 : Table Difference Checker 2:29 doBeforeExecution
+Adding handler c395141b-5b7f-431b-8f72-5f3247185a3e (Table Difference Checker 2:17: <no directory>) - 9 in total
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : NodeContainer : Table Difference Checker : 2:29 : Table Difference Checker 2:29 has new state: EXECUTING
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : LocalNodeExecutionJob : Table Difference Checker : 2:29 : Table Difference Checker 2:29 Start execute
+KNIME-Worker-14-Table Difference Checker 2:29 : LocalNodeExecutionJob : Table Difference Checker : 2:29 : 2020-02-17 20:23:03,591Table Difference Checker 2:29 Start execute
+ : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doBeforeExecution
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: EXECUTING
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : LocalNodeExecutionJob : Table Difference Checker : 2:21 : Table Difference Checker 2:21 Start execute
+Table Difference Checker : 2:21 : Table Difference Checker 2:21 Start execute
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : WorkflowManager : Table Difference Checker : 2:25 : Table Difference Checker 2:25 doBeforeExecution
+2020-02-17 20:23:03,591 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : NodeContainer : Table Difference Checker : 2:25 : Table Difference Checker 2:25 has new state: EXECUTING
+2020-02-17 20:23:03,592 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : LocalNodeExecutionJob : Table Difference Checker : 2:25 : Table Difference Checker 2:25 Start execute
+2020-02-17 20:23:03,5922020-02-17 20:23:03,592 : DEBUG :  : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : KNIME-Worker-17-Table Difference Checker 2:17 : LocalNodeExecutionJob : WorkflowManager : Table Difference Checker : Table Difference Checker : 2:25 : 2:17 : Table Difference Checker 2:25 Start execute
+Table Difference Checker 2:17 doBeforeExecution
+2020-02-17 20:23:03,592 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : NodeContainer : Table Difference Checker : 2:17 : Table Difference Checker 2:17 has new state: EXECUTING
+2020-02-17 20:23:03,592 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : LocalNodeExecutionJob : Table Difference Checker : 2:17 : Table Difference Checker 2:17 Start execute
+2020-02-17 20:23:03,608 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : Buffer : Table Difference Checker : 2:25 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5811293444532598367.tmp", 0 remaining
+2020-02-17 20:23:03,608 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : Buffer : Table Difference Checker : 2:17 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_472736216818826793.tmp", 0 remaining
+Buffer : Table Difference Checker : 2:17 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_472736216818826793.tmp", 0 remaining
+2020-02-17 20:23:03,608 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : Buffer : Table Difference Checker : 2:29 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5715370348600627889.tmp", 0 remaining
+2020-02-17 20:23:03,609 : INFO  : KNIME-Worker-16-Table Difference Checker 2:25 : LocalNodeExecutionJob : Table Difference Checker : 2:25 : Table Difference Checker 2:25 End execute (0 secs)
+2020-02-17 20:23:03,609 : INFO2020-02-17 20:23:03,609 : INFO  : KNIME-Worker-16-Table Difference Checker 2:25 :  LocalNodeExecutionJob :  : KNIME-Worker-17-Table Difference Checker 2:17 : Table Difference Checker : LocalNodeExecutionJob : 2:25 : Table Difference Checker 2:25 End execute (0 secs)
+Table Difference Checker : 2:17 : Table Difference Checker 2:17 End execute (0 secs)
+2020-02-17 20:23:03,609 : INFO  : KNIME-Worker-14-Table Difference Checker 2:29 : LocalNodeExecutionJob : Table Difference Checker : 2:29 : Table Difference Checker 2:29 End execute (0 secs)
+2020-02-17 20:23:03,6092020-02-17 20:23:03,609 :  : DEBUG : INFOKNIME-Worker-16-Table Difference Checker 2:25 : WorkflowManager :  Table Difference Checker :  : KNIME-Worker-14-Table Difference Checker 2:29 : LocalNodeExecutionJob : 2:25 : Table Difference Checker : 2:29 : Table Difference Checker 2:29 End execute (0 secs)
+Table Difference Checker 2:25 doBeforePostExecution
+2020-02-17 20:23:03,609 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : NodeContainer : Table Difference Checker : 2:25 : Table Difference Checker 2:25 has new state: POSTEXECUTE
+2020-02-17 20:23:03,609 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : WorkflowManager : Table Difference Checker : 2:25 : Table Difference Checker 2:25 doAfterExecute - success
+2020-02-17 20:23:03,609 : DEBUG : KNIME-Worker-16-Table Difference Checker 2:25 : NodeContainer : Table Difference Checker : 2:25 : Table Difference Checker 2:25 has new state: EXECUTED
+2020-02-17 20:23:03,609 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : WorkflowManager : Table Difference Checker : 2:17 : Table Difference Checker 2:17 doBeforePostExecution
+2020-02-17 20:23:03,610 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : NodeContainer : Table Difference Checker : 2:17 : Table Difference Checker 2:17 has new state: POSTEXECUTE
+2020-02-17 20:23:03,610 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : WorkflowManager : Table Difference Checker : 2:17 : Table Difference Checker 2:17 doAfterExecute - success
+2020-02-17 20:23:03,610 : DEBUG : KNIME-Worker-17-Table Difference Checker 2:17 : NodeContainer : Table Difference Checker : 2:17 : Table Difference Checker 2:17 has new state: EXECUTED
+2020-02-17 20:23:03,610 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : WorkflowManager : Table Difference Checker : 2:29 : Table Difference Checker 2:29 doBeforePostExecution
+2020-02-17 20:23:03,610 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : NodeContainer : Table Difference Checker : 2:29 : Table Difference Checker 2:29 has new state: POSTEXECUTE
+2020-02-17 20:23:03,610 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : WorkflowManager : Table Difference Checker : 2:29 : Table Difference Checker 2:29 doAfterExecute - success
+2020-02-17 20:23:03,611 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : NodeContainer : Table Difference Checker : 2:29 : Table Difference Checker 2:29 has new state: EXECUTED
+2020-02-17 20:23:03,611 : DEBUG : KNIME-Worker-14-Table Difference Checker 2:29 : NodeContainer : Table Difference Checker : 2020-02-17 20:23:03,611 : DEBUG : 2:29 : Table Difference Checker 2:29 has new state: EXECUTED
+KNIME-Worker-15-Table Difference Checker 2:21 : Buffer : Table Difference Checker : 2:21 : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_8377501780857474030.tmp", 0 remaining
+2020-02-17 20:23:03,611 : INFO  : KNIME-Worker-15-Table Difference Checker 2:21 : LocalNodeExecutionJob : Table Difference Checker : 2:21 : Table Difference Checker 2:21 End execute (0 secs)
+2020-02-17 20:23:03,611 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doBeforePostExecution
+2020-02-17 20:23:03,611 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: POSTEXECUTE
+2020-02-17 20:23:03,611 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : WorkflowManager : Table Difference Checker : 2:21 : Table Difference Checker 2:21 doAfterExecute - success
+2020-02-17 20:23:03,611 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : Table Difference Checker 2:21 has new state: EXECUTED
+2020-02-17 20:23:03,612 : DEBUG : KNIME-Worker-15-Table Difference Checker 2:21 : NodeContainer : Table Difference Checker : 2:21 : scorer_test 2 has new state: EXECUTED
+2020-02-17 20:23:03,613 : DEBUG : KNIME-WFM-Parent-Notifier : NodeContainer :  :  : ROOT  has new state: IDLE
+2020-02-17 20:23:03,619 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5634252323629799060.tmp", 0 remaining
+2020-02-17 20:23:03,621 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_472736216818826793.tmp", 0 remaining
+2020-02-17 20:23:03,623 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_3677207085658355975.tmp", 0 remaining
+2020-02-17 20:23:03,625 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_8377501780857474030.tmp", 0 remaining
+2020-02-17 20:23:03,626 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_1242466142886248261.tmp", 0 remaining
+2020-02-17 20:23:03,628 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5811293444532598367.tmp", 0 remaining
+2020-02-17 20:23:03,631 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_6612578763452401914.tmp", 0 remaining
+2020-02-17 20:23:03,632 : DEBUG : Worker-3 : Buffer :  :  : Closing input stream on "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5715370348600627889.tmp", 0 remaining
+2020-02-17 20:23:04,327 : DEBUG : main : ProjectWorkflowMap : scorer_test : 2 : Removing "file:/C:/src/knime/runtime-KNIME/workflow_tests/scorer_test/" from project map (1 remaining)
+2020-02-17 20:23:04,327 : DEBUG : main : WorkflowManager : scorer_test : 2 : Removing project "scorer_test 2"
+2020-02-17 20:23:04,329 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:21 : Removing all (0) views from model.
+2020-02-17 20:23:04,329 : DEBUG : main : Node : Table Difference Checker : 2:21 : clean output ports.
+2020-02-17 20:23:04,330 : DEBUG : main : WorkflowDataRepository : Table Difference Checker : 2:21 : Removing handler ac85133e-1b66-424c-a259-ec2720d250ba (Table Difference Checker 2:21: <no directory>) - 8 remaining
+2020-02-17 20:23:04,330 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:25 : Removing all (0) views from model.
+2020-02-17 20:23:04,330 : DEBUG : main : Node : Table Difference Checker : 2:25 : clean output ports.
+2020-02-17 20:23:04,330 : DEBUG : main : WorkflowDataRepository : Table Difference Checker : 2:25 : Removing handler 83f3f935-f7a0-49dd-a1e9-91a4f75b8b90 (Table Difference Checker 2:25: <no directory>) - 7 remaining
+2020-02-17 20:23:04,331 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:29 : Removing all (0) views from model.
+2020-02-17 20:23:04,331 : DEBUG : main : Node : Table Difference Checker : 2:29 : clean output ports.
+2020-02-17 20:23:04,331 : DEBUG : main : WorkflowDataRepository : Table Difference Checker : 2:29 : Removing handler 4ef6d50e-05cc-4481-b286-8354ecdb4630 (Table Difference Checker 2:29: <no directory>) - 6 remaining
+2020-02-17 20:23:04,331 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 2:17 : Removing all (0) views from model.
+2020-02-17 20:23:04,331 : DEBUG : main : Node : Table Difference Checker : 2:17 : clean output ports.
+2020-02-17 20:23:04,331 : DEBUG : main : WorkflowDataRepository : Table Difference Checker : 2:17 : Removing handler c395141b-5b7f-431b-8f72-5f3247185a3e (Table Difference Checker 2:17: <no directory>) - 5 remaining
+2020-02-17 20:23:04,331 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:20 : Removing all (0) views from model.
+2020-02-17 20:23:04,332 : DEBUG : main : Node : Conformal Scorer : 2:20 : clean output ports.
+2020-02-17 20:23:04,332 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:19 : Removing all (0) views from model.
+2020-02-17 20:23:04,332 : DEBUG : main : Node : Conformal Scorer : 2:19 : clean output ports.
+2020-02-17 20:23:04,332 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:19 : Removing handler 7aa48c90-cd6e-4057-a7a0-a2bba5a61cb4 (Conformal Scorer 2:19: <no directory>) - 4 remaining
+2020-02-17 20:23:04,333 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:24 : Removing all (0) views from model.
+2020-02-17 20:23:04,333 : DEBUG : main : Node : Conformal Scorer : 2:24 : clean output ports.
+2020-02-17 20:23:04,333 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_8377501780857474030.tmp"
+2020-02-17 20:23:04,333 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:23 : Removing all (0) views from model.
+2020-02-17 20:23:04,333 : DEBUG : main : Node : Conformal Scorer : 2:23 : clean output ports.
+2020-02-17 20:23:04,333 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:23 : Removing handler d5b11a78-17bc-4a04-9c55-48571aa4caf3 (Conformal Scorer 2:23: <no directory>) - 3 remaining
+2020-02-17 20:23:04,334 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:28 : Removing all (0) views from model.
+2020-02-17 20:23:04,334 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5811293444532598367.tmp"
+2020-02-17 20:23:04,334 : DEBUG : main : Node : Conformal Scorer : 2:28 : clean output ports.
+2020-02-17 20:23:04,334 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:27 : Removing all (0) views from model.
+2020-02-17 20:23:04,334 : DEBUG : main : Node : Conformal Scorer : 2:27 : clean output ports.
+2020-02-17 20:23:04,335 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:27 : Removing handler f8284974-1662-4afe-b24f-0003dee17128 (Conformal Scorer 2:27: <no directory>) - 2 remaining
+2020-02-17 20:23:04,335 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5715370348600627889.tmp"
+2020-02-17 20:23:04,335 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:16 : Removing all (0) views from model.
+2020-02-17 20:23:04,335 : DEBUG : main : Node : Conformal Scorer : 2:16 : clean output ports.
+2020-02-17 20:23:04,335 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 2:15 : Removing all (0) views from model.
+2020-02-17 20:23:04,335 : DEBUG : main : Node : Conformal Scorer : 2:15 : clean output ports.
+2020-02-17 20:23:04,336 : DEBUG : main : WorkflowDataRepository : Conformal Scorer : 2:15 : Removing handler dde037e2-6e1b-48c2-ab77-7352e72abc0c (Conformal Scorer 2:15: <no directory>) - 1 remaining
+2020-02-17 20:23:04,336 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_472736216818826793.tmp"
+2020-02-17 20:23:04,336 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:18 : Removing all (0) views from model.
+2020-02-17 20:23:04,336 : DEBUG : main : Node : Conformal Classifier : 2:18 : clean output ports.
+2020-02-17 20:23:04,337 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:22 : Removing all (0) views from model.
+2020-02-17 20:23:04,337 : DEBUG : main : Node : Conformal Classifier : 2:22 : clean output ports.
+2020-02-17 20:23:04,337 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:26 : Removing all (0) views from model.
+2020-02-17 20:23:04,337 : DEBUG : main : Node : Conformal Classifier : 2:26 : clean output ports.
+2020-02-17 20:23:04,337 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_3677207085658355975.tmp"
+2020-02-17 20:23:04,337 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 2:14 : Removing all (0) views from model.
+2020-02-17 20:23:04,338 : DEBUG : main : Node : Conformal Classifier : 2:14 : clean output ports.
+2020-02-17 20:23:04,338 : DEBUG : main : VirtualSubNodeOutputNodeModel : Component Output : 2:13:0:13 : Removing all (0) views from model.
+2020-02-17 20:23:04,338 : DEBUG : main : Node : Component Output : 2:13:0:13 : clean output ports.
+2020-02-17 20:23:04,338 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_1242466142886248261.tmp"
+2020-02-17 20:23:04,338 : DEBUG : main : ConformalPredictorLoopEndNodeModel : Conformal Prediction Loop End : 2:13:0:11 : Removing all (0) views from model.
+2020-02-17 20:23:04,338 : DEBUG : main : Node : Conformal Prediction Loop End : 2:13:0:11 : clean output ports.
+2020-02-17 20:23:04,339 : DEBUG : main : ConformalPredictorNodeModel : Conformal Predictor : 2:13:0:10 : Removing all (0) views from model.
+2020-02-17 20:23:04,339 : DEBUG : main : Node : Conformal Predictor : 2:13:0:10 : clean output ports.
+2020-02-17 20:23:04,339 : DEBUG : main : ConformalPredictorCalibratorNodeModel : Conformal Calibrator : 2:13:0:9 : Removing all (0) views from model.
+2020-02-17 20:23:04,339 : DEBUG : main : Node : Conformal Calibrator : 2:13:0:9 : clean output ports.
+2020-02-17 20:23:04,339 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_6612578763452401914.tmp"
+2020-02-17 20:23:04,339 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 2:13:0:8 : Removing all (0) views from model.
+2020-02-17 20:23:04,339 : DEBUG : main : Node : Random Forest Predictor : 2:13:0:8 : clean output ports.
+2020-02-17 20:23:04,340 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 2:13:0:4 : Removing all (0) views from model.
+2020-02-17 20:23:04,340 : DEBUG : main : Node : Random Forest Predictor : 2:13:0:4 : clean output ports.
+2020-02-17 20:23:04,340 : DEBUG : main : TreeEnsembleClassificationLearnerNodeModel : Random Forest Learner : 2:13:0:3 : Removing all (0) views from model.
+2020-02-17 20:23:04,340 : DEBUG : main : Node : Random Forest Learner : 2:13:0:3 : clean output ports.
+2020-02-17 20:23:04,340 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_5634252323629799060.tmp"
+2020-02-17 20:23:04,340 : DEBUG : main : ConformalPredictorLoopStartNodeModel : Conformal Prediction Loop Start : 2:13:0:2 : Removing all (0) views from model.
+2020-02-17 20:23:04,340 : DEBUG : main : Node : Conformal Prediction Loop Start : 2:13:0:2 : clean output ports.
+2020-02-17 20:23:04,340 : DEBUG : main : WorkflowDataRepository : Conformal Prediction Loop Start : 2:13:0:2 : Removing handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 0 remaining
+2020-02-17 20:23:04,341 : DEBUG : main : VirtualSubNodeInputNodeModel : Component Input : 2:13:0:12 : Removing all (0) views from model.
+2020-02-17 20:23:04,341 : DEBUG : main : Node : Component Input : 2:13:0:12 : clean output ports.
+2020-02-17 20:23:04,341 : DEBUG : main : FileReaderNodeModel : File Reader : 2:13:0:1 : Removing all (0) views from model.
+2020-02-17 20:23:04,341 : DEBUG : KNIME-Temp-File-Deleter : Buffer :  :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_249376469394771104.tmp"
+2020-02-17 20:23:04,341 : DEBUG : KNIME-Temp-File-Deleter : 2020-02-17 20:23:04,341Buffer :  :  : DEBUG : main :  : Deleted temporary file "C:\Users\ajbond\AppData\Local\Temp\knime_scorer_test6627\knime_container_20200217_249376469394771104.tmp"
+Node : File Reader : 2:13:0:1 : clean output ports.
+2020-02-17 20:23:04,341 : DEBUG : main : WorkflowManager : scorer_test : 2 : Project "scorer_test 2" removed (2 remaining)
+2020-02-17 20:23:07,197 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,200 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,202 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,205 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,207 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,209 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,212 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,214 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,217 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,219 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,221 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,223 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,225 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,228 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,230 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,232 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 2 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,238 : DEBUG : ModalContext : FileReaderNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,240 : DEBUG : ModalContext : ConformalPredictorLoopStartNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,244 : DEBUG : ModalContext : RandomForestClassificationLearnerNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,247 : DEBUG : ModalContext : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,250 : DEBUG : ModalContext : RandomForestClassificationPredictorNodeFactory2 : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,252 : DEBUG : ModalContext : ConformalPredictorCalibratorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,254 : DEBUG : ModalContext : ConformalPredictorNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,257 : DEBUG : ModalContext : ConformalPredictorLoopEndNodeFactory : Input : 2:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:23:07,263 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(1) to node 2:13:0:3(1)
+2020-02-17 20:23:07,263 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:10(1) to node 2:13:0:11(2)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:8(1) to node 2:13:0:10(2)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:11(1)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:1(1) to node 2:13:0:2(1)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:9(1) to node 2:13:0:10(1)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(2) to node 2:13:0:4(2)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:11(2) to node 2:13:0:13(1)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:4(1)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:2(3) to node 2:13:0:8(2)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:3(3) to node 2:13:0:8(1)
+2020-02-17 20:23:07,264 : DEBUG : ModalContext : WorkflowManager : Input : 2:13 : Added new connection from node 2:13:0:4(1) to node 2:13:0:9(1)
+2020-02-17 20:23:07,271 : DEBUG : ModalContext : WorkflowDataRepository : Conformal Prediction Loop Start : 2:13:0:2 : Adding handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 1 in total
+2020-02-17 20:23:07,357 : DEBUG : ModalContext : Node : Conformal Scorer : 2:15 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:07,361 : DEBUG : ModalContext : Node : Conformal Scorer : 2:27 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:07,365 : DEBUG : ModalContext : Node : Conformal Scorer : 2:23 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:07,369 : DEBUG : ModalContext : Node : Conformal Scorer : 2:19 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:23:07,373 : DEBUG : ModalContext : Node : Table Difference Checker : 2:17 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:07,374 : DEBUG : ModalContext : Node : Table Difference Checker : 2:29 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:07,375 : DEBUG : ModalContext : Node : Table Difference Checker : 2:25 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:07,376 : DEBUG : ModalContext : Node : Table Difference Checker : 2:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:23:07,377 : DEBUG : ModalContext : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test"  with no errors
+2020-02-17 20:23:15,659 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:23:15,664 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Scorer : 2:20 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:23:29,042 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Classifier : 2:18 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:23:29,046 : DEBUG : AWT-EventQueue-0 : BufferSettings : Conformal Classifier : 2:18 : Using table format org.knime.core.data.container.DefaultTableStoreFormat
+2020-02-17 20:42:49,175 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Loading executable extensions of extension point: org.knime.database.RowFilter
+2020-02-17 20:42:49,177 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Executable extension initializer has been created
+2020-02-17 20:42:49,177 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Executable is instance of MSAccessRowFilterInitializer
+2020-02-17 20:42:49,202 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Loading extensions of extension point: org.knime.database.DBType
+2020-02-17 20:42:49,211 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=h2, name=H2, description=null)
+2020-02-17 20:42:49,212 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=msaccess, name=Microsoft Access, description=null)
+2020-02-17 20:42:49,214 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=mssqlserver, name=Microsoft SQL Server, description=null)
+2020-02-17 20:42:49,215 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=mysql, name=MySQL, description=null)
+2020-02-17 20:42:49,215 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=postgres, name=PostgreSQL, description=null)
+2020-02-17 20:42:49,215 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=sqlite, name=SQLite, description=null)
+2020-02-17 20:42:49,216 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=db2, name=IBM Db2, description=null)
+2020-02-17 20:42:49,217 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=oracle, name=Oracle, description=null)
+2020-02-17 20:42:49,217 : DEBUG : ModalContext : DBTypeRegistry : scorer_test : 0 : Register database type: DBType(id=vertica, name=Vertica, description=Vertica Analytics Platform)
+2020-02-17 20:42:49,232 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Executable extension initializer has been created
+2020-02-17 20:42:49,233 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Executable is instance of SQLiteRowFilterInitializer
+2020-02-17 20:42:49,241 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Executable extension initializer has been created
+2020-02-17 20:42:49,241 : DEBUG : ModalContext : ExtensionPoints : scorer_test : 0 : Executable is instance of OracleRowFilterInitializer
+2020-02-17 20:42:49,796 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,848 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,870 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,884 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,899 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,909 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,927 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,943 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,950 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,959 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,967 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,981 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:49,988 : DEBUG : ModalContext : ConformalPredictorClassifierNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,001 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,009 : DEBUG : ModalContext : ConformalPredictorScorerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,016 : DEBUG : ModalContext : DifferenceCheckerNodeFactory : scorer_test : 0 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,093 : DEBUG : ModalContext : FileReaderNodeFactory : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,124 : DEBUG : ModalContext : ConformalPredictorLoopStartNodeFactory : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,178 : DEBUG : ModalContext : RandomForestClassificationLearnerNodeFactory2 : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,257 : DEBUG : ModalContext : RandomForestClassificationPredictorNodeFactory2 : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,265 : DEBUG : ModalContext : RandomForestClassificationPredictorNodeFactory2 : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,277 : DEBUG : ModalContext : ConformalPredictorCalibratorNodeFactory : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,295 : DEBUG : ModalContext : ConformalPredictorNodeFactory : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,311 : DEBUG : ModalContext : ConformalPredictorLoopEndNodeFactory : Input : 0:13 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:50,350 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:2(1) to node 0:13:0:3(1)
+2020-02-17 20:42:50,350 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:10(1) to node 0:13:0:11(2)
+2020-02-17 20:42:50,351 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:8(1) to node 0:13:0:10(2)
+2020-02-17 20:42:50,351 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:9(1) to node 0:13:0:11(1)
+2020-02-17 20:42:50,351 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:1(1) to node 0:13:0:2(1)
+2020-02-17 20:42:50,351 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:9(1) to node 0:13:0:10(1)
+2020-02-17 20:42:50,352 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:2(2) to node 0:13:0:4(2)
+2020-02-17 20:42:50,352 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:11(2) to node 0:13:0:13(1)
+2020-02-17 20:42:50,352 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:3(3) to node 0:13:0:4(1)
+2020-02-17 20:42:50,352 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:2(3) to node 0:13:0:8(2)
+2020-02-17 20:42:50,353 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:3(3) to node 0:13:0:8(1)
+2020-02-17 20:42:50,353 : DEBUG : ModalContext : WorkflowManager : Input : 0:13 : Added new connection from node 0:13:0:4(1) to node 0:13:0:9(1)
+2020-02-17 20:42:50,431 : DEBUG : ModalContext : WorkflowDataRepository : Conformal Prediction Loop Start : 0:13:0:2 : Adding handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 1 in total
+2020-02-17 20:42:50,692 : DEBUG : ModalContext : Node : Conformal Scorer : 0:15 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:42:50,699 : DEBUG : ModalContext : Node : Conformal Scorer : 0:27 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:42:50,705 : DEBUG : ModalContext : Node : Conformal Scorer : 0:23 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:42:50,711 : DEBUG : ModalContext : Node : Conformal Scorer : 0:19 : Configure succeeded. (Conformal Scorer)
+2020-02-17 20:42:50,726 : DEBUG : ModalContext : Node : Table Difference Checker : 0:17 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:42:50,728 : DEBUG : ModalContext : Node : Table Difference Checker : 0:29 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:42:50,729 : DEBUG : ModalContext : Node : Table Difference Checker : 0:25 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:42:50,731 : DEBUG : ModalContext : Node : Table Difference Checker : 0:21 : Configure succeeded. (Table Difference Checker)
+2020-02-17 20:42:50,733 : DEBUG : ModalContext : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\scorer_test"  with no errors
+2020-02-17 20:42:54,042 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Boosting Learner" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,046 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:0
+2020-02-17 20:42:54,096 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:0:11(1) to node 1:0:10(1)
+2020-02-17 20:42:54,096 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:0:1(1) to node 1:0:11(1)
+2020-02-17 20:42:54,096 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:0:1(2) to node 1:0:10(2)
+2020-02-17 20:42:54,097 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:0:4(1) to node 1:0(0)
+2020-02-17 20:42:54,097 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:0:10(1) to node 1:0:4(2)
+2020-02-17 20:42:54,097 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:0(0) to node 1:0:1(1)
+2020-02-17 20:42:54,097 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:0:11(1) to node 1:0:4(1)
+2020-02-17 20:42:54,098 : DEBUG : Worker-1 : Node : Boosting Learner Loop Start : 1:0:1 : reset
+2020-02-17 20:42:54,098 : DEBUG : Worker-1 : Node : Boosting Learner Loop Start : 1:0:1 : clean output ports.
+2020-02-17 20:42:54,101 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Boosting Learner"  with warnings
+2020-02-17 20:42:54,106 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Boosting Predictor" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,108 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:1
+2020-02-17 20:42:54,130 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:1:1(1) to node 1:1:4(1)
+2020-02-17 20:42:54,131 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:1:4(1) to node 1:1:3(1)
+2020-02-17 20:42:54,131 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:1(1) to node 1:1:4(2)
+2020-02-17 20:42:54,131 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:1:3(1) to node 1:1(0)
+2020-02-17 20:42:54,131 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:1(0) to node 1:1:1(1)
+2020-02-17 20:42:54,133 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Boosting Predictor"  with no errors
+2020-02-17 20:42:54,140 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Delegating" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,143 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:2
+2020-02-17 20:42:54,222 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:2:61
+2020-02-17 20:42:54,223 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2(0) to node 1:2:63(1)
+2020-02-17 20:42:54,223 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:68(1) to node 1:2:69(1)
+2020-02-17 20:42:54,223 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:66(1) to node 1:2:64(2)
+2020-02-17 20:42:54,223 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:67(1) to node 1:2:64(1)
+2020-02-17 20:42:54,223 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:68(1) to node 1:2:67(1)
+2020-02-17 20:42:54,224 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:69(1) to node 1:2:61(0)
+2020-02-17 20:42:54,224 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:63(1) to node 1:2:69(2)
+2020-02-17 20:42:54,224 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:63(1) to node 1:2:68(1)
+2020-02-17 20:42:54,224 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:63(1) to node 1:2:66(2)
+2020-02-17 20:42:54,224 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:61(0) to node 1:2:66(1)
+2020-02-17 20:42:54,224 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:64(1) to node 1:2(0)
+2020-02-17 20:42:54,245 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:61:62(1) to node 1:2:61(0)
+2020-02-17 20:42:54,245 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:61(0) to node 1:2:61:62(1)
+2020-02-17 20:42:54,245 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:61(0) to node 1:2:61:61(1)
+2020-02-17 20:42:54,245 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:61(0) to node 1:2:61:61(2)
+2020-02-17 20:42:54,246 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:2:61:61(1) to node 1:2:61:62(2)
+2020-02-17 20:42:54,256 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Delegating"  with no errors
+2020-02-17 20:42:54,261 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Bagging" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,264 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:3
+2020-02-17 20:42:54,305 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3(1) to node 1:3:15(2)
+2020-02-17 20:42:54,305 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3:13(1) to node 1:3:12(1)
+2020-02-17 20:42:54,305 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3(0) to node 1:3:13(1)
+2020-02-17 20:42:54,305 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3:9(1) to node 1:3(0)
+2020-02-17 20:42:54,305 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3:15(1) to node 1:3:9(1)
+2020-02-17 20:42:54,305 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3:8(1) to node 1:3:15(1)
+2020-02-17 20:42:54,306 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3:16(1) to node 1:3:7(1)
+2020-02-17 20:42:54,306 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3:12(1) to node 1:3:16(1)
+2020-02-17 20:42:54,306 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:3:7(1) to node 1:3:8(1)
+2020-02-17 20:42:54,310 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484098\0\.cp\metanode_templates\Bagging"  with no errors
+2020-02-17 20:42:54,316 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484127\0\.cp\metanode_templates\Seasonality Correction" (version "V2100" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,317 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:4
+2020-02-17 20:42:54,338 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:4:24(1) to node 1:4:25(1)
+2020-02-17 20:42:54,338 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:4:25(1) to node 1:4(0)
+2020-02-17 20:42:54,339 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:4(0) to node 1:4:24(1)
+2020-02-17 20:42:54,340 : DEBUG : Worker-1 : Node : Lag Column : 1:4:24 : reset
+2020-02-17 20:42:54,340 : DEBUG : Worker-1 : Node : Lag Column : 1:4:24 : clean output ports.
+2020-02-17 20:42:54,342 : DEBUG : Worker-1 : Node : Java Snippet (simple) : 1:4:25 : reset
+2020-02-17 20:42:54,342 : DEBUG : Worker-1 : Node : Java Snippet (simple) : 1:4:25 : clean output ports.
+2020-02-17 20:42:54,343 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484127\0\.cp\metanode_templates\Seasonality Correction"  with warnings
+2020-02-17 20:42:54,349 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484127\0\.cp\metanode_templates\Time Series Auto-Prediction Training" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,352 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:5
+2020-02-17 20:42:54,375 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:5:217(1) to node 1:5(0)
+2020-02-17 20:42:54,375 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:5:217(2) to node 1:5(1)
+2020-02-17 20:42:54,375 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:5(0) to node 1:5:216(1)
+2020-02-17 20:42:54,376 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:5:147(1) to node 1:5:217(1)
+2020-02-17 20:42:54,376 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:5:216(1) to node 1:5:147(1)
+2020-02-17 20:42:54,376 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:5:147(2) to node 1:5(2)
+2020-02-17 20:42:54,380 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484127\0\.cp\metanode_templates\Time Series Auto-Prediction Training"  with no errors
+2020-02-17 20:42:54,385 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484127\0\.cp\metanode_templates\Time Series Auto-Prediction Predictor" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,388 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:6
+2020-02-17 20:42:54,410 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:6:177(1) to node 1:6:176(1)
+2020-02-17 20:42:54,410 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:6(1) to node 1:6:177(2)
+2020-02-17 20:42:54,410 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:6:177(1) to node 1:6(0)
+2020-02-17 20:42:54,410 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:6(0) to node 1:6:177(1)
+2020-02-17 20:42:54,410 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:6:176(1) to node 1:6(1)
+2020-02-17 20:42:54,412 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\KNIME Analytics Platform\org.eclipse.osgi\484127\0\.cp\metanode_templates\Time Series Auto-Prediction Predictor"  with no errors
+2020-02-17 20:42:54,415 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Cross Validation" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,418 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:7
+2020-02-17 20:42:54,435 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:7:2(1) to node 1:7:16(1)
+2020-02-17 20:42:54,435 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:7:2(2) to node 1:7:15(2)
+2020-02-17 20:42:54,435 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:7(0) to node 1:7:2(1)
+2020-02-17 20:42:54,436 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:7:1(2) to node 1:7(1)
+2020-02-17 20:42:54,436 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:7:1(1) to node 1:7(0)
+2020-02-17 20:42:54,436 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:7:15(1) to node 1:7:1(1)
+2020-02-17 20:42:54,436 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:7:16(1) to node 1:7:15(1)
+2020-02-17 20:42:54,438 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Cross Validation"  with no errors
+2020-02-17 20:42:54,440 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Variables Loop (Data)" (version "V200" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,442 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:8
+2020-02-17 20:42:54,453 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:8:3(1) to node 1:8:4(2)
+2020-02-17 20:42:54,453 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:8(1) to node 1:8:3(1)
+2020-02-17 20:42:54,453 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:8(0) to node 1:8:4(1)
+2020-02-17 20:42:54,453 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:8:2(1) to node 1:8(0)
+2020-02-17 20:42:54,457 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Variables Loop (Data)"  with no errors
+2020-02-17 20:42:54,459 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Variables Loop (Database)" (version "V200" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,461 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:9
+2020-02-17 20:42:54,470 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:9:3(1) to node 1:9:4(2)
+2020-02-17 20:42:54,470 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:9(1) to node 1:9:3(1)
+2020-02-17 20:42:54,470 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:9(0) to node 1:9:4(1)
+2020-02-17 20:42:54,470 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:9:2(1) to node 1:9(0)
+2020-02-17 20:42:54,474 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Variables Loop (Database)"  with no errors
+2020-02-17 20:42:54,476 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Iterate list of files" (version "V2100" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,478 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:10
+2020-02-17 20:42:54,486 : DEBUG : Worker-1 : FileReaderNodeFactory : Iterate List of Files : 1:10 : Factory is already initialized. Nothing to do.
+2020-02-17 20:42:54,487 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:10:2(1) to node 1:10:4(0)
+2020-02-17 20:42:54,487 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:10:4(1) to node 1:10:3(1)
+2020-02-17 20:42:54,487 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:10:3(1) to node 1:10(0)
+2020-02-17 20:42:54,487 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:10(0) to node 1:10:2(1)
+2020-02-17 20:42:54,491 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Iterate list of files"  with no errors
+2020-02-17 20:42:54,493 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Looper" (version "V200" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,495 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:11
+2020-02-17 20:42:54,501 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:11:2(1) to node 1:11(0)
+2020-02-17 20:42:54,501 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:11(0) to node 1:11:1(1)
+2020-02-17 20:42:54,504 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Looper"  with no errors
+2020-02-17 20:42:54,506 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Backward Feature Elimination" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,508 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:12
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:2(2) to node 1:12:3(1)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:11(1) to node 1:12:10(1)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:7(0) to node 1:12:2(1)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12(0) to node 1:12:8(1)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12(1) to node 1:12:3(2)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:3(1) to node 1:12(1)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:6(2) to node 1:12:10(2)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:2(1) to node 1:12(0)
+2020-02-17 20:42:54,557 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:6(1) to node 1:12:11(1)
+2020-02-17 20:42:54,558 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:10(1) to node 1:12:7(1)
+2020-02-17 20:42:54,558 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:12:8(1) to node 1:12:6(1)
+2020-02-17 20:42:54,561 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Backward Feature Elimination"  with no errors
+2020-02-17 20:42:54,564 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Forward Feature Selection" (version "V3070" with loader class "FileWorkflowPersistor")
+2020-02-17 20:42:54,566 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 1:13
+2020-02-17 20:42:54,587 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:2(2) to node 1:13:3(1)
+2020-02-17 20:42:54,587 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:10(1) to node 1:13:9(1)
+2020-02-17 20:42:54,587 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:7(0) to node 1:13:2(1)
+2020-02-17 20:42:54,587 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13(0) to node 1:13:8(1)
+2020-02-17 20:42:54,587 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13(1) to node 1:13:3(2)
+2020-02-17 20:42:54,587 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:3(1) to node 1:13(1)
+2020-02-17 20:42:54,588 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:6(1) to node 1:13:10(1)
+2020-02-17 20:42:54,588 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:2(1) to node 1:13(0)
+2020-02-17 20:42:54,588 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:8(1) to node 1:13:6(1)
+2020-02-17 20:42:54,588 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:9(1) to node 1:13:7(1)
+2020-02-17 20:42:54,588 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 1:13:6(2) to node 1:13:9(2)
+2020-02-17 20:42:54,591 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\java-workspace\.metadata\.plugins\org.eclipse.pde.core\.bundle_pool\plugins\org.knime.base_4.1.1.v202001312016\metanode_templates\Forward Feature Selection"  with no errors
+2020-02-17 20:43:50,978 : DEBUG : ModalContext : WorkflowManager :  :  : Loading workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test" (version "V4010" with loader class "FileWorkflowPersistor")
+2020-02-17 20:43:50,984 : DEBUG : ModalContext : WorkflowManager :  :  : Created subworkflow 2
+2020-02-17 20:43:51,066 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:2(1) to node 2:3(1)
+2020-02-17 20:43:51,066 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:10(1) to node 2:11(2)
+2020-02-17 20:43:51,066 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:13(1) to node 2:12(1)
+2020-02-17 20:43:51,066 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:8(1) to node 2:10(2)
+2020-02-17 20:43:51,066 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:11(1)
+2020-02-17 20:43:51,066 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:14(1)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:18(1) to node 2:16(2)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:2(1)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:10(1)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:13(3) to node 2:14(2)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:16(1) to node 2:19(2)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:16(2) to node 2:20(2)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:2(2) to node 2:4(2)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:4(1)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:2(3) to node 2:8(2)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:8(1)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:13(1)
+2020-02-17 20:43:51,067 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:4(1) to node 2:9(1)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:11(1) to node 2:19(1)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:13(2) to node 2:17(2)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:14(1) to node 2:18(2)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:17(1)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:18(1)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:17(1) to node 2:15(1)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:11(2) to node 2:20(1)
+2020-02-17 20:43:51,068 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:16(1)
+2020-02-17 20:43:51,262 : DEBUG : ModalContext : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test"  with no errors
+2020-02-17 20:44:22,852 : DEBUG : main : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:11(1)
+2020-02-17 20:45:14,655 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test" (version "V4010" with loader class "FileWorkflowPersistor")
+2020-02-17 20:45:14,661 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 2
+2020-02-17 20:45:14,752 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:2(1) to node 2:3(1)
+2020-02-17 20:45:14,752 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:10(1) to node 2:11(2)
+2020-02-17 20:45:14,752 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:13(1) to node 2:12(1)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:8(1) to node 2:10(2)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:11(1)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:14(1)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:18(1) to node 2:16(2)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:2(1)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:10(1)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:13(3) to node 2:14(2)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:16(1) to node 2:19(2)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:16(2) to node 2:20(2)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:2(2) to node 2:4(2)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:4(1)
+2020-02-17 20:45:14,753 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:2(3) to node 2:8(2)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:8(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:13(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:4(1) to node 2:9(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:11(1) to node 2:19(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:13(2) to node 2:17(2)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:14(1) to node 2:18(2)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:17(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:18(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:17(1) to node 2:15(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:11(2) to node 2:20(1)
+2020-02-17 20:45:14,754 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:16(1)
+2020-02-17 20:45:14,907 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test"  with no errors
+2020-02-17 20:45:15,632 : DEBUG : Worker-1 : WorkflowManager :  :  : Loading workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test" (version "V4010" with loader class "FileWorkflowPersistor")
+2020-02-17 20:45:15,637 : DEBUG : Worker-1 : WorkflowManager :  :  : Created subworkflow 2
+2020-02-17 20:45:15,703 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:2(1) to node 2:3(1)
+2020-02-17 20:45:15,703 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:10(1) to node 2:11(2)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:13(1) to node 2:12(1)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:8(1) to node 2:10(2)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:11(1)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:14(1)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:18(1) to node 2:16(2)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:2(1)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:10(1)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:13(3) to node 2:14(2)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:16(1) to node 2:19(2)
+2020-02-17 20:45:15,704 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:16(2) to node 2:20(2)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:2(2) to node 2:4(2)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:4(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:2(3) to node 2:8(2)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:8(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:13(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:4(1) to node 2:9(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:11(1) to node 2:19(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:13(2) to node 2:17(2)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:14(1) to node 2:18(2)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:17(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:18(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:17(1) to node 2:15(1)
+2020-02-17 20:45:15,705 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:11(2) to node 2:20(1)
+2020-02-17 20:45:15,706 : DEBUG : Worker-1 : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:16(1)
+2020-02-17 20:45:15,761 : DEBUG : Worker-1 : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test"  with no errors
+2020-02-17 20:45:25,648 : DEBUG : ModalContext : WorkflowManager :  :  : Loading workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test" (version "V4010" with loader class "FileWorkflowPersistor")
+2020-02-17 20:45:25,650 : DEBUG : ModalContext : WorkflowManager :  :  : Created subworkflow 2
+2020-02-17 20:45:25,703 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:2(1) to node 2:3(1)
+2020-02-17 20:45:25,703 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:10(1) to node 2:11(2)
+2020-02-17 20:45:25,704 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:13(1) to node 2:12(1)
+2020-02-17 20:45:25,704 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:8(1) to node 2:10(2)
+2020-02-17 20:45:25,704 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:11(1)
+2020-02-17 20:45:25,704 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:14(1)
+2020-02-17 20:45:25,704 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:18(1) to node 2:16(2)
+2020-02-17 20:45:25,704 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:2(1)
+2020-02-17 20:45:25,704 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:9(1) to node 2:10(1)
+2020-02-17 20:45:25,705 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:13(3) to node 2:14(2)
+2020-02-17 20:45:25,705 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:16(1) to node 2:19(2)
+2020-02-17 20:45:25,705 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:16(2) to node 2:20(2)
+2020-02-17 20:45:25,705 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:2(2) to node 2:4(2)
+2020-02-17 20:45:25,705 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:4(1)
+2020-02-17 20:45:25,705 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:2(3) to node 2:8(2)
+2020-02-17 20:45:25,705 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:3(3) to node 2:8(1)
+2020-02-17 20:45:25,707 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:1(1) to node 2:13(1)
+2020-02-17 20:45:25,707 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:4(1) to node 2:9(1)
+2020-02-17 20:45:25,707 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:11(1) to node 2:19(1)
+2020-02-17 20:45:25,707 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:13(2) to node 2:17(2)
+2020-02-17 20:45:25,707 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:14(1) to node 2:18(2)
+2020-02-17 20:45:25,707 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:12(3) to node 2:17(1)
+2020-02-17 20:45:25,707 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:18(1)
+2020-02-17 20:45:25,708 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:17(1) to node 2:15(1)
+2020-02-17 20:45:25,708 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:11(2) to node 2:20(1)
+2020-02-17 20:45:25,708 : DEBUG : ModalContext : WorkflowManager :  :  : Added new connection from node 2:15(1) to node 2:16(1)
+2020-02-17 20:45:25,780 : DEBUG : ModalContext : WorkflowManager :  :  : Loaded workflow from "C:\src\knime\runtime-KNIME\workflow_tests\loop_test"  with no errors
+2020-02-17 20:46:03,558 : DEBUG : main : ProjectWorkflowMap : scorer_test : 0 : Removing "file:/C:/src/knime/runtime-KNIME/workflow_tests/scorer_test/" from project map (1 remaining)
+2020-02-17 20:46:03,559 : DEBUG : main : WorkflowManager : scorer_test : 0 : Removing project "scorer_test 0"
+2020-02-17 20:46:03,561 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 0:21 : Removing all (0) views from model.
+2020-02-17 20:46:03,561 : DEBUG : main : Node : Table Difference Checker : 0:21 : clean output ports.
+2020-02-17 20:46:03,562 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 0:25 : Removing all (0) views from model.
+2020-02-17 20:46:03,562 : DEBUG : main : Node : Table Difference Checker : 0:25 : clean output ports.
+2020-02-17 20:46:03,562 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 0:29 : Removing all (0) views from model.
+2020-02-17 20:46:03,562 : DEBUG : main : Node : Table Difference Checker : 0:29 : clean output ports.
+2020-02-17 20:46:03,562 : DEBUG : main : DifferenceCheckerNodeModel : Table Difference Checker : 0:17 : Removing all (0) views from model.
+2020-02-17 20:46:03,562 : DEBUG : main : Node : Table Difference Checker : 0:17 : clean output ports.
+2020-02-17 20:46:03,563 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:20 : Removing all (0) views from model.
+2020-02-17 20:46:03,563 : DEBUG : main : Node : Conformal Scorer : 0:20 : clean output ports.
+2020-02-17 20:46:03,564 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:19 : Removing all (0) views from model.
+2020-02-17 20:46:03,564 : DEBUG : main : Node : Conformal Scorer : 0:19 : clean output ports.
+2020-02-17 20:46:03,564 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:24 : Removing all (0) views from model.
+2020-02-17 20:46:03,564 : DEBUG : main : Node : Conformal Scorer : 0:24 : clean output ports.
+2020-02-17 20:46:03,565 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:23 : Removing all (0) views from model.
+2020-02-17 20:46:03,565 : DEBUG : main : Node : Conformal Scorer : 0:23 : clean output ports.
+2020-02-17 20:46:03,565 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:28 : Removing all (0) views from model.
+2020-02-17 20:46:03,565 : DEBUG : main : Node : Conformal Scorer : 0:28 : clean output ports.
+2020-02-17 20:46:03,565 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:27 : Removing all (0) views from model.
+2020-02-17 20:46:03,566 : DEBUG : main : Node : Conformal Scorer : 0:27 : clean output ports.
+2020-02-17 20:46:03,566 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:16 : Removing all (0) views from model.
+2020-02-17 20:46:03,566 : DEBUG : main : Node : Conformal Scorer : 0:16 : clean output ports.
+2020-02-17 20:46:03,567 : DEBUG : main : ConformalPredictorScorerNodeModel : Conformal Scorer : 0:15 : Removing all (0) views from model.
+2020-02-17 20:46:03,567 : DEBUG : main : Node : Conformal Scorer : 0:15 : clean output ports.
+2020-02-17 20:46:03,568 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 0:18 : Removing all (0) views from model.
+2020-02-17 20:46:03,568 : DEBUG : main : Node : Conformal Classifier : 0:18 : clean output ports.
+2020-02-17 20:46:03,569 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 0:22 : Removing all (0) views from model.
+2020-02-17 20:46:03,569 : DEBUG : main : Node : Conformal Classifier : 0:22 : clean output ports.
+2020-02-17 20:46:03,569 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 0:26 : Removing all (0) views from model.
+2020-02-17 20:46:03,569 : DEBUG : main : Node : Conformal Classifier : 0:26 : clean output ports.
+2020-02-17 20:46:03,570 : DEBUG : main : ConformalPredictorClassifierNodeModel : Conformal Classifier : 0:14 : Removing all (0) views from model.
+2020-02-17 20:46:03,570 : DEBUG : main : Node : Conformal Classifier : 0:14 : clean output ports.
+2020-02-17 20:46:03,571 : DEBUG : main : VirtualSubNodeOutputNodeModel : Component Output : 0:13:0:13 : Removing all (0) views from model.
+2020-02-17 20:46:03,571 : DEBUG : main : Node : Component Output : 0:13:0:13 : clean output ports.
+2020-02-17 20:46:03,572 : DEBUG : main : ConformalPredictorLoopEndNodeModel : Conformal Prediction Loop End : 0:13:0:11 : Removing all (0) views from model.
+2020-02-17 20:46:03,572 : DEBUG : main : Node : Conformal Prediction Loop End : 0:13:0:11 : clean output ports.
+2020-02-17 20:46:03,573 : DEBUG : main : ConformalPredictorNodeModel : Conformal Predictor : 0:13:0:10 : Removing all (0) views from model.
+2020-02-17 20:46:03,573 : DEBUG : main : Node : Conformal Predictor : 0:13:0:10 : clean output ports.
+2020-02-17 20:46:03,573 : DEBUG : main : ConformalPredictorCalibratorNodeModel : Conformal Calibrator : 0:13:0:9 : Removing all (0) views from model.
+2020-02-17 20:46:03,573 : DEBUG : main : Node : Conformal Calibrator : 0:13:0:9 : clean output ports.
+2020-02-17 20:46:03,574 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 0:13:0:8 : Removing all (0) views from model.
+2020-02-17 20:46:03,574 : DEBUG : main : Node : Random Forest Predictor : 0:13:0:8 : clean output ports.
+2020-02-17 20:46:03,575 : DEBUG : main : TreeEnsembleClassificationPredictorNodeModel : Random Forest Predictor : 0:13:0:4 : Removing all (0) views from model.
+2020-02-17 20:46:03,575 : DEBUG : main : Node : Random Forest Predictor : 0:13:0:4 : clean output ports.
+2020-02-17 20:46:03,575 : DEBUG : main : TreeEnsembleClassificationLearnerNodeModel : Random Forest Learner : 0:13:0:3 : Removing all (0) views from model.
+2020-02-17 20:46:03,575 : DEBUG : main : Node : Random Forest Learner : 0:13:0:3 : clean output ports.
+2020-02-17 20:46:03,576 : DEBUG : main : ConformalPredictorLoopStartNodeModel : Conformal Prediction Loop Start : 0:13:0:2 : Removing all (0) views from model.
+2020-02-17 20:46:03,576 : DEBUG : main : Node : Conformal Prediction Loop Start : 0:13:0:2 : clean output ports.
+2020-02-17 20:46:03,576 : DEBUG : main : WorkflowDataRepository : Conformal Prediction Loop Start : 0:13:0:2 : Removing handler d526699c-e770-40bd-ad12-d1b3788eabd9 (Conformal Prediction Loop Start: <no directory>) - 0 remaining
+2020-02-17 20:46:03,577 : DEBUG : main : VirtualSubNodeInputNodeModel : Component Input : 0:13:0:12 : Removing all (0) views from model.
+2020-02-17 20:46:03,577 : DEBUG : main : Node : Component Input : 0:13:0:12 : clean output ports.
+2020-02-17 20:46:03,577 : DEBUG : main : FileReaderNodeModel : File Reader : 0:13:0:1 : Removing all (0) views from model.
+2020-02-17 20:46:03,577 : DEBUG : main : Node : File Reader : 0:13:0:1 : clean output ports.
+2020-02-17 20:46:03,577 : DEBUG : main : WorkflowManager : scorer_test : 0 : Project "scorer_test 0" removed (2 remaining)

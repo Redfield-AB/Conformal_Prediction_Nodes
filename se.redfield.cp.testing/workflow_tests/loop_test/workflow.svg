@@ -782,15 +782,13 @@ wCZJ3mUVry+vmM1mstvZcN+BOtrQlj65syM4okU/LSUQhiG6XTfjwCbs9XpJAWW3
 x16YseMZdck40oe+qyAHudSzpTMbDIZotVprx1B2uej27BheLI0hp6bz2M4dw3Sl
 jcVGkruA8+n7vpR1INHT6PLHRcTEo/4E/b737TbkE9wsktgQmiDekvKLLahW8Sd3
 I9NSe3Ml5QAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
-            <polygon text-rendering="optimizeLegibility"
-                     clip-path="url(#clipPath55)" points=" 628 39 637 43 628 48"
-                     stroke="none"/>
-            <polygon text-rendering="optimizeLegibility"
-                     clip-path="url(#clipPath56)" points=" 628 49 637 53 628 58"
-                     stroke="none"/>
         </g>
         <g text-rendering="optimizeLegibility" font-family="&apos;Arial&apos;"
            stroke-linecap="butt">
+            <polygon fill="none" clip-path="url(#clipPath55)"
+                     points=" 628 39 636 42 628 47"/>
+            <polygon clip-path="url(#clipPath56)" points=" 628 49 637 53 628 58"
+                     stroke="none"/>
             <polygon fill="none" clip-path="url(#clipPath57)"
                      points=" 628 59 636 62 628 67"/>
             <polygon clip-path="url(#clipPath58)" points=" 669 39 678 43 669 48"
@@ -1050,8 +1048,8 @@ KuxVUL4R85E7vDonBEVCorKA/wUtYJym4Kxa9eD6Gnme64R7C8rXoC0YcXU0iaCw
 fxjg6Ph4ahnKLJfZfjf0p5bh1tz3N8tQVYASEKq/gDGGSBDKPg2SKAhkH015W4qN
 2W9F+clPiMhitEspF8qZnWcR7wJJbBADlNDKr/gRdwHUkatixdAAAAAASUVORK5C
 YII=" xlink:actuate="onLoad"/>
-            <polygon clip-path="url(#clipPath85)"
-                     points=" 628 399 637 403 628 408" stroke="none"/>
+            <polygon fill="none" clip-path="url(#clipPath85)"
+                     points=" 628 399 636 402 628 407"/>
             <polygon clip-path="url(#clipPath86)"
                      points=" 628 409 637 413 628 418" stroke="none"/>
             <polygon fill="none" clip-path="url(#clipPath87)"
@@ -1668,8 +1666,8 @@ wCZJ3mUVry+vmM1mstvZcN+BOtrQlj65syM4okU/LSUQhiG6XTfjwCbs9XpJAWW3
 x16YseMZdck40oe+qyAHudSzpTMbDIZotVprx1B2uej27BheLI0hp6bz2M4dw3Sl
 jcVGkruA8+n7vpR1INHT6PLHRcTEo/4E/b737TbkE9wsktgQmiDekvKLLahW8Sd3
 I9NSe3Ml5QAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
-            <polygon clip-path="url(#clipPath55)" points=" 628 39 637 43 628 48"
-                     stroke="none"/>
+            <polygon fill="none" clip-path="url(#clipPath55)"
+                     points=" 628 39 636 42 628 47"/>
             <polygon clip-path="url(#clipPath56)" points=" 628 49 637 53 628 58"
                      stroke="none"/>
             <polygon fill="none" clip-path="url(#clipPath57)"
@@ -1931,8 +1929,8 @@ KuxVUL4R85E7vDonBEVCorKA/wUtYJym4Kxa9eD6Gnme64R7C8rXoC0YcXU0iaCw
 fxjg6Ph4ahnKLJfZfjf0p5bh1tz3N8tQVYASEKq/gDGGSBDKPg2SKAhkH015W4qN
 2W9F+clPiMhitEspF8qZnWcR7wJJbBADlNDKr/gRdwHUkatixdAAAAAASUVORK5C
 YII=" xlink:actuate="onLoad"/>
-            <polygon clip-path="url(#clipPath85)"
-                     points=" 628 399 637 403 628 408" stroke="none"/>
+            <polygon fill="none" clip-path="url(#clipPath85)"
+                     points=" 628 399 636 402 628 407"/>
             <polygon clip-path="url(#clipPath86)"
                      points=" 628 409 637 413 628 418" stroke="none"/>
             <polygon fill="none" clip-path="url(#clipPath87)"
@@ -2163,55 +2161,11 @@ I9NSe3Ml5QAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
             <polygon clip-path="url(#clipPath107)"
                      points=" 728 58 737 62 728 67" stroke="none"/>
             <path fill="none"
-                  d="M478 533 C480 533 484 533 486 533 C504 533 531 539 549 539 C594 539 574 403 619 403 C621 403 625 403 627 403"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
                   d="M478 53 C480 53 484 53 486 53 C520 53 485 163 519 163 C521 163 525 163 527 163"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M78 173 C80 173 84 173 86 173 C194 173 11 533 119 533 C121 533 125 533 127 533"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M178 543 C180 543 184 543 186 543 C227 543 208 419 249 419 C270 419 298 422 319 422 C321 422 325 422 327 422"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M678 403 C680 403 684 403 686 403 C697 403 708 422 719 422 C721 422 725 422 727 422"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M278 183 C280 183 284 183 286 183 C329 183 276 43 319 43 C321 43 325 43 327 43"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M278 543 C280 543 284 543 286 543 C297 543 308 523 319 523 C321 523 325 523 327 523"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M478 53 C480 53 484 53 486 53 C526 53 579 43 619 43 C621 43 625 43 627 43"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M378 533 C380 533 384 533 386 533 C395 533 410 533 419 533 C421 533 425 533 427 533"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M78 173 C80 173 84 173 86 173 C95 173 110 173 119 173 C121 173 125 173 127 173"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M478 533 C480 533 484 533 486 533 C526 533 479 403 519 403 C521 403 525 403 527 403"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M578 173 C580 173 584 173 586 173 C623 173 582 53 619 53 C621 53 625 53 627 53"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M378 413 C380 413 384 413 386 413 C425 413 480 422 519 422 C521 422 525 422 527 422"
+                  d="M278 183 C280 183 284 183 286 183 C297 183 308 163 319 163 C321 163 325 163 327 163"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
@@ -2223,19 +2177,15 @@ I9NSe3Ml5QAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M178 183 C180 183 184 183 186 183 C225 183 210 299 249 299 C289 299 279 182 319 182 C321 182 325 182 327 182"
+                  d="M178 533 C180 533 184 533 186 533 C228 533 207 659 249 659 C289 659 279 542 319 542 C321 542 325 542 327 542"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M378 173 C380 173 384 173 386 173 C425 173 480 182 519 182 C521 182 525 182 527 182"
+                  d="M578 413 C580 413 584 413 586 413 C595 413 610 413 619 413 C621 413 625 413 627 413"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M678 43 C680 43 684 43 686 43 C794 43 611 403 719 403 C721 403 725 403 727 403"
-                  clip-path="url(#clipPath108)" fill-rule="evenodd"
-                  stroke="rgb(150,150,150)"/>
-            <path fill="none"
-                  d="M278 183 C280 183 284 183 286 183 C297 183 308 163 319 163 C321 163 325 163 327 163"
+                  d="M378 533 C380 533 384 533 386 533 C395 533 410 533 419 533 C421 533 425 533 427 533"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
@@ -2243,7 +2193,31 @@ I9NSe3Ml5QAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M178 533 C180 533 184 533 186 533 C228 533 207 659 249 659 C289 659 279 542 319 542 C321 542 325 542 327 542"
+                  d="M78 173 C80 173 84 173 86 173 C95 173 110 173 119 173 C121 173 125 173 127 173"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M278 543 C280 543 284 543 286 543 C297 543 308 523 319 523 C321 523 325 523 327 523"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M178 543 C180 543 184 543 186 543 C227 543 208 419 249 419 C270 419 298 422 319 422 C321 422 325 422 327 422"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M678 413 C680 413 684 413 686 413 C791 413 614 62 719 62 C721 62 725 62 727 62"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M178 183 C180 183 184 183 186 183 C225 183 210 299 249 299 C289 299 279 182 319 182 C321 182 325 182 327 182"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M478 533 C480 533 484 533 486 533 C526 533 479 403 519 403 C521 403 525 403 527 403"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M178 173 C180 173 184 173 186 173 C225 173 210 59 249 59 C270 59 298 62 319 62 C321 62 325 62 327 62"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
@@ -2255,15 +2229,39 @@ I9NSe3Ml5QAAAABJRU5ErkJggg==" xlink:actuate="onLoad"/>
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M178 173 C180 173 184 173 186 173 C225 173 210 59 249 59 C270 59 298 62 319 62 C321 62 325 62 327 62"
+                  d="M678 403 C680 403 684 403 686 403 C697 403 708 422 719 422 C721 422 725 422 727 422"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M578 413 C580 413 584 413 586 413 C595 413 610 413 619 413 C621 413 625 413 627 413"
+                  d="M678 43 C680 43 684 43 686 43 C794 43 611 403 719 403 C721 403 725 403 727 403"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
             <path fill="none"
-                  d="M678 413 C680 413 684 413 686 413 C791 413 614 62 719 62 C721 62 725 62 727 62"
+                  d="M478 533 C480 533 484 533 486 533 C504 533 531 539 549 539 C594 539 574 403 619 403 C621 403 625 403 627 403"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M78 173 C80 173 84 173 86 173 C194 173 11 533 119 533 C121 533 125 533 127 533"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M278 183 C280 183 284 183 286 183 C329 183 276 43 319 43 C321 43 325 43 327 43"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M578 173 C580 173 584 173 586 173 C623 173 582 53 619 53 C621 53 625 53 627 53"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M378 413 C380 413 384 413 386 413 C425 413 480 422 519 422 C521 422 525 422 527 422"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M478 53 C480 53 484 53 486 53 C526 53 579 43 619 43 C621 43 625 43 627 43"
+                  clip-path="url(#clipPath108)" fill-rule="evenodd"
+                  stroke="rgb(150,150,150)"/>
+            <path fill="none"
+                  d="M378 173 C380 173 384 173 386 173 C425 173 480 182 519 182 C521 182 525 182 527 182"
                   clip-path="url(#clipPath108)" fill-rule="evenodd"
                   stroke="rgb(150,150,150)"/>
         </g>

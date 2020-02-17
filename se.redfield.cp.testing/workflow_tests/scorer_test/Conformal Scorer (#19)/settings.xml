@@ -10,7 +10,7 @@
 <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="targetColumn" type="xstring" value="default"/>
+<entry key="targetColumn" type="xstring" value="y"/>
 <config key="classesColumn_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>

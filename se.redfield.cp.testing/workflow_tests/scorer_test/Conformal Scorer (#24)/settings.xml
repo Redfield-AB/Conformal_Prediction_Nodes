@@ -10,7 +10,7 @@
 <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="targetColumn" type="xstring" value="default"/>
+<entry key="targetColumn" type="xstring" value="y"/>
 <config key="classesColumn_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
@@ -54,6 +54,6 @@
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-<entry key="file_store_id" type="xstring" value="17886738-f28a-4720-a091-96bfb0939ab4"/>
+<entry key="file_store_id" type="xstring" value="69fa53b1-0e7a-4901-b45b-6ff818854b4d"/>
 </config>
 </config>

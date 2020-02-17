@@ -14,7 +14,7 @@
 <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="iterations" type="xint" value="1"/>
+<entry key="iterations" type="xint" value="2"/>
 <config key="testPartition">
 <entry key="method" type="xstring" value="Relative"/>
 <entry key="samplingMethod" type="xstring" value="Stratified"/>

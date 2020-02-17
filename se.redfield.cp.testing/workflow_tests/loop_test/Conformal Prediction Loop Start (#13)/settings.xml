@@ -12,13 +12,13 @@
 <entry key="type" type="xstring" value="variable"/>
 <entry key="name" type="xstring" value="iteration"/>
 <entry key="class" type="xstring" value="INTEGER"/>
-<entry key="value" type="xint" value="0"/>
+<entry key="value" type="xint" value="1"/>
 </config>
 <config key="Variable_3">
 <entry key="type" type="xstring" value="variable"/>
 <entry key="name" type="xstring" value="iterationsNum"/>
 <entry key="class" type="xstring" value="INTEGER"/>
-<entry key="value" type="xint" value="1"/>
+<entry key="value" type="xint" value="2"/>
 </config>
 </config>
 <config key="internal_node_subsettings">
@@ -29,7 +29,7 @@
 <entry key="SettingsModelID" type="xstring" value="SMID_integer"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="iterations" type="xint" value="1"/>
+<entry key="iterations" type="xint" value="2"/>
 <config key="testPartition">
 <entry key="method" type="xstring" value="Relative"/>
 <entry key="samplingMethod" type="xstring" value="Stratified"/>
@@ -88,6 +88,6 @@
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" value="filestore"/>
-<entry key="file_store_id" type="xstring" value="1e64c559-4df8-458b-a08d-6010158a0375"/>
+<entry key="file_store_id" type="xstring" value="fe583086-b96c-4bcd-b2cf-931239485bdc"/>
 </config>
 </config>
