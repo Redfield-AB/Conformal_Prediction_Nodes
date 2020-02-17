@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp;
 
 import java.util.ArrayList;
@@ -24,6 +39,11 @@ import org.knime.core.node.ExecutionMonitor;
 
 import se.redfield.cp.nodes.ConformalPredictorNodeModel;
 
+/**
+ * Class used by Conformal Predictor node to process input table and calculate
+ * Rank and P-value for each row based on the calibration table probabilities.
+ *
+ */
 public class Predictor {
 
 	private ConformalPredictorNodeModel model;
@@ -32,6 +52,12 @@ public class Predictor {
 		this.model = model;
 	}
 
+	/**
+	 * Creates output table spec.
+	 * 
+	 * @param inPredictionTableSpecs Input prediction table spec.
+	 * @return
+	 */
 	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs) {
 		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
 		if (!model.getKeepAllColumns()) {
@@ -47,6 +73,15 @@ public class Predictor {
 		return r.createSpec();
 	}
 
+	/**
+	 * Creates column rearranger that is used to process input prediction table.
+	 * 
+	 * @param predictionTableSpec Input prediction table spec.
+	 * @param inCalibrationTable  Input calibration table.
+	 * @param exec                Execution context.
+	 * @return
+	 * @throws CanceledExecutionException
+	 */
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
@@ -65,6 +100,15 @@ public class Predictor {
 		return r;
 	}
 
+	/**
+	 * Collects probabilities from the calibration table. Collected probabilities
+	 * grouped by target and sorted in desc order.
+	 * 
+	 * @param inCalibrationTable
+	 * @param exec
+	 * @return
+	 * @throws CanceledExecutionException
+	 */
 	private Map<String, List<Double>> collectCalibrationProbabilities(BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> result = new HashMap<>();
@@ -100,6 +144,13 @@ public class Predictor {
 		return result;
 	}
 
+	/**
+	 * Creates score columns specs consist of Rank column (if option enabled) and
+	 * P-value column.
+	 * 
+	 * @param value
+	 * @return
+	 */
 	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
 		List<DataColumnSpec> columns = new ArrayList<>();
 
@@ -114,6 +165,10 @@ public class Predictor {
 		return columns.toArray(new DataColumnSpec[] {});
 	}
 
+	/**
+	 * Cell factory used to append P-value and optional Rank columns
+	 *
+	 */
 	private class ScoreCellFactory extends AbstractCellFactory {
 
 		private int pColumnIndex;
@@ -139,6 +194,13 @@ public class Predictor {
 			}
 		}
 
+		/**
+		 * Calculated the rank for a given probability. Rank is the position probability
+		 * would take in a sorted list of probabilities from the calibration table.
+		 * 
+		 * @param p Probability.
+		 * @return Rank.
+		 */
 		protected int getRank(double p) {
 			int idx = Collections.binarySearch(probabilities, p, Collections.reverseOrder());
 			if (idx < 0) {// insertion index

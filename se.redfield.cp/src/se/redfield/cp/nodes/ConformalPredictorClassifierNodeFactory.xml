@@ -14,6 +14,12 @@
         
         
         <option name="Significance level">Defines the tolerable percentage of the prediction errors.</option>
+        <option name="Output Classes as String">
+        	If checked classes column will be represented as String instead of Collection column.
+        </option>
+        <option name="String separator">
+        	Character used to separate different classes when string representation is selected.
+        </option>
     </fullDescription>
     
     <ports>

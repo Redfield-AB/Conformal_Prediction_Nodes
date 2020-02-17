@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp.nodes;
 
 import java.util.Set;
@@ -25,6 +40,11 @@ import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.Predictor;
 
+/**
+ * Conformal Predictor Node. Uses calibration data to calculate Rank and P-value
+ * for each row of the input prediction table.
+ *
+ */
 public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorNodeModel.class);
@@ -79,6 +99,13 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]) };
 	}
 
+	/**
+	 * Validates calibration table spec.
+	 * 
+	 * @param calibrationTableSpec Calibration table spec.
+	 * @param predictionTableSpec  Input Prediction table spec.
+	 * @throws InvalidSettingsException
+	 */
 	private void validateCalibrationTable(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
 			throws InvalidSettingsException {
 		if (!calibrationTableSpec.containsName(getSelectedColumnName())) {
@@ -101,6 +128,14 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 		checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
 	}
 
+	/**
+	 * Checks if the calibration table contains data for all classes present in
+	 * prediction table
+	 * 
+	 * @param calibrationTableSpec Calibration table spec.
+	 * @param predictionTableSpec  Input prediction table spec.
+	 * @throws InvalidSettingsException
+	 */
 	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
 			throws InvalidSettingsException {
 		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getSelectedColumnName()).getDomain()

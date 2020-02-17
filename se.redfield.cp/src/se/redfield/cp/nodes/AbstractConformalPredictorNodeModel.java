@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp.nodes;
 
 import java.io.File;
@@ -19,6 +34,10 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
+/**
+ * Base {@link NodeModel} implementation for Predictor and Calibrator nodes
+ *
+ */
 public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(AbstractConformalPredictorNodeModel.class);
@@ -55,10 +74,28 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		super(nrInDataPorts, nrOutDataPorts);
 	}
 
+	/**
+	 * Returns probability column name for a given value for a selected target
+	 * column.
+	 * 
+	 * @param val target's value
+	 * @return probability column name
+	 */
 	public String getProbabilityColumnName(String val) {
 		return getProbabilityColumnName(getSelectedColumnName(), val);
 	}
 
+	/**
+	 * Returns probability column name which format is
+	 * 
+	 * <pre>
+	 * P ([column]=[value])
+	 * </pre>
+	 * 
+	 * @param column target column name
+	 * @param val    target column value
+	 * @return probability column name
+	 */
 	public String getProbabilityColumnName(String column, String val) {
 		return String.format(String.format("P (%s=%s)", column, val));
 	}
@@ -83,6 +120,13 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		return CALIBRATION_P_COLUMN_DEFAULT_NAME;
 	}
 
+	/**
+	 * Validates input table spec. Attempts to perform autoconfig if node is not
+	 * configured
+	 * 
+	 * @param spec
+	 * @throws InvalidSettingsException
+	 */
 	protected void validateSettings(DataTableSpec spec) throws InvalidSettingsException {
 		if (getSelectedColumnName().isEmpty()) {
 			attemptAutoconfig(spec);
@@ -99,6 +143,12 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		validateTableSpecs(getSelectedColumnName(), spec);
 	}
 
+	/**
+	 * Attempts autoconfig by searching for a target column that would pass spec
+	 * validation.
+	 * 
+	 * @param spec Input table spec
+	 */
 	protected void attemptAutoconfig(DataTableSpec spec) {
 		String[] columnNames = spec.getColumnNames();
 		for (String column : columnNames) {
@@ -112,6 +162,18 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		}
 	}
 
+	/**
+	 * Validates input table spec against specified target column. Makes sure table
+	 * contains probability columns for every target column's value.
+	 * 
+	 * @param selectedColumn Target column.
+	 * @param spec           Input table spec.
+	 * @throws InvalidSettingsException If target column domain doesn't have
+	 *                                  possible values filled. If one of
+	 *                                  probability columns is missing from input
+	 *                                  table. If keepIDColumn is selected and ID
+	 *                                  column is missing from input table.
+	 */
 	protected void validateTableSpecs(String selectedColumn, DataTableSpec spec) throws InvalidSettingsException {
 		DataColumnSpec columnSpec = spec.getColumnSpec(selectedColumn);
 		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
@@ -132,6 +194,14 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		}
 	}
 
+	/**
+	 * Returns this list of column from input table required to include in output
+	 * table. List includes target column, all the probability columns and ID column
+	 * (if option enabled).
+	 * 
+	 * @param spec Input table spec
+	 * @return
+	 */
 	public String[] getRequiredColumnNames(DataTableSpec spec) {
 		List<String> columns = spec.getColumnSpec(getSelectedColumnName()).getDomain().getValues().stream()
 				.map(c -> getProbabilityColumnName(c.toString())).collect(Collectors.toList());
@@ -169,20 +239,17 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	@Override
 	protected void loadInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override
 	protected void saveInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override
 	protected void reset() {
-		// TODO Auto-generated method stub
-
+		// nothing to reset
 	}
 }

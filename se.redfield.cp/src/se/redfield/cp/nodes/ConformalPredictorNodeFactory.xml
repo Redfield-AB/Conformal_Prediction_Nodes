@@ -17,6 +17,10 @@
         <option name="Keep All Columns">
         	If checked all columns from input table will be also included into output table along with calibration columns.
         </option>
+        <option name="Keep ID column">
+        	If checked selected ID column from input table will be included into output table.
+        </option>
+        
     </fullDescription>
     
     <ports>

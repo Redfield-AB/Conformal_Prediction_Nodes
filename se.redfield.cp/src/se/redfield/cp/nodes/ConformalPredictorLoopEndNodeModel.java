@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp.nodes;
 
 import java.io.File;
@@ -42,6 +57,20 @@ import org.knime.core.node.workflow.LoopStartNodeTerminator;
 
 import se.redfield.cp.utils.KnimeUtils;
 
+/**
+ * Conformal Predictor Loop End Node. Works with corresponing Start Loop Node.
+ * Collects calibration, prediction and training model data.<br />
+ * 
+ * Calibration tables are concatenated, iteration column is added.<br />
+ * 
+ * Prediction tables grouped by RowKey. Rank, P, and P-value columns are
+ * aggregated using median operator. The rest of the column aggregated by
+ * {@link FirstOperator}.<br />
+ * 
+ * Training models port is optional. Any tables passed to this port gets
+ * concatenated with addition of iteration column.
+ *
+ */
 public class ConformalPredictorLoopEndNodeModel extends NodeModel implements LoopEndNode {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorLoopEndNodeModel.class);
@@ -88,15 +117,35 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 				createModelTableSpec(inSpecs[PORT_MODEL_TABLE]) };
 	}
 
+	/**
+	 * Creates {@link DataTableSpec} for output calibration table by appending
+	 * iteration column to input table spec.
+	 * 
+	 * @param inSpec Input calibration table spec
+	 * @return
+	 */
 	private DataTableSpec createCalibrationTableSpec(DataTableSpec inSpec) {
 		return appendIterationColumn(inSpec);
 	}
 
+	/**
+	 * Appends iteration column to provided {@link DataTableSpec}.
+	 * 
+	 * @param inSpec Input spec.
+	 * @return Result spec.
+	 */
 	private DataTableSpec appendIterationColumn(DataTableSpec inSpec) {
 		DataColumnSpec iterColumn = new DataColumnSpecCreator(getIterationColumnName(), IntCell.TYPE).createSpec();
 		return KnimeUtils.createSpec(inSpec, iterColumn);
 	}
 
+	/**
+	 * Create Model table ouput spec by appending iteration column to input table
+	 * spec.
+	 * 
+	 * @param inSpec Input table spec.
+	 * @return Result spec.
+	 */
 	private DataTableSpec createModelTableSpec(DataTableSpec inSpec) {
 		if (inSpec == null) {
 			return null;
@@ -104,17 +153,36 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		return appendIterationColumn(inSpec);
 	}
 
+	/**
+	 * Create Prediction table output spec.
+	 * 
+	 * @param inSpec Input prediction table spec.
+	 * @return
+	 */
 	private DataTableSpec createPredictionTableSpec(DataTableSpec inSpec) {
 		return GroupByTable.createGroupByTableSpec(createConcatenatedTableSpec(inSpec), getGroupByCols(),
 				columnAggregators, ColumnNamePolicy.KEEP_ORIGINAL_NAME);
 	}
 
+	/**
+	 * Creates new spec by appending 'original row id' column.
+	 * 
+	 * @param inSpec Original spec.
+	 * @return Result spec.
+	 */
 	private DataTableSpec createConcatenatedTableSpec(DataTableSpec inSpec) {
 		DataColumnSpec origRowIdColumn = new DataColumnSpecCreator(ORIGINAL_ROWID_COLUMN_NAME, StringCell.TYPE)
 				.createSpec();
 		return new DataTableSpec(inSpec, new DataTableSpec(origRowIdColumn));
 	}
 
+	/**
+	 * Initializes column aggregator used to group predicton table. Rank, P and
+	 * P-value columns are aggregated using {@link MedianOperator}. Any additional
+	 * columns are aggregated using {@link FirstOperator}.
+	 * 
+	 * @param inPredictionTableSpec Input prediction table spec.
+	 */
 	private void initColumnAggregators(DataTableSpec inPredictionTableSpec) {
 		List<ColumnAggregator> aggregators = new ArrayList<>();
 		List<Pattern> patterns = Arrays.asList(//
@@ -175,6 +243,15 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		}
 	}
 
+	/**
+	 * Initializes {@link BufferedDataContainer} objects used to collect data on
+	 * each iteration.
+	 * 
+	 * @param inCalibrationTable Input calibration table.
+	 * @param inPredictionTable  Input prediction table.
+	 * @param inModelTable       Input model table.
+	 * @param exec               Execution context.
+	 */
 	private void initContainers(BufferedDataTable inCalibrationTable, BufferedDataTable inPredictionTable,
 			BufferedDataTable inModelTable, ExecutionContext exec) {
 		calibrationContainer = exec.createDataContainer(appendIterationColumn(inCalibrationTable.getDataTableSpec()));
@@ -185,11 +262,31 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		}
 	}
 
+	/**
+	 * Appends all row from provided table to provided container along with
+	 * appending iteration column.
+	 * 
+	 * @param cont  Container to add rows.
+	 * @param table Table to get rows from.
+	 * @param exec  Execution context.
+	 * @throws CanceledExecutionException
+	 */
 	private void appendTable(BufferedDataContainer cont, BufferedDataTable table, ExecutionContext exec)
 			throws CanceledExecutionException {
 		appendTable(cont, table, exec, row -> new IntCell(iteration));
 	}
 
+	/**
+	 * Appends all rows from provided table to provided container. Appends a cell to
+	 * each row provided by appendCell lambda function.
+	 * 
+	 * @param cont         Container to add rows.
+	 * @param table        Table to get rows from.
+	 * @param exec         Execution context.
+	 * @param appendedCell Functions that takes a {@link DataRow} and generates
+	 *                     appended column for this row.
+	 * @throws CanceledExecutionException
+	 */
 	private void appendTable(BufferedDataContainer cont, BufferedDataTable table, ExecutionContext exec,
 			Function<DataRow, DataCell> appendedCell) throws CanceledExecutionException {
 		if (cont != null) {
@@ -205,6 +302,13 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		}
 	}
 
+	/**
+	 * Generates output tables from data collected on each iteration
+	 * 
+	 * @param exec Execution context.
+	 * @return Otput tables.
+	 * @throws CanceledExecutionException
+	 */
 	private BufferedDataTable[] collectResults(ExecutionContext exec) throws CanceledExecutionException {
 		calibrationContainer.close();
 		predictionContainer.close();
@@ -218,6 +322,14 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		return new BufferedDataTable[] { calibrationContainer.getTable(), collectPredictionTable(exec), outModelTable };
 	}
 
+	/**
+	 * Generates output prediction table. Groups collected rows by original RowKey
+	 * and preconfigured columnAggregators.
+	 * 
+	 * @param exec Execution context.
+	 * @return Output Prediction table.
+	 * @throws CanceledExecutionException
+	 */
 	private BufferedDataTable collectPredictionTable(ExecutionContext exec) throws CanceledExecutionException {
 		BufferedDataTable table = predictionContainer.getTable();
 		List<String> groupByCols = getGroupByCols();
@@ -239,34 +351,29 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
-		// TODO Auto-generated method stub
-
+		// no settings
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
-		// TODO Auto-generated method stub
-
+		// no settings
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		// TODO Auto-generated method stub
-
+		// no settings
 	}
 
 	@Override
 	protected void loadInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override
 	protected void saveInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override

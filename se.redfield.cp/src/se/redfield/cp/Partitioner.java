@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp;
 
 import java.util.Random;
@@ -17,6 +32,10 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
+/**
+ * Class used to partition provided table based on a given sampling settings.
+ *
+ */
 public class Partitioner {
 
 	private final SamplingNodeSettings settings;
@@ -25,17 +44,36 @@ public class Partitioner {
 	private int iteration;
 	private long defaultSeed;
 
+	/**
+	 * Creates instance.
+	 * 
+	 * @param settings           Sampling settings.
+	 * @param iterationDependent Flag specifies that partitioning result has to be
+	 *                           different on each iteration (only for when
+	 *                           stratified or random sampling is selected)
+	 */
 	public Partitioner(SamplingNodeSettings settings, boolean iterationDependent) {
 		this.settings = settings;
 		this.iterationDependent = iterationDependent;
 		reset();
 	}
 
+	/**
+	 * Resets current iteratin and default random seed value
+	 */
 	public void reset() {
 		iteration = 0;
 		defaultSeed = System.nanoTime();
 	}
 
+	/**
+	 * Partitions provide table into 2 table based on a sampling settings.
+	 * 
+	 * @param inTable Input table.
+	 * @param exec    Execution context.
+	 * @return
+	 * @throws CanceledExecutionException
+	 */
 	public BufferedDataTable[] partition(BufferedDataTable inTable, ExecutionContext exec)
 			throws CanceledExecutionException {
 		IRowFilter filter = getRowFilter(inTable, exec);
@@ -77,6 +115,14 @@ public class Partitioner {
 		return new BufferedDataTable[] { matchContainer.getTable(), missContainer.getTable() };
 	}
 
+	/**
+	 * Creates {@link IRowFilter} instance based on a sampling settings
+	 * 
+	 * @param inTable Input table.
+	 * @param exec    Execution context.
+	 * @return
+	 * @throws CanceledExecutionException
+	 */
 	private IRowFilter getRowFilter(BufferedDataTable inTable, ExecutionContext exec)
 			throws CanceledExecutionException {
 		Random rand = getRandomInstance();
@@ -102,6 +148,11 @@ public class Partitioner {
 		}
 	}
 
+	/**
+	 * Creates {@link Random} instance. Uses seed from sampling settings of default
+	 * seed value. If iterationDependent flag is set current iteration is added to
+	 * the seed value to produce different results on each iteration
+	 */
 	private Random getRandomInstance() {
 		if (settings.samplingMethod() == SamplingMethods.Random
 				|| settings.samplingMethod() == SamplingMethods.Stratified) {

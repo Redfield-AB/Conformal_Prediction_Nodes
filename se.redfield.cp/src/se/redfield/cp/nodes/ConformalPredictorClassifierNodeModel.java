@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp.nodes;
 
 import static java.util.stream.Collectors.toList;
@@ -41,6 +56,12 @@ import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
+/**
+ * Conformal Classifier node. Assigns predicted classes to each row based on
+ * it's P-values and selected Significance Level. Works with classes column
+ * represented as Collection or String column
+ *
+ */
 public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
@@ -110,6 +131,14 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}
 
+	/**
+	 * Validated settings.
+	 * 
+	 * @param scoreColumns Score columns collected from the input table.
+	 * @throws InvalidSettingsException If scoreColumns is empty or if string
+	 *                                  separator is empty in case String output
+	 *                                  mode is selected
+	 */
 	private void validateSettings(Map<String, Integer> scoreColumns) throws InvalidSettingsException {
 		if (scoreColumns.isEmpty()) {
 			throw new InvalidSettingsException("No Score columns found in provided table");
@@ -120,12 +149,24 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		}
 	}
 
+	/**
+	 * Creates ColumnRearranger
+	 * 
+	 * @param inSpec       Input table spec
+	 * @param scoreColumns Collected score columns
+	 * @return rearranger
+	 */
 	private ColumnRearranger createRearranger(DataTableSpec inSpec, Map<String, Integer> scoreColumns) {
 		ColumnRearranger r = new ColumnRearranger(inSpec);
 		r.append(new ClassifierCellFactory(scoreColumns));
 		return r;
 	}
 
+	/**
+	 * CellFactory used to create Classes column. Collects all classes that has
+	 * P-value greater than selected threshold.
+	 *
+	 */
 	private class ClassifierCellFactory extends AbstractCellFactory {
 
 		private Map<String, Integer> scoreColumns;
@@ -158,6 +199,11 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	}
 
+	/**
+	 * Created {@link DataColumnSpec} from classes column
+	 * 
+	 * @return
+	 */
 	private DataColumnSpec createClassColumnSpec() {
 		DataType type = getClassesAsString() ? StringCell.TYPE : SetCell.getCollectionType(StringCell.TYPE);
 		return new DataColumnSpecCreator(getClassesColumnName(), type).createSpec();
@@ -203,15 +249,13 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@Override
 	protected void loadInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override
 	protected void saveInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override

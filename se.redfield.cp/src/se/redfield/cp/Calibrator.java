@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp;
 
 import java.util.Arrays;
@@ -8,6 +23,8 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.MissingValue;
+import org.knime.core.data.MissingValueException;
 import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.CellFactory;
 import org.knime.core.data.container.ColumnRearranger;
@@ -20,14 +37,30 @@ import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.nodes.ConformalPredictorCalibratorNodeModel;
 
+/**
+ * Class used by Conformal Calibrator Node to process input table into output
+ * calibration table.
+ *
+ */
 public class Calibrator {
 
 	private ConformalPredictorCalibratorNodeModel model;
 
+	/**
+	 * Creates instance
+	 * 
+	 * @param model
+	 */
 	public Calibrator(ConformalPredictorCalibratorNodeModel model) {
 		this.model = model;
 	}
 
+	/**
+	 * Creates output calibration table spec.
+	 * 
+	 * @param inputTableSpec Input table spec.
+	 * @return
+	 */
 	public DataTableSpec createOutputSpec(DataTableSpec inputTableSpec) {
 		ColumnRearranger rearranger = new ColumnRearranger(inputTableSpec);
 		if (!model.getKeepAllColumns()) {
@@ -38,6 +71,16 @@ public class Calibrator {
 		return rearranger.createSpec();
 	}
 
+	/**
+	 * Processes input table to create calibration table. P column (probability for
+	 * a target class) is appended to table and then ranks are assigned based on P
+	 * column value.
+	 * 
+	 * @param inCalibrationTable Input table.
+	 * @param exec               Execution context.
+	 * @return
+	 * @throws CanceledExecutionException
+	 */
 	public BufferedDataTable process(BufferedDataTable inCalibrationTable, ExecutionContext exec)
 			throws CanceledExecutionException {
 		ColumnRearranger appendProbabilityRearranger = new ColumnRearranger(inCalibrationTable.getDataTableSpec());
@@ -61,6 +104,12 @@ public class Calibrator {
 		return exec.createColumnRearrangeTable(sortedTable, appendScoreRearranger, exec.createSubProgress(0.25));
 	}
 
+	/**
+	 * Creates cell factory that appends P column to input table.
+	 * 
+	 * @param inputTableSpec Input table spec.
+	 * @return
+	 */
 	private CellFactory createPCellFactory(DataTableSpec inputTableSpec) {
 		int columnIndex = inputTableSpec.findColumnIndex(model.getSelectedColumnName());
 		Map<String, Integer> probabilityColumns = inputTableSpec.getColumnSpec(columnIndex).getDomain().getValues()
@@ -73,6 +122,9 @@ public class Calibrator {
 			@Override
 			public DataCell[] getCells(DataRow row) {
 				DataCell dataCell = row.getCell(columnIndex);
+				if (dataCell.isMissing()) {
+					throw new MissingValueException((MissingValue) dataCell, "Target column contains missing values");
+				}
 				Integer probabilityCol = probabilityColumns.get(dataCell.toString());
 
 				return new DataCell[] { row.getCell(probabilityCol) };
@@ -80,6 +132,13 @@ public class Calibrator {
 		};
 	}
 
+	/**
+	 * Creates cell factory that appends ranks column. Rank is an index row has
+	 * inside each target's group sorted by probability column.
+	 * 
+	 * @param inputTableSpec Input table spec.
+	 * @return
+	 */
 	private CellFactory createScoreCellFactory(DataTableSpec inputTableSpec) {
 		int columnIndex = inputTableSpec.findColumnIndex(model.getSelectedColumnName());
 

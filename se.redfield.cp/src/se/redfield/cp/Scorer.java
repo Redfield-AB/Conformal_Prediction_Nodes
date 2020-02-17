@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp;
 
 import static java.util.stream.Collectors.toSet;
@@ -28,6 +43,11 @@ import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.nodes.ConformalPredictorScorerNodeModel;
 
+/**
+ * Class used by Conformal Scorer node to calculate quality metrics for a given
+ * prediction table.
+ *
+ */
 public class Scorer {
 
 	private ConformalPredictorScorerNodeModel model;
@@ -36,6 +56,9 @@ public class Scorer {
 		this.model = model;
 	}
 
+	/**
+	 * Creates output table spec.
+	 */
 	public DataTableSpec createOutputSpec() {
 		List<DataColumnSpec> specs = new ArrayList<>();
 		specs.add(new DataColumnSpecCreator("Target", StringCell.TYPE).createSpec());
@@ -51,6 +74,26 @@ public class Scorer {
 		return new DataTableSpec(specs.toArray(new DataColumnSpec[] {}));
 	}
 
+	/**
+	 * Processes input table. Callects the following metrics for each row: *
+	 * <ul>
+	 * <li>Exact match – number of correct predictions that belong to one class, and
+	 * not belong to any mixed class.</li>
+	 * <li>Soft match - number of correct predictions that belong to one of the
+	 * mixed classes.</li>
+	 * <li>Total match – Exact_match + Soft_match.</li>
+	 * <li>Error – number of predictions that does not match real target class.</li>
+	 * <li>Total – total number of records that belongs to the current target
+	 * class.</li>
+	 * <li>Accuracy (strict) = Exact_match/(Exact_match + Error)</li>
+	 * <li>Accuracy (soft) = Total_match/Total</li>
+	 * </ul>
+	 * 
+	 * @param inTable Input table.
+	 * @param exec    Execution context.
+	 * @return
+	 * @throws CanceledExecutionException
+	 */
 	public BufferedDataTable process(BufferedDataTable inTable, ExecutionContext exec)
 			throws CanceledExecutionException {
 		Map<String, ClassScores> scores = new HashMap<>();
@@ -86,6 +129,13 @@ public class Scorer {
 		return createOutputTable(scores, exec);
 	}
 
+	/**
+	 * Creates {@link BufferedDataTable} from collected scores.
+	 * 
+	 * @param scores Collected scores.
+	 * @param exec   Execution context.
+	 * @return
+	 */
 	private BufferedDataTable createOutputTable(Map<String, ClassScores> scores, ExecutionContext exec) {
 		BufferedDataContainer cont = exec.createDataContainer(createOutputSpec());
 
@@ -98,6 +148,13 @@ public class Scorer {
 		return cont.getTable();
 	}
 
+	/**
+	 * Creates a single score row.
+	 * 
+	 * @param score Scores object.
+	 * @param idx   Row index.
+	 * @return Row.
+	 */
 	private DataRow createRow(ClassScores score, long idx) {
 		List<DataCell> cells = new ArrayList<>();
 		cells.add(new StringCell(score.getTarget()));
@@ -113,6 +170,12 @@ public class Scorer {
 		return new DefaultRow(RowKey.createRowKey(idx), cells);
 	}
 
+	/**
+	 * Collects predicted classes as a string set from Classes cell.
+	 * 
+	 * @param cell Classes cell.
+	 * @return
+	 */
 	private Set<String> getClasses(DataCell cell) {
 		if (cell.getType().isCollectionType()) {
 			return ((CollectionDataValue) cell).stream().map(DataCell::toString).collect(toSet());
@@ -121,6 +184,10 @@ public class Scorer {
 		}
 	}
 
+	/**
+	 * Class that holds all metrics calculated from input table.
+	 *
+	 */
 	private class ClassScores {
 		private String target;
 		private long total;

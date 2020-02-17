@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2020 Redfield AB.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, Version 3, as
+ * published by the Free Software Foundation.
+ *  
+ * This program is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, see <http://www.gnu.org/licenses>.
+ */
 package se.redfield.cp.nodes;
 
 import java.io.File;
@@ -20,6 +35,17 @@ import org.knime.core.node.workflow.LoopStartNodeTerminator;
 
 import se.redfield.cp.Partitioner;
 
+/**
+ * Conformal Predictor Loop Start Node. Separated input table into 3 tables:
+ * <ul>
+ * <li>Training Table</li>
+ * <li>Calibration Table</li>
+ * <li>Test Table</li>
+ * </ul>
+ *
+ * Test table is the same across the whole cycle. Training/Calibration Tables
+ * are different on each iteration.
+ */
 public class ConformalPredictorLoopStartNodeModel extends NodeModel implements LoopStartNodeTerminator {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorLoopStartNodeModel.class);
@@ -54,11 +80,20 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		DataTableSpec in = inSpecs[0];
-		checkSettings(testPartitionSettings, in, "Test Set");
-		checkSettings(calibrationPartitionSettings, in, "Calibration Set");
+		checkSettings(testPartitionSettings, in, "Training/Test split");
+		checkSettings(calibrationPartitionSettings, in, "Training/Calibration split");
 		return new DataTableSpec[] { in, in, in };
 	}
 
+	/**
+	 * Validates sampling settings against input table spec.
+	 * 
+	 * @param partitionSettings Sampling settings.
+	 * @param inSpec            Input table spec.
+	 * @param title             Title to identify exact sampling settings in error
+	 *                          messages.
+	 * @throws InvalidSettingsException
+	 */
 	private void checkSettings(SamplingNodeSettings partitionSettings, DataTableSpec inSpec, String title)
 			throws InvalidSettingsException {
 		if (partitionSettings.countMethod() == null) {
@@ -103,10 +138,18 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		iterationsSettings.validateSettings(settings);
-		validateSamplingSettings(settings, KEY_TEST_PARTITION, "Test Set");
-		validateSamplingSettings(settings, KEY_CALIBRATION_PARTITION, "Calibration Set");
+		validateSamplingSettings(settings, KEY_TEST_PARTITION, "Training/Test split");
+		validateSamplingSettings(settings, KEY_CALIBRATION_PARTITION, "Training/Calibration split");
 	}
 
+	/**
+	 * Validates sampling settings consistency.
+	 * 
+	 * @param settings Node settings to load sampling settings from.
+	 * @param key      Corresponding setting's key.
+	 * @param prefix   Prefix to error message.
+	 * @throws InvalidSettingsException
+	 */
 	private void validateSamplingSettings(NodeSettingsRO settings, String key, String prefix)
 			throws InvalidSettingsException {
 		try {
@@ -116,6 +159,12 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 		}
 	}
 
+	/**
+	 * Validates sampling settings consistency.
+	 * 
+	 * @param settings Settings to validate.
+	 * @throws InvalidSettingsException
+	 */
 	private void validateSamplingSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		SamplingNodeSettings tmp = new SamplingNodeSettings();
 		tmp.loadSettingsFrom(settings, false);
@@ -150,15 +199,13 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 	@Override
 	protected void loadInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override
 	protected void saveInternals(File nodeInternDir, ExecutionMonitor exec)
 			throws IOException, CanceledExecutionException {
-		// TODO Auto-generated method stub
-
+		// no internals
 	}
 
 	@Override
