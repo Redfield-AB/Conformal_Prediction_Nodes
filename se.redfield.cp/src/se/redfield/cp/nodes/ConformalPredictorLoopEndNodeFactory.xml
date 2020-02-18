@@ -13,15 +13,15 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Calibration Table">Calibration table created by Conformal Calibrator node</inPort>
-        <inPort index="1" name="Prediction Table">
+        <inPort index="0" name="Prediction Table">
         	Scored prediction table based on test table. 
         	This table is built using the calibration table and aggregated over all iterations using median P-values
         </inPort>
+        <inPort index="1" name="Calibration Table">Calibration table created by Conformal Calibrator node</inPort>
         <inPort index="2" name="Model">(Optional) Additional port for models or any other auxiliary tables.</inPort>
         
-        <outPort index="0" name="Calibration Table">Calibration Table</outPort>
-        <outPort index="1" name="Prediction Table">Prediction Table</outPort>
+        <outPort index="0" name="Prediction Table">Prediction Table</outPort>
+        <outPort index="1" name="Calibration Table">Calibration Table</outPort>
         <outPort index="2" name="Model">Model</outPort>
     </ports>    
 </knimeNode>

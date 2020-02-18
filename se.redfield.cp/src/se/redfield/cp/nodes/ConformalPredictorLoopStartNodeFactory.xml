@@ -29,7 +29,7 @@
         <inPort index="0" name="Table to partition">Table to partition</inPort>
         
         <outPort index="0" name="Training Table">Training Table</outPort>
-        <outPort index="1" name="Calibration Table">Calibration Table</outPort>
-        <outPort index="2" name="Test Table">Test Table</outPort>
+        <outPort index="1" name="Test Table">Test Table</outPort>
+        <outPort index="2" name="Calibration Table">Calibration Table</outPort>
     </ports>    
 </knimeNode>

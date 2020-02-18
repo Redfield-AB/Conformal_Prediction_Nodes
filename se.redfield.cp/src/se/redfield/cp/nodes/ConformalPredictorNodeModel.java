@@ -49,8 +49,8 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorNodeModel.class);
 
-	public static final int PORT_CALIBRATION_TABLE = 0;
-	public static final int PORT_PREDICTION_TABLE = 1;
+	public static final int PORT_PREDICTION_TABLE = 0;
+	public static final int PORT_CALIBRATION_TABLE = 1;
 
 	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
 	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "P-value (%s)";
@@ -153,7 +153,8 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	@Override
 	public InputPortRole[] getInputPortRoles() {
-		return new InputPortRole[] { InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, InputPortRole.DISTRIBUTED_STREAMABLE };
+		return new InputPortRole[] { InputPortRole.DISTRIBUTED_STREAMABLE,
+				InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, };
 	}
 
 	@Override

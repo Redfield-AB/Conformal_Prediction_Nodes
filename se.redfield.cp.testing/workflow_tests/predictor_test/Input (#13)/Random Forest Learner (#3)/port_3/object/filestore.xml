@@ -2,9 +2,9 @@
 <config xmlns="http://www.knime.org/2008/09/XMLConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.knime.org/2008/09/XMLConfig http://www.knime.org/XMLConfig_2008_09.xsd" key="filestore">
 <config key="filestore_keys">
 <config key="filestore_key_0">
-<entry key="storeUUID" type="xstring" value="1d85504d-b02f-41b7-adb1-facac57e41cd"/>
+<entry key="storeUUID" type="xstring" value="d69b1e81-a172-4cfe-9027-e7b19ab50acd"/>
 <entry key="index" type="xint" value="0"/>
-<entry key="name" type="xstring" value="46ae8be9-5539-4020-86a3-110cae3a8baf"/>
+<entry key="name" type="xstring" value="4f0fd04b-c3c2-454d-8cfd-87e3be812104"/>
 <entry key="iterationIndex" type="xint" value="0"/>
 <config key="nestedLoopPath">
 <entry key="array-size" type="xint" value="0"/>

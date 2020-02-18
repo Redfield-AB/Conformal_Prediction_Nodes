@@ -24,8 +24,8 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Calibration Table">Calibration Table</inPort>
-        <inPort index="1" name="Prediction Table">Table with predictions and class probabilities. Target variable must have the same domain as the calibration table.</inPort>
+    	<inPort index="0" name="Prediction Table">Table with predictions and class probabilities. Target variable must have the same domain as the calibration table.</inPort>
+        <inPort index="1" name="Calibration Table">Calibration Table</inPort>
         
         <outPort index="0" name="Output">Table with calibrated predictions.</outPort>
     </ports>    

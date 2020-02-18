@@ -23,12 +23,14 @@
 </config>
 <entry key="variable-prefix" type="xstring" isnull="true" value=""/>
 <config key="port-names">
-<entry key="array-size" type="xint" value="1"/>
+<entry key="array-size" type="xint" value="2"/>
 <entry key="0" type="xstring" value="Port 1"/>
+<entry key="1" type="xstring" value="Port 2"/>
 </config>
 <config key="port-descriptions">
-<entry key="array-size" type="xint" value="1"/>
+<entry key="array-size" type="xint" value="2"/>
 <entry key="0" type="xstring" value=""/>
+<entry key="1" type="xstring" value=""/>
 </config>
 </config>
 <entry key="customDescription" type="xstring" isnull="true" value=""/>
@@ -79,6 +81,6 @@
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-<entry key="file_store_id" type="xstring" value="d9123389-9354-4f91-bcbc-c19e883c73ce"/>
+<entry key="file_store_id" type="xstring" value="2ca49488-2a16-4e5c-9d54-ef33008426c7"/>
 </config>
 </config>

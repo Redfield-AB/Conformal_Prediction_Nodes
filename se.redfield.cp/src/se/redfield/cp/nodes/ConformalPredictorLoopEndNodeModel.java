@@ -75,8 +75,8 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorLoopEndNodeModel.class);
 
-	public static final int PORT_CALIBRATION_TABLE = 0;
-	public static final int PORT_PREDICTION_TABLE = 1;
+	public static final int PORT_PREDICTION_TABLE = 0;
+	public static final int PORT_CALIBRATION_TABLE = 1;
 	public static final int PORT_MODEL_TABLE = 2;
 
 	public static final String P_COLUMN_REGEX = "^P \\((.+=.+)\\)$";
@@ -94,9 +94,10 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	private ColumnAggregator[] columnAggregators;
 
 	protected ConformalPredictorLoopEndNodeModel() {
-		super(new PortType[] { BufferedDataTable.TYPE_OPTIONAL, BufferedDataTable.TYPE,
+		super(new PortType[] { BufferedDataTable.TYPE, BufferedDataTable.TYPE_OPTIONAL,
 				BufferedDataTable.TYPE_OPTIONAL },
-				new PortType[] { BufferedDataTable.TYPE, BufferedDataTable.TYPE, BufferedDataTable.TYPE_OPTIONAL });
+				new PortType[] { BufferedDataTable.TYPE, BufferedDataTable.TYPE_OPTIONAL,
+						BufferedDataTable.TYPE_OPTIONAL });
 	}
 
 	private String getIterationColumnName() {
@@ -113,8 +114,8 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 			initColumnAggregators(inSpecs[PORT_PREDICTION_TABLE]);
 		}
 
-		return new DataTableSpec[] { createCalibrationTableSpec(inSpecs[PORT_CALIBRATION_TABLE]),
-				createPredictionTableSpec(inSpecs[PORT_PREDICTION_TABLE]),
+		return new DataTableSpec[] { createPredictionTableSpec(inSpecs[PORT_PREDICTION_TABLE]),
+				createCalibrationTableSpec(inSpecs[PORT_CALIBRATION_TABLE]),
 				createModelTableSpec(inSpecs[PORT_MODEL_TABLE]) };
 	}
 
@@ -314,7 +315,7 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	 * @throws CanceledExecutionException
 	 */
 	private BufferedDataTable[] collectResults(ExecutionContext exec) throws CanceledExecutionException {
-		return new BufferedDataTable[] { getFromContainer(calibrationContainer, exec), collectPredictionTable(exec),
+		return new BufferedDataTable[] { collectPredictionTable(exec), getFromContainer(calibrationContainer, exec),
 				getFromContainer(modelContainer, exec) };
 	}
 

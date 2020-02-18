@@ -120,7 +120,7 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 		pushFlowVariableInt(FW_ITERATIONS_NUM, getIterationsNum());
 
 		iteration++;
-		return new BufferedDataTable[] { trainingSetTable, calibrationSetTable, testSetTable };
+		return new BufferedDataTable[] { trainingSetTable, testSetTable, calibrationSetTable };
 	}
 
 	@Override
