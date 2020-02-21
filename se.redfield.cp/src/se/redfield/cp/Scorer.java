@@ -19,6 +19,7 @@ import static java.util.stream.Collectors.toSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -177,6 +178,9 @@ public class Scorer {
 	 * @return
 	 */
 	private Set<String> getClasses(DataCell cell) {
+		if (cell.isMissing()) {
+			return Collections.emptySet();
+		}
 		if (cell.getType().isCollectionType()) {
 			return ((CollectionDataValue) cell).stream().map(DataCell::toString).collect(toSet());
 		} else {

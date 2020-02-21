@@ -31,6 +31,7 @@ import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataType;
 import org.knime.core.data.DoubleValue;
+import org.knime.core.data.MissingCell;
 import org.knime.core.data.collection.CollectionCellFactory;
 import org.knime.core.data.collection.SetCell;
 import org.knime.core.data.container.AbstractCellFactory;
@@ -66,7 +67,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
 
-	private static final String KEY_SCORE_THRESHOLD = "significanceLevel";
+	private static final String KEY_SCORE_THRESHOLD = "errorRate";
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 
@@ -141,7 +142,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	 */
 	private void validateSettings(Map<String, Integer> scoreColumns) throws InvalidSettingsException {
 		if (scoreColumns.isEmpty()) {
-			throw new InvalidSettingsException("No Score columns found in provided table");
+			throw new InvalidSettingsException("No P-values columns found in provided table");
 		}
 
 		if (getClassesAsString() && getStringSeparator().isEmpty()) {
@@ -188,10 +189,15 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 			}
 
 			DataCell result;
-			if (getClassesAsString()) {
-				result = new StringCell(String.join(getStringSeparator(), classes));
+			if (classes.isEmpty()) {
+				result = new MissingCell("No class asigned");
 			} else {
-				result = CollectionCellFactory.createSetCell(classes.stream().map(StringCell::new).collect(toList()));
+				if (getClassesAsString()) {
+					result = new StringCell(String.join(getStringSeparator(), classes));
+				} else {
+					result = CollectionCellFactory
+							.createSetCell(classes.stream().map(StringCell::new).collect(toList()));
+				}
 			}
 
 			return new DataCell[] { result };

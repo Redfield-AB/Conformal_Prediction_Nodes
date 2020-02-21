@@ -59,7 +59,7 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	}
 
 	static SettingsModelBoolean createKeepAllColumnsSettingsModel() {
-		return new SettingsModelBoolean(KEY_KEEP_ALL_COLUMNS, false);
+		return new SettingsModelBoolean(KEY_KEEP_ALL_COLUMNS, true);
 	}
 
 	static SettingsModelBoolean createKeepIdColumnSettings() {

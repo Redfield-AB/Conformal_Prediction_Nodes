@@ -46,7 +46,7 @@ public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsP
 		classesAsStringSettings
 				.addChangeListener(e -> stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue()));
 
-		addDialogComponent(new DialogComponentNumber(scoreThresholdSettings, "Significance level", 0.01));
+		addDialogComponent(new DialogComponentNumber(scoreThresholdSettings, "Error rate (significance level)", 0.01));
 		createNewGroup("Output");
 		addDialogComponent(new DialogComponentBoolean(classesAsStringSettings, "Output Classes as String"));
 		addDialogComponent(new DialogComponentString(stringSeparatorSettings, "String separator"));

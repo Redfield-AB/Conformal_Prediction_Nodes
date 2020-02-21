@@ -61,7 +61,7 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 	private final SettingsModelBoolean includeRankSettings = createIncludeRankSettings();
 
 	static SettingsModelBoolean createIncludeRankSettings() {
-		return new SettingsModelBoolean(KEY_INCLUDE_RANK_COLUMN, true);
+		return new SettingsModelBoolean(KEY_INCLUDE_RANK_COLUMN, false);
 	}
 
 	protected ConformalPredictorNodeModel() {

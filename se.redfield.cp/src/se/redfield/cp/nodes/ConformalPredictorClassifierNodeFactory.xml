@@ -10,10 +10,11 @@
         <intro>
         	Produces predictions based on the calibration table and the significance level provided by the user.
 			The significance level defines the tolerable percentage of the prediction errors.
+			The node expects P-value columns for all the classes in target domain.
         </intro>
         
         
-        <option name="Significance level">Defines the tolerable percentage of the prediction errors.</option>
+        <option name="Error rate (significance level)">Defines the tolerable percentage of the prediction errors.</option>
         <option name="Output Classes as String">
         	If checked classes column will be represented as String instead of Collection column.
         </option>
