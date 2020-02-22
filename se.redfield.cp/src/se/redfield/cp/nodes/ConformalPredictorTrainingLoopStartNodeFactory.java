@@ -20,14 +20,15 @@ import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
 
 /**
- * Factory class for Conformal Predictor Loop Start Node
+ * Factory class for Conformal Predictor Training Loop Start Node
  *
  */
-public class ConformalPredictorLoopStartNodeFactory extends NodeFactory<ConformalPredictorLoopStartNodeModel> {
+public class ConformalPredictorTrainingLoopStartNodeFactory
+		extends NodeFactory<ConformalPredictorTrainingLoopStartNodeModel> {
 
 	@Override
-	public ConformalPredictorLoopStartNodeModel createNodeModel() {
-		return new ConformalPredictorLoopStartNodeModel();
+	public ConformalPredictorTrainingLoopStartNodeModel createNodeModel() {
+		return new ConformalPredictorTrainingLoopStartNodeModel();
 	}
 
 	@Override
@@ -36,19 +37,19 @@ public class ConformalPredictorLoopStartNodeFactory extends NodeFactory<Conforma
 	}
 
 	@Override
-	public NodeView<ConformalPredictorLoopStartNodeModel> createNodeView(int viewIndex,
-			ConformalPredictorLoopStartNodeModel nodeModel) {
+	public NodeView<ConformalPredictorTrainingLoopStartNodeModel> createNodeView(int viewIndex,
+			ConformalPredictorTrainingLoopStartNodeModel nodeModel) {
 		return null;
 	}
 
 	@Override
 	protected boolean hasDialog() {
-		return false;
+		return true;
 	}
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return null;
+		return new ConformalPredictorTrainingLoopStartNodeDialog();
 	}
 
 }

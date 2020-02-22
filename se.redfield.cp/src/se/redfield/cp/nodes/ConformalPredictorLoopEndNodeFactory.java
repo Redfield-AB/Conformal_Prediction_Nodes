@@ -19,6 +19,10 @@ import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
 
+/**
+ * Factory class for Conformal Prediction Loop End Node
+ *
+ */
 public class ConformalPredictorLoopEndNodeFactory extends NodeFactory<ConformalPredictorLoopEndNodeModel> {
 
 	@Override

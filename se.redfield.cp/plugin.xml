@@ -26,19 +26,29 @@
       </node>
       <node
             category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorLoopEndNodeFactory">
+            factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory">
+      </node>
+      <node
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorScorerNodeFactory">
+      </node>
+      <node
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorTrainingLoopStartNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPredictorTrainingLoopStartNodeFactory"
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorTrainingLoopEndNodeFactory">
       </node>
       <node
             category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory">
       </node>
       <node
+            after="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory"
             category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory">
-      </node>
-      <node
-            category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorScorerNodeFactory">
+            factory-class="se.redfield.cp.nodes.ConformalPredictorLoopEndNodeFactory">
       </node>
    </extension>
    <extension

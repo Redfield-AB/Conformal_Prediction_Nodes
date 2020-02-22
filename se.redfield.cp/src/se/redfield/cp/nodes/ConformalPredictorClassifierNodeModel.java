@@ -110,7 +110,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	}
 
 	private String getScoreColumnPattern() {
-		return ConformalPredictorLoopEndNodeModel.SCORE_COLUMN_REGEX;
+		return ConformalPredictorLoopEndNodeModel.P_VALUE_COLUMN_REGEX;
 	}
 
 	private String getClassesColumnName() {

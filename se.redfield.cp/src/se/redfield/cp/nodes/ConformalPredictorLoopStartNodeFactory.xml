@@ -3,33 +3,23 @@
     <name>Conformal Prediction Loop Start</name>
     
     <shortDescription>
-        Splits the input table into three new tables: training, calibration/cross-validation and test.
+        
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	Splits the input table into three new tables: training, calibration/cross-validation and test.
-			First goes training and test split, then the rest of the training table is split into training and calibration/cross-validation.
-			The last procedure is repeated several times for every loop iteration. Test set is created only once and always remains the same during all iterations.
+
         </intro>
         
         
-        <option name="Number of cross-validation iterations">
-        	Defines the number of training/calibration splits and number of loop iterations.
-        </option>
-        <option name="Training/Test split">
-        	Similar to Partitioning node splits input table into two datasets. This split is done once for all loop iterations.
-        </option>
-        <option name="Training/Calibration split">
-        	Similar to Partitioning node splits training set into two datasets - training and calibration. This split is done for every loop iteration.
-        </option>
+
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Table to partition">Table to partition</inPort>
+        <inPort index="0" name="Model table">Model table</inPort>
+        <inPort index="1" name="Calibration table">Calibration table</inPort>
         
-        <outPort index="0" name="Training Table">Training Table</outPort>
-        <outPort index="1" name="Test Table">Test Table</outPort>
-        <outPort index="2" name="Calibration Table">Calibration Table</outPort>
+        <outPort index="0" name="Model Table">Model Table</outPort>
+        <outPort index="1" name="Calibration Table">Calibration Table</outPort>
     </ports>    
 </knimeNode>
