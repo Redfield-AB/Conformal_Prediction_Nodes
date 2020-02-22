@@ -20,6 +20,7 @@ import static java.util.stream.Collectors.toSet;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -69,6 +70,8 @@ public class Scorer {
 			specs.add(new DataColumnSpecCreator("Total match", LongCell.TYPE).createSpec());
 			specs.add(new DataColumnSpecCreator("Error", LongCell.TYPE).createSpec());
 			specs.add(new DataColumnSpecCreator("Total", LongCell.TYPE).createSpec());
+			specs.add(new DataColumnSpecCreator("Single class predictions", LongCell.TYPE).createSpec());
+			specs.add(new DataColumnSpecCreator("Null predictions", LongCell.TYPE).createSpec());
 		}
 		specs.add(new DataColumnSpecCreator("Efficiency", DoubleCell.TYPE).createSpec());
 		specs.add(new DataColumnSpecCreator("Validity", DoubleCell.TYPE).createSpec());
@@ -111,16 +114,20 @@ public class Scorer {
 			Set<String> classes = getClasses(row.getCell(classesIdx));
 			ClassScores score = scores.computeIfAbsent(target, ClassScores::new);
 
-			score.incTotal();
-
 			if (classes.contains(target)) {
 				if (classes.size() == 1) {
-					score.incTpExclusive();
+					score.inc(Metric.STRICT_MATCH);
 				} else {
-					score.incTpInclusive();
+					score.inc(Metric.SOFT_MATCH);
 				}
 			} else {
-				score.incFn();
+				score.inc(Metric.ERROR);
+			}
+
+			if (classes.isEmpty()) {
+				score.inc(Metric.NULL_CLASS);
+			} else if (classes.size() == 1) {
+				score.inc(Metric.SINGLE_CLASS);
 			}
 
 			exec.checkCanceled();
@@ -160,11 +167,13 @@ public class Scorer {
 		List<DataCell> cells = new ArrayList<>();
 		cells.add(new StringCell(score.getTarget()));
 		if (model.isAdditionalInfoMode()) {
-			cells.add(new LongCell(score.getTpExclusive()));
-			cells.add(new LongCell(score.getTpInclusive()));
-			cells.add(new LongCell(score.getTotalTp()));
-			cells.add(new LongCell(score.getFn()));
+			cells.add(new LongCell(score.get(Metric.STRICT_MATCH)));
+			cells.add(new LongCell(score.get(Metric.SOFT_MATCH)));
+			cells.add(new LongCell(score.getTotalMatch()));
+			cells.add(new LongCell(score.get(Metric.ERROR)));
 			cells.add(new LongCell(score.getTotal()));
+			cells.add(new LongCell(score.get(Metric.SINGLE_CLASS)));
+			cells.add(new LongCell(score.get(Metric.NULL_CLASS)));
 		}
 		cells.add(new DoubleCell(score.getEfficiency()));
 		cells.add(new DoubleCell(score.getValidity()));
@@ -194,61 +203,43 @@ public class Scorer {
 	 */
 	private class ClassScores {
 		private String target;
-		private long total;
-		private long tpExclusive;
-		private long tpInclusive;
-		private long fn;
+		private Map<Metric, Long> metrics;
 
 		public ClassScores(String target) {
 			this.target = target;
+			this.metrics = new EnumMap<>(Metric.class);
+		}
+
+		public void inc(Metric m) {
+			metrics.compute(m, (k, v) -> v == null ? 1L : v + 1);
+		}
+
+		public long get(Metric m) {
+			return metrics.getOrDefault(m, 0L);
 		}
 
 		public String getTarget() {
 			return target;
 		}
 
-		public void incTotal() {
-			total++;
-		}
-
-		public void incTpExclusive() {
-			tpExclusive++;
-		}
-
-		public void incTpInclusive() {
-			tpInclusive++;
-		}
-
-		public void incFn() {
-			fn++;
+		public long getTotalMatch() {
+			return get(Metric.STRICT_MATCH) + get(Metric.SOFT_MATCH);
 		}
 
 		public long getTotal() {
-			return total;
-		}
-
-		public long getTpExclusive() {
-			return tpExclusive;
-		}
-
-		public long getTpInclusive() {
-			return tpInclusive;
-		}
-
-		public long getFn() {
-			return fn;
-		}
-
-		public long getTotalTp() {
-			return tpExclusive + tpInclusive;
+			return getTotalMatch() + get(Metric.ERROR);
 		}
 
 		public double getEfficiency() {
-			return (double) tpExclusive / (tpExclusive + fn);
+			return (double) get(Metric.SINGLE_CLASS) / getTotal();
 		}
 
 		public double getValidity() {
-			return (double) getTotalTp() / total;
+			return (double) getTotalMatch() / getTotal();
 		}
+	}
+
+	private enum Metric {
+		STRICT_MATCH, SOFT_MATCH, ERROR, SINGLE_CLASS, NULL_CLASS
 	}
 }
