@@ -6,11 +6,11 @@
 <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
 </config>
 <config key="model">
-<config key="significanceLevel_Internals">
+<config key="errorRate_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="significanceLevel" type="xdouble" value="0.2"/>
+<entry key="errorRate" type="xdouble" value="0.2"/>
 <config key="classesAsString_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>

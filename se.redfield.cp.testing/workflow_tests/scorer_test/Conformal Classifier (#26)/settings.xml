@@ -6,11 +6,11 @@
 <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
 </config>
 <config key="model">
-<config key="significanceLevel_Internals">
+<config key="errorRate_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_double"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="significanceLevel" type="xdouble" value="0.2"/>
+<entry key="errorRate" type="xdouble" value="0.2"/>
 <config key="classesAsString_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
@@ -18,7 +18,7 @@
 <entry key="classesAsString" type="xboolean" value="false"/>
 <config key="stringSeparator_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_string"/>
-<entry key="EnabledStatus" type="xboolean" value="true"/>
+<entry key="EnabledStatus" type="xboolean" value="false"/>
 </config>
 <entry key="stringSeparator" type="xstring" value=";"/>
 </config>
@@ -43,12 +43,12 @@
 <entry key="index" type="xint" value="1"/>
 <entry key="port_spec_class" type="xstring" value="org.knime.core.data.DataTableSpec"/>
 <entry key="port_object_class" type="xstring" value="org.knime.core.node.BufferedDataTable"/>
-<entry key="port_object_summary" type="xstring" value="Rows: 453, Cols: 27"/>
+<entry key="port_object_summary" type="xstring" value="Rows: 1357, Cols: 27"/>
 <entry key="port_dir_location" type="xstring" value="port_1"/>
 </config>
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" isnull="true" value=""/>
-<entry key="file_store_id" type="xstring" value="682128c6-34c8-4f1a-a9e2-c8ca189babce"/>
+<entry key="file_store_id" type="xstring" value="179ec454-8d02-45b5-8d2a-2ec060b1f649"/>
 </config>
 </config>

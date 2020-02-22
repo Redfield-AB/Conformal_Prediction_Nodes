@@ -15,10 +15,10 @@
 <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
 <entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
-<entry key="keepAllColumns" type="xboolean" value="true"/>
+<entry key="keepAllColumns" type="xboolean" value="false"/>
 <config key="keepIdColumn_Internals">
 <entry key="SettingsModelID" type="xstring" value="SMID_boolean"/>
-<entry key="EnabledStatus" type="xboolean" value="false"/>
+<entry key="EnabledStatus" type="xboolean" value="true"/>
 </config>
 <entry key="keepIdColumn" type="xboolean" value="false"/>
 <config key="idColumn_Internals">
@@ -48,7 +48,7 @@
 <entry key="index" type="xint" value="1"/>
 <entry key="port_spec_class" type="xstring" value="org.knime.core.data.DataTableSpec"/>
 <entry key="port_object_class" type="xstring" value="org.knime.core.node.BufferedDataTable"/>
-<entry key="port_object_summary" type="xstring" value="Rows: 407, Cols: 23"/>
+<entry key="port_object_summary" type="xstring" value="Rows: 905, Cols: 5"/>
 <entry key="port_dir_location" type="xstring" value="port_1"/>
 </config>
 </config>

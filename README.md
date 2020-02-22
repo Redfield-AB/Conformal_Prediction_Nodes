@@ -1,4 +1,4 @@
-Redfield AB Anonymization extension for KNIME
+Redfield AB Conformal Prediction extension for KNIME
 =============================================
 
 
