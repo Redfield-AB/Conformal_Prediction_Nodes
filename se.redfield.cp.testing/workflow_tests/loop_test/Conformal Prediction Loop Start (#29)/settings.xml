@@ -9,7 +9,18 @@
 <config key="internal_node_subsettings">
 <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
 </config>
-<config key="model"/>
+<config key="model">
+<config key="modelIterationColumn_Internals">
+<entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+<entry key="EnabledStatus" type="xboolean" value="true"/>
+</config>
+<entry key="modelIterationColumn" type="xstring" value="Iteration"/>
+<config key="calibrationIterationColumn_Internals">
+<entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+<entry key="EnabledStatus" type="xboolean" value="true"/>
+</config>
+<entry key="calibrationIterationColumn" type="xstring" value="Iteration"/>
+</config>
 <entry key="customDescription" type="xstring" isnull="true" value=""/>
 <entry key="state" type="xstring" value="CONFIGURED"/>
 <entry key="factory" type="xstring" value="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory"/>

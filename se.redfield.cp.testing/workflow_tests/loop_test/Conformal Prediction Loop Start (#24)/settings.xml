@@ -12,7 +12,18 @@
 <config key="internal_node_subsettings">
 <entry key="memory_policy" type="xstring" value="CacheSmallInMemory"/>
 </config>
-<config key="model"/>
+<config key="model">
+<config key="modelIterationColumn_Internals">
+<entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+<entry key="EnabledStatus" type="xboolean" value="true"/>
+</config>
+<entry key="modelIterationColumn" type="xstring" value="Iteration"/>
+<config key="calibrationIterationColumn_Internals">
+<entry key="SettingsModelID" type="xstring" value="SMID_string"/>
+<entry key="EnabledStatus" type="xboolean" value="true"/>
+</config>
+<entry key="calibrationIterationColumn" type="xstring" value="Iteration"/>
+</config>
 <entry key="customDescription" type="xstring" isnull="true" value=""/>
 <entry key="state" type="xstring" value="EXECUTED"/>
 <entry key="factory" type="xstring" value="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory"/>
@@ -47,6 +58,6 @@
 </config>
 <config key="filestores">
 <entry key="file_store_location" type="xstring" value="filestore"/>
-<entry key="file_store_id" type="xstring" value="c57f117f-14b6-44a1-b60f-3c45a85ee365"/>
+<entry key="file_store_id" type="xstring" value="f42cca5a-cab6-4240-bf34-32431e6cf6c1"/>
 </config>
 </config>
