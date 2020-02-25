@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/loop_start.png" type="LoopStart" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
-    <name>Conformal Predictor Training Loop Start</name>
+<knimeNode icon="./icons/calibrator_loop_start.png" type="LoopStart" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Calibration Loop Start</name>
     
     <shortDescription>
         Splits the input table into two new tables: training and calibration.
@@ -17,7 +17,7 @@
         	Defines the number of training/calibration splits and number of loop iterations.
         </option>
         <option name="Training/Calibration split">
-        	Similar to Partitioning node splits input table into two datasets. This split is done once for all loop iterations.
+        	Similar to Partitioning node splits input table into two datasets.
         </option>
     </fullDescription>
     
