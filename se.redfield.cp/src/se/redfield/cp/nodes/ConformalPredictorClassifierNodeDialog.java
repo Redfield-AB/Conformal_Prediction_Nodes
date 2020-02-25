@@ -38,15 +38,15 @@ public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsP
 	public ConformalPredictorClassifierNodeDialog() {
 		super();
 
-		SettingsModelDoubleBounded scoreThresholdSettings = ConformalPredictorClassifierNodeModel
-				.createScoreThresholdSettings();
+		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorClassifierNodeModel.createErrorRateSettings();
 		classesAsStringSettings = ConformalPredictorClassifierNodeModel.createClassesAsStringSettings();
 		stringSeparatorSettings = ConformalPredictorClassifierNodeModel.createStringSeparatorSettings();
 
 		classesAsStringSettings
 				.addChangeListener(e -> stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue()));
 
-		addDialogComponent(new DialogComponentNumber(scoreThresholdSettings, "Error rate (significance level)", 0.01));
+		addDialogComponent(new DialogComponentNumber(errorRateSettings, "Error rate (significance level)", 0.01,
+				createFlowVariableModel(errorRateSettings)));
 		createNewGroup("Output");
 		addDialogComponent(new DialogComponentBoolean(classesAsStringSettings, "Output Classes as String"));
 		addDialogComponent(new DialogComponentString(stringSeparatorSettings, "String separator"));

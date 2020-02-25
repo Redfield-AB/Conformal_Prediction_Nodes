@@ -67,22 +67,22 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
 
-	private static final String KEY_SCORE_THRESHOLD = "errorRate";
+	private static final String KEY_ERROR_RATE = "errorRate";
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 
-	private static final double DEFAULT_SCORE_THRESHOLD = 0.2;
+	private static final double DEFAULT_ERROR_RATE = 0.2;
 	private static final String DEFAULT_SEPARATOR = ";";
 	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 
-	private final SettingsModelDoubleBounded scoreThresholdSettings = createScoreThresholdSettings();
+	private final SettingsModelDoubleBounded errorRateSettings = createErrorRateSettings();
 	private final SettingsModelBoolean classesAsStringSettings = createClassesAsStringSettings();
 	private final SettingsModelString stringSeparatorSettings = createStringSeparatorSettings();
 
 	private ColumnRearranger rearranger;
 
-	static SettingsModelDoubleBounded createScoreThresholdSettings() {
-		return new SettingsModelDoubleBounded(KEY_SCORE_THRESHOLD, DEFAULT_SCORE_THRESHOLD, 0, 1);
+	static SettingsModelDoubleBounded createErrorRateSettings() {
+		return new SettingsModelDoubleBounded(KEY_ERROR_RATE, DEFAULT_ERROR_RATE, 0, 1);
 	}
 
 	static SettingsModelBoolean createClassesAsStringSettings() {
@@ -97,8 +97,8 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		super(1, 1);
 	}
 
-	public double getScoreThreshold() {
-		return scoreThresholdSettings.getDoubleValue();
+	public double getErrorRate() {
+		return errorRateSettings.getDoubleValue();
 	}
 
 	public boolean getClassesAsString() {
@@ -183,7 +183,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
 				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				if (score > getScoreThreshold()) {
+				if (score > getErrorRate()) {
 					classes.add(e.getKey());
 				}
 			}
@@ -233,21 +233,21 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
-		scoreThresholdSettings.saveSettingsTo(settings);
+		errorRateSettings.saveSettingsTo(settings);
 		classesAsStringSettings.saveSettingsTo(settings);
 		stringSeparatorSettings.saveSettingsTo(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
-		scoreThresholdSettings.validateSettings(settings);
+		errorRateSettings.validateSettings(settings);
 		classesAsStringSettings.validateSettings(settings);
 		stringSeparatorSettings.validateSettings(settings);
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		scoreThresholdSettings.loadSettingsFrom(settings);
+		errorRateSettings.loadSettingsFrom(settings);
 		classesAsStringSettings.loadSettingsFrom(settings);
 		stringSeparatorSettings.loadSettingsFrom(settings);
 	}
