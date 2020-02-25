@@ -43,12 +43,12 @@ public class ConformalPredictorLoopStartNodeFactory extends NodeFactory<Conforma
 
 	@Override
 	protected boolean hasDialog() {
-		return false;
+		return true;
 	}
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return null;
+		return new ConformalPredictorLoopStartNodeDialog();
 	}
 
 }
