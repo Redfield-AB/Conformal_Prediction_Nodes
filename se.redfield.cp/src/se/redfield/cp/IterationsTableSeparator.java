@@ -15,6 +15,7 @@
  */
 package se.redfield.cp;
 
+import java.io.Closeable;
 import java.util.NoSuchElementException;
 
 import org.knime.core.data.DataRow;
@@ -26,7 +27,6 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-import com.sun.xml.internal.ws.Closeable;
 
 /**
  * Class used to split a table by iterations.<br/>
