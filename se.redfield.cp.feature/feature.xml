@@ -2,7 +2,7 @@
 <feature
       id="se.redfield.cp.feature"
       label="Redfield Conformal Prediction Nodes"
-      version="0.0.1.qualifier"
+      version="1.0.0.qualifier"
       provider-name="Redfield AB">
 
    <description>
@@ -14,7 +14,7 @@
    </copyright>
 
    <license url="https://www.gnu.org/licenses/gpl-3.0.html">
-GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+      GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. &lt;https://fsf.org/&gt;
  Everyone is permitted to copy and distribute verbatim copies
@@ -693,6 +693,6 @@ Public License instead of this License.  But first, please read
          id="se.redfield.cp"
          download-size="0"
          install-size="0"
-         version="0.0.1.qualifier"/>
+         version="1.0.0.qualifier"/>
 
 </feature>
