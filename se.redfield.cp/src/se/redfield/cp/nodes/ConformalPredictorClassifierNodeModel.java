@@ -67,11 +67,11 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
 
-	private static final String KEY_ERROR_RATE = "errorRate";
+	private static final String KEY_ERROR_RATE = "significanceLevel";
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 
-	private static final double DEFAULT_ERROR_RATE = 0.2;
+	private static final double DEFAULT_ERROR_RATE = 0.8;
 	private static final String DEFAULT_SEPARATOR = ";";
 	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 
@@ -183,7 +183,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
 				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				if (score > getErrorRate()) {
+				if (score < getErrorRate()) {
 					classes.add(e.getKey());
 				}
 			}
