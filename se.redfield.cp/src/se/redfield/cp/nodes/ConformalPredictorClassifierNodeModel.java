@@ -70,6 +70,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	private static final String KEY_ERROR_RATE = "significanceLevel";
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
+	private static final String KEY_INVERT_CHECK = "invertCheck";
 
 	private static final double DEFAULT_ERROR_RATE = 0.8;
 	private static final String DEFAULT_SEPARATOR = ";";
@@ -78,6 +79,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	private final SettingsModelDoubleBounded errorRateSettings = createErrorRateSettings();
 	private final SettingsModelBoolean classesAsStringSettings = createClassesAsStringSettings();
 	private final SettingsModelString stringSeparatorSettings = createStringSeparatorSettings();
+	private final SettingsModelBoolean invertCheckSettings = createInvertCheckSettings();
 
 	private ColumnRearranger rearranger;
 
@@ -91,6 +93,10 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	static SettingsModelString createStringSeparatorSettings() {
 		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
+	}
+
+	static SettingsModelBoolean createInvertCheckSettings() {
+		return new SettingsModelBoolean(KEY_INVERT_CHECK, false);
 	}
 
 	protected ConformalPredictorClassifierNodeModel() {
@@ -183,7 +189,13 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
 				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				if (score < getErrorRate()) {
+				boolean accept;
+				if (!invertCheckSettings.getBooleanValue()) {
+					accept = score <= getErrorRate();
+				} else {
+					accept = score >= getErrorRate();
+				}
+				if (accept) {
 					classes.add(e.getKey());
 				}
 			}
@@ -236,6 +248,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		errorRateSettings.saveSettingsTo(settings);
 		classesAsStringSettings.saveSettingsTo(settings);
 		stringSeparatorSettings.saveSettingsTo(settings);
+		invertCheckSettings.saveSettingsTo(settings);
 	}
 
 	@Override
@@ -250,6 +263,11 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		errorRateSettings.loadSettingsFrom(settings);
 		classesAsStringSettings.loadSettingsFrom(settings);
 		stringSeparatorSettings.loadSettingsFrom(settings);
+		try {
+			invertCheckSettings.loadSettingsFrom(settings);
+		} catch (InvalidSettingsException e) {
+
+		}
 	}
 
 	@Override
