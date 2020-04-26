@@ -189,13 +189,8 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
 				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				boolean accept;
-				if (!invertCheckSettings.getBooleanValue()) {
-					accept = score <= getErrorRate();
-				} else {
-					accept = score >= getErrorRate();
-				}
-				if (accept) {
+				double threshold = invertCheckSettings.getBooleanValue() ? (1 - getErrorRate()) : getErrorRate();
+				if (score <= threshold) {
 					classes.add(e.getKey());
 				}
 			}

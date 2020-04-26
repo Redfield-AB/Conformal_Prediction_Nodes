@@ -53,7 +53,7 @@ public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsP
 
 		createNewGroup("Debug");
 		addDialogComponent(new DialogComponentBoolean(ConformalPredictorClassifierNodeModel.createInvertCheckSettings(),
-				"Invert check (p-values greater than error rate will be accepted)"));
+				"Invert check (p-values will be checked agains (1 - error_rate))"));
 	}
 
 	@Override
