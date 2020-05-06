@@ -50,10 +50,6 @@ public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsP
 		createNewGroup("Output");
 		addDialogComponent(new DialogComponentBoolean(classesAsStringSettings, "Output Classes as String"));
 		addDialogComponent(new DialogComponentString(stringSeparatorSettings, "String separator"));
-
-		createNewGroup("Debug");
-		addDialogComponent(new DialogComponentBoolean(ConformalPredictorClassifierNodeModel.createInvertCheckSettings(),
-				"Invert check (p-values will be checked agains (1 - error_rate))"));
 	}
 
 	@Override

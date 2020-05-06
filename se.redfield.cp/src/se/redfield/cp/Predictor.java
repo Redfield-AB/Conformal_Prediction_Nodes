@@ -184,7 +184,7 @@ public class Predictor {
 		public DataCell[] getCells(DataRow row) {
 			double p = ((DoubleValue) row.getCell(pColumnIndex)).getDoubleValue();
 			int rank = getRank(p);
-			double score = ((double) rank + 1) / (probabilities.size() + 1);
+			double score = ((double) probabilities.size() - rank) / (probabilities.size() + 1);
 			DoubleCell scoreCell = new DoubleCell(score);
 
 			if (model.getIncludeRankColumn()) {

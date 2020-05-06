@@ -9,7 +9,7 @@
     <fullDescription>
         <intro>
         	Creates a calibration table with ranking for further calibration of the test data sets.
-			Ranking is sorting by class probabilities provided by predictor nodes.
+			Ranking is sorting by class probabilities provided by predictor nodes in descending order.
 			Note that predictor must provide the class probabilities for the predictions in order to apply conformal prediction.
         </intro>
         

@@ -67,19 +67,17 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
 
-	private static final String KEY_ERROR_RATE = "significanceLevel";
+	private static final String KEY_ERROR_RATE = "errorRate";
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
-	private static final String KEY_INVERT_CHECK = "invertCheck";
 
-	private static final double DEFAULT_ERROR_RATE = 0.8;
+	private static final double DEFAULT_ERROR_RATE = 0.2;
 	private static final String DEFAULT_SEPARATOR = ";";
 	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 
 	private final SettingsModelDoubleBounded errorRateSettings = createErrorRateSettings();
 	private final SettingsModelBoolean classesAsStringSettings = createClassesAsStringSettings();
 	private final SettingsModelString stringSeparatorSettings = createStringSeparatorSettings();
-	private final SettingsModelBoolean invertCheckSettings = createInvertCheckSettings();
 
 	private ColumnRearranger rearranger;
 
@@ -93,10 +91,6 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	static SettingsModelString createStringSeparatorSettings() {
 		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
-	}
-
-	static SettingsModelBoolean createInvertCheckSettings() {
-		return new SettingsModelBoolean(KEY_INVERT_CHECK, false);
 	}
 
 	protected ConformalPredictorClassifierNodeModel() {
@@ -148,7 +142,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	 */
 	private void validateSettings(Map<String, Integer> scoreColumns) throws InvalidSettingsException {
 		if (scoreColumns.isEmpty()) {
-			throw new InvalidSettingsException("No P-values columns found in provided table");
+			throw new InvalidSettingsException("No p-values columns found in provided table");
 		}
 
 		if (getClassesAsString() && getStringSeparator().isEmpty()) {
@@ -189,8 +183,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
 				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				double threshold = invertCheckSettings.getBooleanValue() ? (1 - getErrorRate()) : getErrorRate();
-				if (score <= threshold) {
+				if (score > getErrorRate()) {
 					classes.add(e.getKey());
 				}
 			}
@@ -243,7 +236,6 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		errorRateSettings.saveSettingsTo(settings);
 		classesAsStringSettings.saveSettingsTo(settings);
 		stringSeparatorSettings.saveSettingsTo(settings);
-		invertCheckSettings.saveSettingsTo(settings);
 	}
 
 	@Override
@@ -258,11 +250,6 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		errorRateSettings.loadSettingsFrom(settings);
 		classesAsStringSettings.loadSettingsFrom(settings);
 		stringSeparatorSettings.loadSettingsFrom(settings);
-		try {
-			invertCheckSettings.loadSettingsFrom(settings);
-		} catch (InvalidSettingsException e) {
-
-		}
 	}
 
 	@Override

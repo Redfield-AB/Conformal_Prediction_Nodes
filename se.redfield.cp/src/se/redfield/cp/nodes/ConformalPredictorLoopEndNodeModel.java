@@ -65,7 +65,7 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 
 	public static final String P_COLUMN_REGEX = "^P \\((.+=.+)\\)$";
 	public static final String RANK_COLUMN_REGEX = "^Rank \\((.+)\\)$";
-	public static final String P_VALUE_COLUMN_REGEX = "^P-value \\((?<value>.+)\\)$";
+	public static final String P_VALUE_COLUMN_REGEX = "^p-value \\((?<value>.+)\\)$";
 
 	private static final String ORIGINAL_ROWID_COLUMN_NAME = "Original RowId";
 
