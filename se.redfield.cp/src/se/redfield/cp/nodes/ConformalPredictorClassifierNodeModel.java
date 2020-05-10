@@ -142,7 +142,7 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	 */
 	private void validateSettings(Map<String, Integer> scoreColumns) throws InvalidSettingsException {
 		if (scoreColumns.isEmpty()) {
-			throw new InvalidSettingsException("No P-values columns found in provided table");
+			throw new InvalidSettingsException("No p-values columns found in provided table");
 		}
 
 		if (getClassesAsString() && getStringSeparator().isEmpty()) {

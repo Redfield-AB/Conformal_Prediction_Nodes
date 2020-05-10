@@ -53,7 +53,7 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 	public static final int PORT_CALIBRATION_TABLE = 1;
 
 	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
-	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "P-value (%s)";
+	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "p-value (%s)";
 
 	private static final String KEY_INCLUDE_RANK_COLUMN = "includeRankColumn";
 

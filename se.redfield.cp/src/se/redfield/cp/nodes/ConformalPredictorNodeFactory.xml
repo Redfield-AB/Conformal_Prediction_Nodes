@@ -3,12 +3,16 @@
     <name>Conformal Predictor</name>
     
     <shortDescription>
-        Calculates the table with P values and Scores for test data based on the provided calibration table.
+        Calculates the table with p-values for test data based on the provided calibration table.
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	Calculates the table with P values and Scores for test data based on the provided calibration table.
+        	Calculates the table with p-values for test data based on the provided calibration table.
+        	The p-value for a class is the fraction of entries from that class in the calibration set 
+        	that have a model probability less than or equal to the model probability for the record under consideration. 
+        	Small p-values indicate records that are nonconforming, larger p-values indicate records that are conforming. 
+        	(Reference: Vovk, V., Gammerman, A. and Shafer, G., 2005. Algorithmic learning in a random world. Springer Science &amp; Business Media.)  
         </intro>
             
         <option name="Target column">
@@ -27,6 +31,6 @@
     	<inPort index="0" name="Prediction Table">Table with predictions and class probabilities. Target variable must have the same domain as the calibration table.</inPort>
         <inPort index="1" name="Calibration Table">Calibration Table</inPort>
         
-        <outPort index="0" name="Output">Table with calibrated predictions.</outPort>
+        <outPort index="0" name="Output">Table with calibrated predictions and p-values.</outPort>
     </ports>    
 </knimeNode>

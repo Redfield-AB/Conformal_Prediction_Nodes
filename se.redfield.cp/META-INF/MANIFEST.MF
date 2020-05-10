@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Conformal Prediction extension for KNIME Workbench
 Bundle-SymbolicName: se.redfield.cp; singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.1.0.qualifier
 Bundle-ClassPath: conformalpredictioncalibrator.jar
 Bundle-Activator: se.redfield.cp.ConformalPredictionPlugin
 Bundle-Vendor: Redfield AB

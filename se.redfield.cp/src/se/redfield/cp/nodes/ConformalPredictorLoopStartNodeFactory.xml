@@ -9,7 +9,7 @@
     <fullDescription>
         <intro>
         	Iterates over Model and Calibration table pairwise. Iteration column is used for pairwise synchronization.
-        	Both tables has to contain entries for a given iteration and order of these iterations has to be the same for both tables.
+        	Both tables have to contain entries for a given iteration and order of these iterations has to be the same for both tables.
         </intro>
         
         <option name="Model iteration column">
