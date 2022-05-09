@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/se.redfield.cp.copa.feature_1.1.0.202205021448.jar" id="se.redfield.cp.copa.feature" version="1.1.0.202205021448">
+      <category name="Conformal_Prediction"/>
+   </feature>
+   <category-def name="Conformal_Prediction" label="Conformal Prediction"/>
+</site>

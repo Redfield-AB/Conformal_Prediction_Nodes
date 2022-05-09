@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/predictor_loop_start.png" type="LoopStart" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Prediction Loop Start</name>
+    
+    <shortDescription>
+        Iterates over Model and Calibration table pairwise.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        	Iterates over Model and Calibration table pairwise. Iteration column is used for pairwise synchronization.
+        	Both tables have to contain entries for a given iteration and order of these iterations has to be the same for both tables.
+        </intro>
+        
+        <option name="Model iteration column">
+        	Iteration column of the collected models table.
+        </option>
+        <option name="Calibration iteration column">
+        	Iteration column of the collected calibration tables.
+        </option>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Collected models table">Collected models table</inPort>
+        <inPort index="1" name="Collected calibration tables">Collected calibration tables</inPort>
+        
+        <outPort index="0" name="Model serialized as a table">Model serialized as a table</outPort>
+        <outPort index="1" name="Calibration table">Calibration table</outPort>
+    </ports>    
+</knimeNode>
