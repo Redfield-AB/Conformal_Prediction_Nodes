@@ -130,7 +130,7 @@ public class Scorer {
 			throws CanceledExecutionException {
 		Map<String, ClassScores> scores = new HashMap<>();
 		DataTableSpec inputTableSpec = inTable.getSpec();
-		ClassScores vovkScores = new ClassScores(null);
+		ClassScores efficiencyScores = new ClassScores(null);
 
 		DataTableSpec spec = inTable.getDataTableSpec();
 		int targetIdx = spec.findColumnIndex(model.getTargetColumn());
@@ -162,7 +162,7 @@ public class Scorer {
 			
 			
 			if (model.isAdditionalEfficiencyMetricsMode()) {
-				vovkScores.inc(Metric.COUNT);
+				efficiencyScores.inc(Metric.COUNT);
 				
 				Map<String, Double> pValues = inputTableSpec.getColumnSpec(targetIdx).getDomain().getValues()
 						.stream().map(DataCell::toString).collect(Collectors.toMap(str -> str,
@@ -170,7 +170,7 @@ public class Scorer {
 				double max=0,second=0,sum=0;
 				for (Double p : pValues.values()) {
 					sum+=p;
-					vovkScores.add(Metric.S, p);//Average Sum of p-values
+					efficiencyScores.add(Metric.S, p);//Average Sum of p-values
 					if (p>max) {
 						max = p;
 						second = max;
@@ -178,26 +178,26 @@ public class Scorer {
 						second = p;
 					}
 				}				
-				vovkScores.add(Metric.U, second);//Unconfidence
-				vovkScores.add(Metric.F, sum-max);//Fuziness				
-				vovkScores.add(Metric.N, classes.size());
+				efficiencyScores.add(Metric.U, second);//Unconfidence
+				efficiencyScores.add(Metric.F, sum-max);//Fuziness				
+				efficiencyScores.add(Metric.N, classes.size());
 				if (classes.size() > 1)					
-					vovkScores.inc(Metric.M);			
-				vovkScores.add(Metric.E, classes.size()-1);
+					efficiencyScores.inc(Metric.M);			
+				efficiencyScores.add(Metric.E, classes.size()-1);
 				if (max==pValues.get(target))
-					vovkScores.add(Metric.OU, second);
+					efficiencyScores.add(Metric.OU, second);
 				else
-					vovkScores.add(Metric.OU, max);
-				vovkScores.add(Metric.OF, sum-pValues.get(target));//Observed Fuziness	
+					efficiencyScores.add(Metric.OU, max);
+				efficiencyScores.add(Metric.OF, sum-pValues.get(target));//Observed Fuziness	
 				
 				if (classes.contains(target)) {
-					vovkScores.add(Metric.OE, classes.size()-1);
+					efficiencyScores.add(Metric.OE, classes.size()-1);
 					if (classes.size() > 1)
-						vovkScores.inc(Metric.OM);
+						efficiencyScores.inc(Metric.OM);
 				} else {
-					vovkScores.add(Metric.OE, classes.size());
+					efficiencyScores.add(Metric.OE, classes.size());
 					if (classes.size() > 0)
-						vovkScores.inc(Metric.OM);
+						efficiencyScores.inc(Metric.OM);
 				}
 				
 				
@@ -211,7 +211,7 @@ public class Scorer {
 			exec.setProgress((double) count++ / total);
 		}
 
-		return createOutputTables(scores, vovkScores, exec);
+		return createOutputTables(scores, efficiencyScores, exec);
 	}
 
 	private double getUnconfidence() {
@@ -226,9 +226,9 @@ public class Scorer {
 	 * @param exec   Execution context.
 	 * @return
 	 */
-	private BufferedDataTable[] createOutputTables(Map<String, ClassScores> scores, ClassScores vovkScores, ExecutionContext exec) {
+	private BufferedDataTable[] createOutputTables(Map<String, ClassScores> scores, ClassScores efficiencyScores, ExecutionContext exec) {
 		BufferedDataContainer cont = exec.createDataContainer(createOutputSpec());
-		BufferedDataContainer vovkCont = exec.createDataContainer(createAdditionalEfficiencyMetricSpec());
+		BufferedDataContainer efficiencyCont = exec.createDataContainer(createAdditionalEfficiencyMetricSpec());
 
 		long idx = 0;
 		for (ClassScores s : scores.values()) {
@@ -237,13 +237,13 @@ public class Scorer {
 		cont.close();
 		
 		idx = 0;
-		vovkCont.addRowToTable(createVovkRow(scores, vovkScores, idx++));
-		vovkCont.close();
+		efficiencyCont.addRowToTable(createSummaryRow(scores, efficiencyScores, idx++));
+		efficiencyCont.close();
 		
-		return new BufferedDataTable[] { cont.getTable(), vovkCont.getTable()};
+		return new BufferedDataTable[] { cont.getTable(), efficiencyCont.getTable()};
 	}
 
-	private DataRow createVovkRow(Map<String, ClassScores> scores, ClassScores score, long idx) {
+	private DataRow createSummaryRow(Map<String, ClassScores> scores, ClassScores score, long idx) {
 		List<DataCell> cells = new ArrayList<>();
 		double efficency=0, validity=0, strictMatch=0, softMatch=0, totalMatch=0, error=0, total=0, single=0, empty=0;
 		int c = scores.size();

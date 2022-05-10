@@ -56,7 +56,7 @@ public abstract class AbstractConformalPredictorRegressionNodeDialog extends Abs
 
 		addDialogComponent(new DialogComponentColumnNameSelection(sigmaColumnSettings, "Difficulty column:", tableIndex,
 				DataValue.class));
-		addDialogComponent(new DialogComponentNumber(betaSettings, "Beta", 0.25,
+		addDialogComponent(new DialogComponentNumber(betaSettings, "Beta", 0.05,
 				createFlowVariableModel(betaSettings)));
 	}
 
