@@ -82,7 +82,7 @@
       <node
             after="se.redfield.cp.nodes.ConformalPredictorScorerNodeFactory" 
             category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorRegressionScorerNodeFactory">
+            factory-class="se.redfield.cp.nodes.ConformalPredictorScorerRegressionNodeFactory">
       </node>
    </extension>
    <extension

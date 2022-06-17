@@ -53,7 +53,7 @@ import se.redfield.cp.ScorerRegression;
  * 
  *
  */
-public class ConformalPredictorRegressionScorerNodeModel extends NodeModel {
+public class ConformalPredictorScorerRegressionNodeModel extends NodeModel {
 
 	private static final String KEY_TARGET_COLUMN = "targetColumn";
 	private static final String KEY_ADDITIONAL_INFO = "additionalInfo";	
@@ -83,7 +83,7 @@ public class ConformalPredictorRegressionScorerNodeModel extends NodeModel {
 		return new SettingsModelBoolean(KEY_ADDITIONAL_INFO, true);
 	}
 
-	protected ConformalPredictorRegressionScorerNodeModel() {
+	protected ConformalPredictorScorerRegressionNodeModel() {
 		super(1, 1);
 	}
 

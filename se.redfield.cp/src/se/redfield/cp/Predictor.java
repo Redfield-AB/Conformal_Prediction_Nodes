@@ -59,14 +59,14 @@ public class Predictor {
 	 * @param inPredictionTableSpecs Input prediction table spec.
 	 * @return
 	 */
-	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs) {
+	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs, Set<DataCell> values) {
 		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
 		if (!model.getKeepAllColumns()) {
 			r.keepOnly(model.getRequiredColumnNames(inPredictionTableSpecs));
 		}
 
-		Set<DataCell> values = inPredictionTableSpecs.getColumnSpec(model.getTargetColumnName()).getDomain()
-				.getValues();
+//		Set<DataCell> values = inPredictionTableSpecs.getColumnSpec(model.getTargetColumnName()).getDomain()
+//				.getValues();
 		for (DataCell v : values) {
 			r.append(new ScoreCellFactory(v.toString(), inPredictionTableSpecs, null));
 		}
@@ -86,7 +86,7 @@ public class Predictor {
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
-		Set<DataCell> values = predictionTableSpec.getColumnSpec(model.getTargetColumnName()).getDomain().getValues();
+		Set<DataCell> values = inCalibrationTable.getDataTableSpec().getColumnSpec(model.getTargetColumnName()).getDomain().getValues();
 
 		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 

@@ -43,6 +43,8 @@ import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
+
+import se.redfield.cp.nodes.ConformalPredictorScorerNodeModel;
 import se.redfield.cp.nodes.ConformalPredictorScorerNodeModel;
 
 /**
@@ -54,8 +56,8 @@ public class Scorer {
 
 	private ConformalPredictorScorerNodeModel model;
 
-	public Scorer(ConformalPredictorScorerNodeModel model) {
-		this.model = model;
+	public Scorer(ConformalPredictorScorerNodeModel conformalPredictorScorerNodeModel) {
+		this.model = conformalPredictorScorerNodeModel;
 	}
 
 	/**

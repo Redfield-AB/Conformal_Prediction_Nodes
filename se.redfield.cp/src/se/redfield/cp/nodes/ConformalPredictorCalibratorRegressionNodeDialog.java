@@ -21,8 +21,8 @@ package se.redfield.cp.nodes;
  */
 public class ConformalPredictorCalibratorRegressionNodeDialog extends AbstractConformalPredictorRegressionNodeDialog {
 
-	public ConformalPredictorCalibratorRegressionNodeDialog() {
-		super(0);
+	public ConformalPredictorCalibratorRegressionNodeDialog(boolean visibleTarget) {
+		super(0, visibleTarget);
 	}
 
 }

@@ -36,8 +36,8 @@ public abstract class AbstractConformalPredictorRegressionNodeDialog extends Abs
 	private SettingsModelBoolean normalizedSetting;
 
 	@SuppressWarnings("unchecked")
-	public AbstractConformalPredictorRegressionNodeDialog(int tableIndex) {
-		super(tableIndex);
+	public AbstractConformalPredictorRegressionNodeDialog(int tableIndex, boolean visibleTarget) {
+		super(tableIndex, visibleTarget);
 		createNewGroup("Conformal Regression");
 		SettingsModelDoubleBounded betaSettings = ConformalPredictorRegressionNodeModel.createBetaSettings();
 

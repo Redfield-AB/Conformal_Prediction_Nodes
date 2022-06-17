@@ -32,16 +32,18 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSettingsPane {
 
 	private SettingsModelString targetColumnSettings;
+	private SettingsModelString predictionColumnSettings;
 	private SettingsModelBoolean keepAllSettings;
 	private SettingsModelBoolean keepIdColumnSetting;
 	private SettingsModelString idColumnSettings;
 	private SettingsModelBoolean includeRank;
 
 	@SuppressWarnings("unchecked")
-	public AbstractConformalPredictorNodeDialog(int tableIndex) {
+	public AbstractConformalPredictorNodeDialog(int tableIndex, boolean visibleTarget) {
 		super();
 
 		targetColumnSettings = AbstractConformalPredictorNodeModel.createTargetColumnSettings();
+		predictionColumnSettings = AbstractConformalPredictorNodeModel.createPredictionColumnSettings();
 		keepAllSettings = AbstractConformalPredictorNodeModel.createKeepAllColumnsSettingsModel();
 		keepIdColumnSetting = AbstractConformalPredictorNodeModel.createKeepIdColumnSettings();
 		idColumnSettings = AbstractConformalPredictorNodeModel.createIdColumnSettings();
@@ -54,8 +56,10 @@ public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSe
 			}
 		});
 		keepIdColumnSetting.addChangeListener(e -> idColumnSettings.setEnabled(keepIdColumnSetting.getBooleanValue()));
-
-		addDialogComponent(new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", tableIndex,
+		if (visibleTarget)
+			addDialogComponent(new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", tableIndex,
+					DataValue.class));
+		addDialogComponent(new DialogComponentColumnNameSelection(predictionColumnSettings, "Prediction column:", tableIndex,
 				DataValue.class));
 
 		createNewGroup("Define output");

@@ -54,8 +54,8 @@ public class CompactConformalRegressionNodeModel extends ConformalPredictorRegre
 	private final CalibratorRegression calibrator = new CalibratorRegression(this);
 	private final PredictorRegression predictor = new PredictorRegression(this);
 
-	protected CompactConformalRegressionNodeModel() {
-		super();
+	protected CompactConformalRegressionNodeModel(boolean visibleTarget) {
+		super(visibleTarget);
 	}
 
 	@Override

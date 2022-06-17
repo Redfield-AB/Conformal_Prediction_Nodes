@@ -54,8 +54,8 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	private final Predictor predictor = new Predictor(this);
 
-	protected ConformalPredictorNodeModel() {
-		super(2, 1);
+	protected ConformalPredictorNodeModel(boolean visibleTarget) {
+		super(2, 1, visibleTarget);
 	}
 
 	@Override
@@ -71,63 +71,67 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		validateSettings(inSpecs[PORT_PREDICTION_TABLE]);
-		validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
-
-		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]) };
+		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
+		validateTables(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
+		
+		//		validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
+//		
+		Set<DataCell> values = inSpecs[PORT_CALIBRATION_TABLE].getColumnSpec(getTargetColumnName()).getDomain()
+				.getValues();
+		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values) };
 	}
 
-	/**
-	 * Validates calibration table spec.
-	 * 
-	 * @param calibrationTableSpec Calibration table spec.
-	 * @param predictionTableSpec  Input Prediction table spec.
-	 * @throws InvalidSettingsException
-	 */
-	private void validateCalibrationTable(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-			throws InvalidSettingsException {
-		if (!calibrationTableSpec.containsName(getTargetColumnName())) {
-			throw new InvalidSettingsException(
-					String.format("Class column '%s' is missing from the calibration table", getTargetColumnName()));
-		}
-
-		if (!calibrationTableSpec.containsName(getCalibrationProbabilityColumnName())) {
-			throw new InvalidSettingsException(
-					String.format("Probability columns '%s' is missing from the calibration table",
-							getCalibrationProbabilityColumnName()));
-		}
-
-		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getTargetColumnName());
-		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-			throw new InvalidSettingsException(
-					"Calibration table: insufficient domain information for column: " + getTargetColumnName());
-		}
-
-		checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
-	}
-
-	/**
-	 * Checks if the calibration table contains data for all classes present in
-	 * prediction table
-	 * 
-	 * @param calibrationTableSpec Calibration table spec.
-	 * @param predictionTableSpec  Input prediction table spec.
-	 * @throws InvalidSettingsException
-	 */
-	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-			throws InvalidSettingsException {
-		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
-				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
-		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
-				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
-
-		for (String val : predictionValues) {
-			if (!calibrationClasses.contains(val)) {
-				throw new InvalidSettingsException(
-						String.format("Class '%s' is missing in the calibration table", val));
-			}
-		}
-	}
+//	/**
+//	 * Validates calibration table spec.
+//	 * 
+//	 * @param calibrationTableSpec Calibration table spec.
+//	 * @param predictionTableSpec  Input Prediction table spec.
+//	 * @throws InvalidSettingsException
+//	 */
+//	private void validateCalibrationTable(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
+//			throws InvalidSettingsException {
+//		if (!calibrationTableSpec.containsName(getTargetColumnName())) {
+//			throw new InvalidSettingsException(
+//					String.format("Class column '%s' is missing from the calibration table", getTargetColumnName()));
+//		}
+//
+//		if (!calibrationTableSpec.containsName(getCalibrationProbabilityColumnName())) {
+//			throw new InvalidSettingsException(
+//					String.format("Probability columns '%s' is missing from the calibration table",
+//							getCalibrationProbabilityColumnName()));
+//		}
+//
+//		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getTargetColumnName());
+//		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+//			throw new InvalidSettingsException(
+//					"Calibration table: insufficient domain information for column: " + getTargetColumnName());
+//		}
+//
+//		checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
+//	}
+//
+//	/**
+//	 * Checks if the calibration table contains data for all classes present in
+//	 * prediction table
+//	 * 
+//	 * @param calibrationTableSpec Calibration table spec.
+//	 * @param predictionTableSpec  Input prediction table spec.
+//	 * @throws InvalidSettingsException
+//	 */
+//	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
+//			throws InvalidSettingsException {
+//		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
+//				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+//		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
+//				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+//
+//		for (String val : predictionValues) {
+//			if (!calibrationClasses.contains(val)) {
+//				throw new InvalidSettingsException(
+//						String.format("Class '%s' is missing in the calibration table", val));
+//			}
+//		}
+//	}
 
 	@Override
 	public InputPortRole[] getInputPortRoles() {

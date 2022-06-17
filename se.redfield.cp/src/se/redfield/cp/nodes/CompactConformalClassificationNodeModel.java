@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
 import org.knime.core.data.DataCell;
@@ -102,8 +103,8 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
 	}
 
-	protected CompactConformalClassificationNodeModel() {
-		super(2, 1);
+	protected CompactConformalClassificationNodeModel(boolean visibleTarget) {
+		super(2, 1, visibleTarget);
 	}
 
 	public double getErrorRate() {
@@ -148,16 +149,19 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
-		validateSettings(inSpecs[PORT_PREDICTION_TABLE]);
+		validateTables(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
 		
+		Set<DataCell> values = inSpecs[PORT_CALIBRATION_TABLE].getColumnSpec(getTargetColumnName()).getDomain()
+				.getValues();
 		scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern()).match(
-					predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]));
+					predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values));
 		validateSettings(scoreColumns);
 
-		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]), scoreColumns);
+		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values), scoreColumns);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}
+
 
 	/**
 	 * Validated settings.

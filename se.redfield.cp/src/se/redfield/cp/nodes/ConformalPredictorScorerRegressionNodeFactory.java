@@ -23,11 +23,11 @@ import org.knime.core.node.NodeView;
  * Factory class for Predictor Scorer Node.
  *
  */
-public class ConformalPredictorRegressionScorerNodeFactory extends NodeFactory<ConformalPredictorRegressionScorerNodeModel> {
+public class ConformalPredictorScorerRegressionNodeFactory extends NodeFactory<ConformalPredictorScorerRegressionNodeModel> {
 
 	@Override
-	public ConformalPredictorRegressionScorerNodeModel createNodeModel() {
-		return new ConformalPredictorRegressionScorerNodeModel();
+	public ConformalPredictorScorerRegressionNodeModel createNodeModel() {
+		return new ConformalPredictorScorerRegressionNodeModel();
 	}
 
 	@Override
@@ -36,8 +36,8 @@ public class ConformalPredictorRegressionScorerNodeFactory extends NodeFactory<C
 	}
 
 	@Override
-	public NodeView<ConformalPredictorRegressionScorerNodeModel> createNodeView(int viewIndex,
-			ConformalPredictorRegressionScorerNodeModel nodeModel) {
+	public NodeView<ConformalPredictorScorerRegressionNodeModel> createNodeView(int viewIndex,
+			ConformalPredictorScorerRegressionNodeModel nodeModel) {
 		return null;
 	}
 
@@ -48,7 +48,7 @@ public class ConformalPredictorRegressionScorerNodeFactory extends NodeFactory<C
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new ConformalPredictorRegressionScorerNodeDialog();
+		return new ConformalPredictorScorerRegressionNodeDialog();
 	}
 
 }

@@ -176,13 +176,13 @@ public class PredictorRegression {
 	
 	private double getDoubleValueFromCell(DataCell cell, String errorMessage) {
 		if (cell.getType().getCellClass().equals((DoubleCell.class))) {
-			// Cast the cell as we know is must be a DoubleCell.
+			// Cast the cell as we know ii must be a DoubleCell.
 			return ((DoubleCell) cell).getDoubleValue();					
 		} else if (cell.getType().getCellClass().equals((IntCell.class))) {
-			// Cast the cell as we know is must be a IntCell.
+			// Cast the cell as we know ii must be a IntCell.
 			return (double) ((IntCell) cell).getIntValue();				
 		} else if (cell.getType().getCellClass().equals((LongCell.class))) {
-			// Cast the cell as we know is must be a LongCell.
+			// Cast the cell as we know ii must be a LongCell.
 			return ((LongCell) cell).getDoubleValue();				
 		} else {
 			throw new MissingValueException((MissingValue) cell, errorMessage);

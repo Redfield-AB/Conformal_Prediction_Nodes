@@ -64,8 +64,8 @@ public abstract class AbstractConformalPredictorRegressionNodeModel extends Abst
 		return betaSettings.getDoubleValue();
 	}
 	
-	protected AbstractConformalPredictorRegressionNodeModel(int nrInDataPorts, int nrOutDataPorts) {
-		super(nrInDataPorts, nrOutDataPorts);
+	protected AbstractConformalPredictorRegressionNodeModel(int nrInDataPorts, int nrOutDataPorts, boolean visibleTarget) {
+		super(nrInDataPorts, nrOutDataPorts, visibleTarget);
 	}
 
 	static SettingsModelBoolean createNormalizedSettingsModel() {
@@ -128,32 +128,35 @@ public abstract class AbstractConformalPredictorRegressionNodeModel extends Abst
 	 *                                  column is missing from input table.
 	 */
 	@Override
-	protected void validateTableSpecs(String selectedColumn, DataTableSpec spec) throws InvalidSettingsException {
+	protected void validateTableSpecs(DataTableSpec spec) throws InvalidSettingsException {
+		DataColumnSpec columnSpec = spec.getColumnSpec(getTargetColumnName());
+		if (columnSpec != null) {
+			 
+			if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
+					|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
+					|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
+			{
+				throw new InvalidSettingsException("Target column " + getTargetColumnName() + " must be numeric.");
+			}
+		}
 		
-		DataColumnSpec columnSpec = spec.getColumnSpec(selectedColumn);
+		if (!spec.containsName(getPredictionColumnName()))
+		{
+			throw new InvalidSettingsException("Prediction column '" + getPredictionColumnName() + "' must exist.");
+		}
+		columnSpec = spec.getColumnSpec(getPredictionColumnName());
 		if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
 				|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
 				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
 		{
-			throw new InvalidSettingsException("Target column " + selectedColumn + " must be numeric.");
-		}
-		
-		if (!spec.containsName(getPredictionColumnName(selectedColumn)))
-		{
-			throw new InvalidSettingsException("Prediction column '" + getPredictionColumnName(selectedColumn) + "' must exist.");
-		}
-		columnSpec = spec.getColumnSpec(getPredictionColumnName(selectedColumn));
-		if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
-				|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
-				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
-		{
-			throw new InvalidSettingsException("Prediction column " + getPredictionColumnName(selectedColumn) + " must be numeric.");
+			throw new InvalidSettingsException("Prediction column " + getPredictionColumnName() + " must be numeric.");
 		}
 
 		if (!getKeepAllColumns() && getKeepIdColumn() && !spec.containsName(getIdColumn())) {
 			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
 		}
 	}
+
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {

@@ -45,7 +45,8 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(AbstractConformalPredictorNodeModel.class);
 
-	private static final String KEY_COLUMN_NAME = "targetColumn";
+	private static final String KEY_TARGET_COLUMN_NAME = "targetColumn";
+	private static final String KEY_PREDICTION_COLUMN_NAME = "predictionColumn";
 	private static final String KEY_KEEP_ALL_COLUMNS = "keepAllColumns";
 	private static final String KEY_KEEP_ID_COLUMN = "keepIdColumn";
 	private static final String KEY_ID_COLUMN = "idColumn";
@@ -59,17 +60,24 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	private static final String KEY_INCLUDE_RANK_COLUMN = "includeRankColumn";
 
 	protected final SettingsModelString targetColumnSettings = createTargetColumnSettings();
+	protected final SettingsModelString predictionColumnSettings = createPredictionColumnSettings();
 	protected final SettingsModelBoolean keepAllColumnsSettings = createKeepAllColumnsSettingsModel();
 	protected final SettingsModelBoolean keepIdColumnSettings = createKeepIdColumnSettings();
 	protected final SettingsModelString idColumnSettings = createIdColumnSettings();
 	private final SettingsModelBoolean includeRankSettings = createIncludeRankSettings();
+	
+	private boolean visibleTarget = true;
 
 	static SettingsModelBoolean createIncludeRankSettings() {
 		return new SettingsModelBoolean(KEY_INCLUDE_RANK_COLUMN, false);
 	}
 
 	static SettingsModelString createTargetColumnSettings() {
-		return new SettingsModelString(KEY_COLUMN_NAME, "");
+		return new SettingsModelString(KEY_TARGET_COLUMN_NAME, "");
+	}
+
+	static SettingsModelString createPredictionColumnSettings() {
+		return new SettingsModelString(KEY_PREDICTION_COLUMN_NAME, "");
 	}
 
 	static SettingsModelBoolean createKeepAllColumnsSettingsModel() {
@@ -84,8 +92,13 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		return new SettingsModelString(KEY_ID_COLUMN, "");
 	}
 
-	protected AbstractConformalPredictorNodeModel(int nrInDataPorts, int nrOutDataPorts) {
+	protected AbstractConformalPredictorNodeModel(int nrInDataPorts, int nrOutDataPorts, boolean viewTarget) {
 		super(nrInDataPorts, nrOutDataPorts);
+		visibleTarget = viewTarget;
+	}
+
+	public boolean isVisibleTarget() {
+		return visibleTarget;
 	}
 
 	/**
@@ -116,6 +129,10 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 
 	public String getTargetColumnName() {
 		return targetColumnSettings.getStringValue();
+	}
+
+	public String getPredictionColumnName() {
+		return predictionColumnSettings.getStringValue();
 	}
 
 	public boolean getKeepAllColumns() {
@@ -161,16 +178,18 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		if (getTargetColumnName().isEmpty()) {
 			attemptAutoconfig(spec);
 		}
-
-		if (getTargetColumnName().isEmpty()) {
-			throw new InvalidSettingsException("Class column is not selected");
+		
+		if (isVisibleTarget()) {
+			if (getTargetColumnName().isEmpty()) {
+				throw new InvalidSettingsException("Class column is not selected");
+			}
 		}
 
 		if (!getKeepAllColumns() && getKeepIdColumn() && getIdColumn().isEmpty()) {
 			throw new InvalidSettingsException("Id column is not selected");
 		}
 
-		validateTableSpecs(getTargetColumnName(), spec);
+		validateTableSpecs(spec);
 	}
 
 	/**
@@ -204,43 +223,144 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	 *                                  table. If keepIDColumn is selected and ID
 	 *                                  column is missing from input table.
 	 */
-	protected void validateTableSpecs(String selectedColumn, DataTableSpec spec) throws InvalidSettingsException {
-		DataColumnSpec columnSpec = spec.getColumnSpec(selectedColumn);
-		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-			throw new InvalidSettingsException("Insufficient domain information for column: " + selectedColumn);
-		}
-
-		Set<DataCell> values = columnSpec.getDomain().getValues();
-		for (DataCell cell : values) {
-			String value = cell.toString();
-			String pColumnName = getProbabilityColumnName(selectedColumn, value);
-			if (!spec.containsName(pColumnName)) {
-				throw new InvalidSettingsException("Probability column not found: " + pColumnName);
+	protected void validateTableSpecs(DataTableSpec spec) throws InvalidSettingsException {
+		DataColumnSpec columnSpec;
+		
+		if (isVisibleTarget()) {
+			columnSpec = spec.getColumnSpec(getTargetColumnName());
+			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+				throw new InvalidSettingsException("Insufficient domain information for column: " + getTargetColumnName());
+			}
+	
+			Set<DataCell> values = columnSpec.getDomain().getValues();
+			for (DataCell cell : values) {
+				String value = cell.toString();
+				String pColumnName = getProbabilityColumnName(value);
+				if (!spec.containsName(pColumnName)) {
+					throw new InvalidSettingsException("Probability column not found: " + pColumnName);
+				}
 			}
 		}
 
-//		DataColumnSpec columnSpec = spec.getColumnSpec(selectedColumn);
-//		if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
-//				|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
-//				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
-//		{
-//			throw new InvalidSettingsException("Target column " + selectedColumn + " must be numeric.");
-//		}
-//		
-//		if (!spec.containsName(getPredictionColumnName(selectedColumn)))
-//		{
-//			throw new InvalidSettingsException("Prediction column '" + getPredictionColumnName(selectedColumn) + "' must exist.");
-//		}
-//		columnSpec = spec.getColumnSpec(getPredictionColumnName(selectedColumn));
-//		if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
-//				|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
-//				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
-//		{
-//			throw new InvalidSettingsException("Prediction column " + getPredictionColumnName(selectedColumn) + " must be numeric.");
-//		}
+		if (!getKeepAllColumns() && getKeepIdColumn() && !spec.containsName(getIdColumn())) {
+			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
+		}
+	}
+
+	/**
+	 * Validates input table spec against specified target column. Makes sure table
+	 * contains probability columns for every target column's value.
+	 * 
+	 * @param selectedColumn Target column.
+	 * @param spec           Input table spec.
+	 * @throws InvalidSettingsException If target column domain doesn't have
+	 *                                  possible values filled. If one of
+	 *                                  probability columns is missing from input
+	 *                                  table. If keepIDColumn is selected and ID
+	 *                                  column is missing from input table.
+	 */
+	protected void validateTableSpecs(String selectedColumn, DataTableSpec spec) throws InvalidSettingsException {
+		DataColumnSpec columnSpec;
+		
+		if (isVisibleTarget()) {
+			columnSpec = spec.getColumnSpec(selectedColumn);
+			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+				throw new InvalidSettingsException("Insufficient domain information for column: " + selectedColumn);
+			}
+	
+			Set<DataCell> values = columnSpec.getDomain().getValues();
+			for (DataCell cell : values) {
+				String value = cell.toString();
+				String pColumnName = getProbabilityColumnName(selectedColumn, value);
+				if (!spec.containsName(pColumnName)) {
+					throw new InvalidSettingsException("Probability column not found: " + pColumnName);
+				}
+			}
+		}
 
 		if (!getKeepAllColumns() && getKeepIdColumn() && !spec.containsName(getIdColumn())) {
 			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
+		}
+	}
+
+	/**
+	 * Validates calibration table spec.
+	 * 
+	 * @param calibrationTableSpec Calibration table spec.
+	 * @param predictionTableSpec  Input Prediction table spec.
+	 * @throws InvalidSettingsException
+	 */
+	protected void validateTables(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
+			throws InvalidSettingsException {
+		
+		//Validate calibration table
+		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getTargetColumnName());
+		if (isVisibleTarget()) {
+			if (!calibrationTableSpec.containsName(getTargetColumnName())) {		
+				throw new InvalidSettingsException(
+						String.format("Class column '%s' is missing from the calibration table", getTargetColumnName()));
+			}
+
+			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+				throw new InvalidSettingsException(
+						"Calibration table: insufficient domain information for column: " + getTargetColumnName());
+			}
+		}
+		
+		Set<DataCell> values = columnSpec.getDomain().getValues();
+		for (DataCell cell : values) {
+			String value = cell.toString();
+			String pColumnName = getProbabilityColumnName(value);
+			if (!calibrationTableSpec.containsName(pColumnName)) {
+				throw new InvalidSettingsException("Probability column not found: " + pColumnName);
+			}
+		}
+		
+		//Validate prediction table
+		columnSpec = predictionTableSpec.getColumnSpec(getTargetColumnName());
+		
+		if (columnSpec != null) {
+			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+				throw new InvalidSettingsException("Insufficient domain information for column: " + getTargetColumnName());
+			}
+	
+			values = columnSpec.getDomain().getValues();
+			for (DataCell cell : values) {
+				String value = cell.toString();
+				String pColumnName = getProbabilityColumnName(value);
+				if (!predictionTableSpec.containsName(pColumnName)) {
+					throw new InvalidSettingsException("Probability column not found: " + pColumnName);
+				}
+			}
+
+			checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
+		}
+
+		if (!getKeepAllColumns() && getKeepIdColumn() && !predictionTableSpec.containsName(getIdColumn())) {
+			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
+		}
+	}
+
+	/**
+	 * Checks if the calibration table contains data for all classes present in
+	 * prediction table
+	 * 
+	 * @param calibrationTableSpec Calibration table spec.
+	 * @param predictionTableSpec  Input prediction table spec.
+	 * @throws InvalidSettingsException
+	 */
+	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
+			throws InvalidSettingsException {
+		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
+				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
+				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+
+		for (String val : predictionValues) {
+			if (!calibrationClasses.contains(val)) {
+				throw new InvalidSettingsException(
+						String.format("Class '%s' is missing in the calibration table", val));
+			}
 		}
 	}
 
@@ -265,6 +385,7 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
 		targetColumnSettings.saveSettingsTo(settings);
+		predictionColumnSettings.saveSettingsTo(settings);
 		keepAllColumnsSettings.saveSettingsTo(settings);
 		keepIdColumnSettings.saveSettingsTo(settings);
 		idColumnSettings.saveSettingsTo(settings);
@@ -274,6 +395,7 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetColumnSettings.validateSettings(settings);
+		predictionColumnSettings.validateSettings(settings);
 		keepAllColumnsSettings.validateSettings(settings);
 		keepIdColumnSettings.validateSettings(settings);
 		idColumnSettings.validateSettings(settings);
@@ -283,6 +405,7 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetColumnSettings.loadSettingsFrom(settings);
+		predictionColumnSettings.loadSettingsFrom(settings);
 		keepAllColumnsSettings.loadSettingsFrom(settings);
 		keepIdColumnSettings.loadSettingsFrom(settings);
 		idColumnSettings.loadSettingsFrom(settings);

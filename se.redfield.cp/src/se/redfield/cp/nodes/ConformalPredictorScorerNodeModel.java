@@ -68,7 +68,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 	private static final String KEY_CLASSES_COLUMN = "classesColumn";
 	private static final String KEY_ADDITIONAL_INFO = "additionalInfo";
 	private static final String KEY_EFFICIENCY_METRICS = "additionalEfficiencyMetrics";
-	public static final String KEY_COLUMN_SELECTION = "pValueColumns";
+//	public static final String KEY_COLUMN_SELECTION = "pValueColumns";
 
 	private final SettingsModelString targetColumnSettings = createTargetColumnSettings();
 	private final SettingsModelString classesColumnSettings = createClassesColumnSettings();
@@ -76,7 +76,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 			.createStringSeparatorSettings();
 	private final SettingsModelBoolean additionalInfoSettings = createAdditionalInfoSettings();
 	private final SettingsModelBoolean additionalEfficiencyMetricsSettings = createAdditionalEfficiencyMetricsSettings();
-	private final SettingsModelFilterString m_pValueCols = createPValueSelectionSettings();
+//	private final SettingsModelFilterString m_pValueCols = createPValueSelectionSettings();
 
 	private final Scorer scorer = new Scorer(this);
 
@@ -96,9 +96,9 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		return new SettingsModelBoolean(KEY_EFFICIENCY_METRICS, true);
 	}
 
-	public static SettingsModelFilterString createPValueSelectionSettings() {
-		return new SettingsModelFilterString(KEY_COLUMN_SELECTION);//,new String[0],new String[0]);
-	}
+//	public static SettingsModelFilterString createPValueSelectionSettings() {
+//		return new SettingsModelFilterString(KEY_COLUMN_SELECTION);//,new String[0],new String[0]);
+//	}
 
 	protected ConformalPredictorScorerNodeModel() {
 		super(1, 2);
@@ -132,30 +132,31 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 	 * @return probability column name
 	 */
 	public String getProbabilityColumnName(String val) {
-		if (isAdditionalEfficiencyMetricsMode()) {
-			List<String> columns = getIncludeList();
-			String shortName = String.format(String.format("p-value (%s)", val));
-			for (String str: columns) {
-				if (str.contains(shortName))
-					return str;
-			}
-			// Handle...
-			return "";
-		} else return String.format(String.format("p-value (%s)", val));
+//		if (isAdditionalEfficiencyMetricsMode()) {
+//			List<String> columns = getIncludeList();
+//			String shortName = String.format(String.format("p-value (%s)", val));
+//			for (String str: columns) {
+//				if (str.contains(shortName))
+//					return str;
+//			}
+//			// Handle...
+//			return "";
+//		} else return String.format(String.format("p-value (%s)", val));
+		return String.format(String.format("p-value (%s)", val));
 	}
 	
-	private List<String> getIncludeList() {
-		List<String> columns = m_pValueCols.getIncludeList();
-		if (columns.size() == 1) {
-			String strToSplit = columns.get(0);
-			//columns.remove(0);
-			List<String> newColumns = new ArrayList<>(); 
-			for (String str : strToSplit.split(";"))
-				newColumns.add(str);
-			columns = newColumns;
-		}
-		return columns;
-	}
+//	private List<String> getIncludeList() {
+//		List<String> columns = m_pValueCols.getIncludeList();
+//		if (columns.size() == 1) {
+//			String strToSplit = columns.get(0);
+//			//columns.remove(0);
+//			List<String> newColumns = new ArrayList<>(); 
+//			for (String str : strToSplit.split(";"))
+//				newColumns.add(str);
+//			columns = newColumns;
+//		}
+//		return columns;
+//	}
 
 
 	@Override
@@ -228,17 +229,12 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
 				throw new InvalidSettingsException("Insufficient domain information for column: " + selectedColumn);
 			}
-			List<String> columns =  getIncludeList();
+//			List<String> columns =  getIncludeList();
 			Set<DataCell> values = columnSpec.getDomain().getValues();
 			boolean containsEnough = true;
 			for (DataCell cell : values) {
 				String value = cell.toString();
-				String pColumnName = String.format(String.format("p-value (%s)", value));
-				boolean columnOK = false;
-				for (String str: columns) 
-					if (str.contains(pColumnName))
-						columnOK = true;		
-				containsEnough &= columnOK;
+				containsEnough &= spec.containsName(getProbabilityColumnName(value));
 			}
 			if (!containsEnough) {
 				throw new InvalidSettingsException("Probability column not found");
@@ -259,7 +255,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		additionalInfoSettings.saveSettingsTo(settings);
 		additionalEfficiencyMetricsSettings.saveSettingsTo(settings);
 		additionalEfficiencyMetricsSettings.saveSettingsTo(settings);
-		m_pValueCols.saveSettingsTo(settings);
+//		m_pValueCols.saveSettingsTo(settings);
 	}
 
 	@Override
@@ -269,7 +265,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		stringSeparatorSettings.validateSettings(settings);
 		additionalInfoSettings.validateSettings(settings);
 		additionalEfficiencyMetricsSettings.validateSettings(settings);
-		m_pValueCols.validateSettings(settings);
+//		m_pValueCols.validateSettings(settings);
 	}
 
 	@Override
@@ -279,7 +275,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		stringSeparatorSettings.loadSettingsFrom(settings);
 		additionalInfoSettings.loadSettingsFrom(settings);
 		additionalEfficiencyMetricsSettings.loadSettingsFrom(settings);
-		m_pValueCols.loadSettingsFrom(settings);
+//		m_pValueCols.loadSettingsFrom(settings);
 	}
 
 	@Override

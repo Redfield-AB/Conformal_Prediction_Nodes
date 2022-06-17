@@ -67,8 +67,8 @@ public class ConformalPredictorRegressionNodeModel extends AbstractConformalPred
 	
 	private final PredictorRegression predictor = new PredictorRegression(this);
 
-	protected ConformalPredictorRegressionNodeModel() {
-		super(2, 1);
+	protected ConformalPredictorRegressionNodeModel(boolean visibleTarget) {
+		super(2, 1, visibleTarget);
 	}
 	
 	static SettingsModelString createStringSeparatorSettings() {

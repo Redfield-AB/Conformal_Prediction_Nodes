@@ -24,7 +24,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
  */
 public class ConformalPredictorNodeDialog extends AbstractConformalPredictorNodeDialog {
 
-	public ConformalPredictorNodeDialog() {
-		super(ConformalPredictorNodeModel.PORT_PREDICTION_TABLE);
+	public ConformalPredictorNodeDialog(boolean visibleTarget) {
+		super(ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE, visibleTarget);
 	}
 }

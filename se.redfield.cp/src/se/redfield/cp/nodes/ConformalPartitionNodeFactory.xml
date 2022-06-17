@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.knime.org/Node.dtd">
-<knimeNode icon="./icons/partition.png" type="Manipulator">
+<knimeNode icon="./icons/conformal_partition.png" type="Manipulator">
     <name>Conformal Partitioning</name>
     <shortDescription>Splits table into two partitions, with the first adjusted for calibration.</shortDescription>
     <fullDescription>

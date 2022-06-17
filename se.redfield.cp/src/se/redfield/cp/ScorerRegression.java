@@ -43,7 +43,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-import se.redfield.cp.nodes.ConformalPredictorRegressionScorerNodeModel;
+import se.redfield.cp.nodes.ConformalPredictorScorerRegressionNodeModel;
 
 /**
  * Class used by Regression Scorer node to calculate quality metrics for a given
@@ -52,10 +52,10 @@ import se.redfield.cp.nodes.ConformalPredictorRegressionScorerNodeModel;
  */
 public class ScorerRegression {
 
-	private ConformalPredictorRegressionScorerNodeModel model;
+	private ConformalPredictorScorerRegressionNodeModel model;
 
-	public ScorerRegression(ConformalPredictorRegressionScorerNodeModel model) {
-		this.model = model;
+	public ScorerRegression(ConformalPredictorScorerRegressionNodeModel conformalPredictorScorerRegressionNodeModel) {
+		this.model = conformalPredictorScorerRegressionNodeModel;
 	}
 
 	/**

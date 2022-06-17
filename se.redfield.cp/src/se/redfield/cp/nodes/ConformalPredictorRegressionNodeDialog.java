@@ -32,8 +32,8 @@ public class ConformalPredictorRegressionNodeDialog extends AbstractConformalPre
 
 
 
-	public ConformalPredictorRegressionNodeDialog() {
-		super(ConformalPredictorRegressionNodeModel.PORT_PREDICTION_TABLE);
+	public ConformalPredictorRegressionNodeDialog(boolean visibleTarget) {
+		super(ConformalPredictorRegressionNodeModel.PORT_CALIBRATION_TABLE, visibleTarget);
 		createNewGroup("User defined error rate");
 		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorClassifierNodeModel.createErrorRateSettings();
 

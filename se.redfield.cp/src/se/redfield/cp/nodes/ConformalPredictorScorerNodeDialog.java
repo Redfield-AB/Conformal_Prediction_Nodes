@@ -50,8 +50,8 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 	private DataTableSpec spec;
 	private SettingsModelString classesColumnSettings;
 	private DialogComponentString stringSeparatorComp;
-	private ColumnSelectionPanel pValueSelectionPanel;
-	private SettingsModelFilterString m_pValueCols;
+//	private ColumnSelectionPanel pValueSelectionPanel;
+//	private SettingsModelFilterString m_pValueCols;
 	private SettingsModelBoolean additionalEfficiencyMetricsSettings;
     
 
@@ -71,8 +71,8 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 
 		classesColumnSettings.addChangeListener(e -> calcStringSeparatorVisibility());
 
-		m_pValueCols = ConformalPredictorScorerNodeModel.createPValueSelectionSettings();
-        additionalEfficiencyMetricsSettings.addChangeListener(e->calcPValueSelectionVisibilty());
+//		m_pValueCols = ConformalPredictorScorerNodeModel.createPValueSelectionSettings();
+//        additionalEfficiencyMetricsSettings.addChangeListener(e->calcPValueSelectionVisibilty());
 		
 		addDialogComponent(
 				new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", 0, DataValue.class));
@@ -82,7 +82,7 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 		createNewGroup("Output");
 		addDialogComponent(new DialogComponentBoolean(additionalInfoSettings, "Additional prediction information"));
 		addDialogComponent(new DialogComponentBoolean(additionalEfficiencyMetricsSettings, "Additional efficiency metrics"));
-		addDialogComponent(new DialogComponentColumnFilter(m_pValueCols,0));
+//		addDialogComponent(new DialogComponentColumnFilter(m_pValueCols,0));
 	}
 
 	private void calcStringSeparatorVisibility() {
@@ -98,10 +98,10 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 			throws NotConfigurableException {
 		this.spec = specs[0];
 		calcStringSeparatorVisibility();
-		calcPValueSelectionVisibilty();
+//		calcPValueSelectionVisibilty();
 	}
-	
-	private void calcPValueSelectionVisibilty() {
-		m_pValueCols.setEnabled(additionalEfficiencyMetricsSettings.isEnabled());		
-	}
+//	
+//	private void calcPValueSelectionVisibilty() {
+//		m_pValueCols.setEnabled(additionalEfficiencyMetricsSettings.isEnabled());		
+//	}
 }

@@ -33,22 +33,22 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  * Node dialog for Regression Scorer Node.
  *
  */
-public class ConformalPredictorRegressionScorerNodeDialog extends DefaultNodeSettingsPane {
+public class ConformalPredictorScorerRegressionNodeDialog extends DefaultNodeSettingsPane {
 
 	//private DataTableSpec spec;
 	private DialogComponentString stringSeparatorComp;
 
 	@SuppressWarnings("unchecked")
-	public ConformalPredictorRegressionScorerNodeDialog() {
+	public ConformalPredictorScorerRegressionNodeDialog() {
 		super();
 
-		SettingsModelString targetColumnSettings = ConformalPredictorRegressionScorerNodeModel.createTargetColumnSettings();
-		SettingsModelString upperboundColumnSettings = ConformalPredictorRegressionScorerNodeModel.createUpperBoundColumnSettings();
-		SettingsModelString lowerboundColumnSettings = ConformalPredictorRegressionScorerNodeModel.createLowerBoundColumnSettings();
+		SettingsModelString targetColumnSettings = ConformalPredictorScorerRegressionNodeModel.createTargetColumnSettings();
+		SettingsModelString upperboundColumnSettings = ConformalPredictorScorerRegressionNodeModel.createUpperBoundColumnSettings();
+		SettingsModelString lowerboundColumnSettings = ConformalPredictorScorerRegressionNodeModel.createLowerBoundColumnSettings();
 
 		SettingsModelString stringSeparatorSettings = ConformalPredictorRegressionNodeModel
 				.createStringSeparatorSettings();
-		SettingsModelBoolean additionalInfoSettings = ConformalPredictorRegressionScorerNodeModel.createAdditionalInfoSettings();
+		SettingsModelBoolean additionalInfoSettings = ConformalPredictorScorerRegressionNodeModel.createAdditionalInfoSettings();
 
 		stringSeparatorComp = new DialogComponentString(stringSeparatorSettings, "String separator:");
 		stringSeparatorComp.getComponentPanel().setVisible(false);

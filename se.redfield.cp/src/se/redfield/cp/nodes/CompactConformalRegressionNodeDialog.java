@@ -31,7 +31,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 public class CompactConformalRegressionNodeDialog extends ConformalPredictorRegressionNodeDialog {
 
 
-	public CompactConformalRegressionNodeDialog() {
-		super();
+	public CompactConformalRegressionNodeDialog(boolean visibleTarget) {
+		super(visibleTarget);
 	}
 }

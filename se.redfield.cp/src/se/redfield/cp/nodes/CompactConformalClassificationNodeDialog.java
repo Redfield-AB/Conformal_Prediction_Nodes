@@ -35,8 +35,8 @@ public class CompactConformalClassificationNodeDialog extends AbstractConformalP
 	private SettingsModelBoolean classesAsStringSettings;
 	private SettingsModelString stringSeparatorSettings;
 
-	public CompactConformalClassificationNodeDialog() {
-		super(CompactConformalClassificationNodeModel.PORT_PREDICTION_TABLE);
+	public CompactConformalClassificationNodeDialog(boolean visibleTarget) {
+		super(CompactConformalClassificationNodeModel.PORT_CALIBRATION_TABLE, visibleTarget);
 
 		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorClassifierNodeModel.createErrorRateSettings();
 		classesAsStringSettings = ConformalPredictorClassifierNodeModel.createClassesAsStringSettings();
