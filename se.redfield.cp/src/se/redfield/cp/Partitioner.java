@@ -76,7 +76,12 @@ public class Partitioner {
 	 */
 	public BufferedDataTable[] partition(BufferedDataTable inTable, ExecutionContext exec)
 			throws CanceledExecutionException {
-		IRowFilter filter = getRowFilter(inTable, exec);
+		return partition(inTable, exec, false);
+	}
+	
+	public BufferedDataTable[] partition(BufferedDataTable inTable, ExecutionContext exec, boolean computeK)
+			throws CanceledExecutionException {
+		IRowFilter filter = getRowFilter(inTable, exec, computeK);
 
 		BufferedDataContainer matchContainer = exec.createDataContainer(inTable.getDataTableSpec());
 		BufferedDataContainer missContainer = exec.createDataContainer(inTable.getDataTableSpec());
@@ -123,7 +128,7 @@ public class Partitioner {
 	 * @return
 	 * @throws CanceledExecutionException
 	 */
-	private IRowFilter getRowFilter(BufferedDataTable inTable, ExecutionContext exec)
+	private IRowFilter getRowFilter(BufferedDataTable inTable, ExecutionContext exec, boolean computeK)
 			throws CanceledExecutionException {
 		Random rand = getRandomInstance();
 
@@ -133,6 +138,8 @@ public class Partitioner {
 		} else {
 			rowCount = settings.count();
 		}
+		if (computeK)
+			rowCount = computeK(rowCount);
 
 		switch (settings.samplingMethod()) {
 		case First:
@@ -164,4 +171,17 @@ public class Partitioner {
 		}
 		return null;
 	}
+	
+
+    protected int computeK(int rowCount) {
+    	int div = 100;
+    	if (rowCount < 100 & rowCount >= 10) 
+    		div = 10;
+    	if (rowCount < 10)
+    		throw new UnsupportedOperationException("Calibration size cannot be smaller than 10.");
+    	int k = 0;
+    	while (k*div + div - 1 <= rowCount)
+    		k += 1;
+    	return k*div - 1;
+    }
 }

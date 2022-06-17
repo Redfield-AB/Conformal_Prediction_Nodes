@@ -15,16 +15,23 @@
  */
 package se.redfield.cp.nodes;
 
+import org.knime.core.data.DataTableSpec;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
+import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
+import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 /**
  * Node dialog for Conformal Predictor node.
  *
  */
-public class ConformalPredictorNodeDialog extends AbstractConformalPredictorNodeDialog {
+public class CompactConformalRegressionNodeDialog extends ConformalPredictorRegressionNodeDialog {
 
-	public ConformalPredictorNodeDialog() {
-		super(ConformalPredictorNodeModel.PORT_PREDICTION_TABLE);
+
+	public CompactConformalRegressionNodeDialog() {
+		super();
 	}
 }

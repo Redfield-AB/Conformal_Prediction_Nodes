@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 
 import org.knime.core.data.DataCell;
@@ -37,7 +38,7 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 
-import se.redfield.cp.nodes.ConformalPredictorNodeModel;
+import se.redfield.cp.nodes.AbstractConformalPredictorNodeModel;
 
 /**
  * Class used by Conformal Predictor node to process input table and calculate
@@ -46,9 +47,9 @@ import se.redfield.cp.nodes.ConformalPredictorNodeModel;
  */
 public class Predictor {
 
-	private ConformalPredictorNodeModel model;
+	private AbstractConformalPredictorNodeModel model;
 
-	public Predictor(ConformalPredictorNodeModel model) {
+	public Predictor(AbstractConformalPredictorNodeModel model) {
 		this.model = model;
 	}
 
@@ -64,7 +65,7 @@ public class Predictor {
 			r.keepOnly(model.getRequiredColumnNames(inPredictionTableSpecs));
 		}
 
-		Set<DataCell> values = inPredictionTableSpecs.getColumnSpec(model.getSelectedColumnName()).getDomain()
+		Set<DataCell> values = inPredictionTableSpecs.getColumnSpec(model.getTargetColumnName()).getDomain()
 				.getValues();
 		for (DataCell v : values) {
 			r.append(new ScoreCellFactory(v.toString(), inPredictionTableSpecs, null));
@@ -85,7 +86,7 @@ public class Predictor {
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
-		Set<DataCell> values = predictionTableSpec.getColumnSpec(model.getSelectedColumnName()).getDomain().getValues();
+		Set<DataCell> values = predictionTableSpec.getColumnSpec(model.getTargetColumnName()).getDomain().getValues();
 
 		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 
@@ -112,7 +113,7 @@ public class Predictor {
 	private Map<String, List<Double>> collectCalibrationProbabilities(BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> result = new HashMap<>();
-		int valIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(model.getSelectedColumnName());
+		int valIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(model.getTargetColumnName());
 		int probIndex = inCalibrationTable.getDataTableSpec()
 				.findColumnIndex(model.getCalibrationProbabilityColumnName());
 
@@ -184,7 +185,13 @@ public class Predictor {
 		public DataCell[] getCells(DataRow row) {
 			double p = ((DoubleValue) row.getCell(pColumnIndex)).getDoubleValue();
 			int rank = getRank(p);
-			double score = ((double) probabilities.size() - rank) / (probabilities.size() + 1);
+			int[] ranks = getRanks(p);
+			//Does not take into consideration that many probabilities can be equal to p
+			// TODO adjust the calculation to calculate the exact p value
+			// FIXED
+			Random rand = new Random();
+			double score = (((double) probabilities.size() - ranks[1]) + rand.nextDouble() * (((double) ranks[1] - ranks[0])))
+					/ (probabilities.size() + 1);
 			DoubleCell scoreCell = new DoubleCell(score);
 
 			if (model.getIncludeRankColumn()) {
@@ -212,6 +219,24 @@ public class Predictor {
 				}
 				return idx + 1;
 			}
+		}
+
+		/**
+		 * Calculated the rank for a given probability as well as the rank for the nearest smaller value. 
+		 * Rank is the position probability would take in a sorted list of probabilities from the calibration table.
+		 * 
+		 * @param p Probability.
+		 * @return [Rank, smaller rank].
+		 */
+		protected int[] getRanks(double p) {
+			int[] idxs = new int[2];
+			idxs[0] = getRank(p);
+			int idx = idxs[0];
+			while (idx < probabilities.size() && probabilities.get(idx) == p) {
+				idx += 1;
+			}
+			idxs[1] = idx - 1;
+			return idxs;	
 		}
 	}
 

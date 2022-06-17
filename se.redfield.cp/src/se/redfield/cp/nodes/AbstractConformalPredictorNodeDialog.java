@@ -31,18 +31,21 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  */
 public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSettingsPane {
 
+	private SettingsModelString targetColumnSettings;
 	private SettingsModelBoolean keepAllSettings;
 	private SettingsModelBoolean keepIdColumnSetting;
 	private SettingsModelString idColumnSettings;
+	private SettingsModelBoolean includeRank;
 
 	@SuppressWarnings("unchecked")
 	public AbstractConformalPredictorNodeDialog(int tableIndex) {
 		super();
 
-		SettingsModelString targetColumnSettings = AbstractConformalPredictorNodeModel.createColumnNameSettingsModel();
+		targetColumnSettings = AbstractConformalPredictorNodeModel.createTargetColumnSettings();
 		keepAllSettings = AbstractConformalPredictorNodeModel.createKeepAllColumnsSettingsModel();
 		keepIdColumnSetting = AbstractConformalPredictorNodeModel.createKeepIdColumnSettings();
 		idColumnSettings = AbstractConformalPredictorNodeModel.createIdColumnSettings();
+		includeRank = ConformalPredictorNodeModel.createIncludeRankSettings();
 
 		keepAllSettings.addChangeListener(e -> {
 			keepIdColumnSetting.setEnabled(!keepAllSettings.getBooleanValue());
@@ -55,12 +58,15 @@ public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSe
 		addDialogComponent(new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", tableIndex,
 				DataValue.class));
 
-		createNewGroup("Output");
+		createNewGroup("Define output");
 
 		addDialogComponent(new DialogComponentBoolean(keepAllSettings, "Keep All Columns"));
 		addDialogComponent(new DialogComponentBoolean(keepIdColumnSetting, "Keep ID column"));
 		addDialogComponent(
 				new DialogComponentColumnNameSelection(idColumnSettings, "ID column:", tableIndex, DataValue.class));
+
+
+		addDialogComponent(new DialogComponentBoolean(includeRank, "Include Rank column"));
 	}
 
 	@Override

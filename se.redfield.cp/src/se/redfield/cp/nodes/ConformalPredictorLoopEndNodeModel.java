@@ -66,8 +66,12 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	public static final String P_COLUMN_REGEX = "^P \\((.+=.+)\\)$";
 	public static final String RANK_COLUMN_REGEX = "^Rank \\((.+)\\)$";
 	public static final String P_VALUE_COLUMN_REGEX = "^p-value \\((?<value>.+)\\)$";
+	public static final String LOWER_COLUMN_REGEX = "^Lower bound \\((.+)\\)$";
+	public static final String UPPER_COLUMN_REGEX = "^Upper bound \\((.+)\\)$";
 
 	private static final String ORIGINAL_ROWID_COLUMN_NAME = "Original RowId";
+	
+	private boolean isClassification = true;
 
 	private int iteration;
 	private BufferedDataContainer container;
@@ -115,17 +119,25 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 
 	/**
 	 * Initializes column aggregator used to group predicton table. Rank, P and
-	 * P-value columns are aggregated using {@link MedianOperator}. Any additional
+	 * P-value columns (for classification) and Lower and Upper bound columns (for regression) are aggregated using {@link MedianOperator}. Any additional
 	 * columns are aggregated using {@link FirstOperator}.
 	 * 
 	 * @param inPredictionTableSpec Input prediction table spec.
 	 */
 	private void initColumnAggregators(DataTableSpec inPredictionTableSpec) {
 		List<ColumnAggregator> aggregators = new ArrayList<>();
-		List<Pattern> patterns = Arrays.asList(//
-				Pattern.compile(P_COLUMN_REGEX), //
-				Pattern.compile(RANK_COLUMN_REGEX), //
-				Pattern.compile(P_VALUE_COLUMN_REGEX));
+		List<Pattern> patterns;
+		if (isClassification(inPredictionTableSpec)) {
+			patterns = Arrays.asList(//
+					Pattern.compile(P_COLUMN_REGEX), //
+					Pattern.compile(RANK_COLUMN_REGEX), //
+					Pattern.compile(P_VALUE_COLUMN_REGEX));
+		} else {
+			patterns = Arrays.asList(//
+					Pattern.compile(LOWER_COLUMN_REGEX), //
+					Pattern.compile(UPPER_COLUMN_REGEX));
+		}
+		
 
 		DataTableSpec spec = createConcatenatedTableSpec(inPredictionTableSpec);
 
@@ -147,6 +159,12 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		}
 
 		columnAggregators = aggregators.toArray(new ColumnAggregator[] {});
+	}
+
+	private boolean isClassification(DataTableSpec spec) {
+		if (spec.containsName(P_COLUMN_REGEX) && spec.containsName(P_VALUE_COLUMN_REGEX) && spec.containsName(RANK_COLUMN_REGEX))
+			return true;
+		return false;
 	}
 
 	@Override

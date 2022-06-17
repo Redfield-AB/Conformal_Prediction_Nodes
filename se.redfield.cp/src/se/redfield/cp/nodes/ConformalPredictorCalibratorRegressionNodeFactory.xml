@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/calibrator.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Calibrator (Regression)</name>
+    
+    <shortDescription>
+        Creates a calibration table with ranking for further calibration of the test data sets.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        	Creates a calibration table with ranking for further calibration of the test data sets.
+			Ranking is sorting by class probabilities provided by predictor nodes in descending order.
+			Note that predictor must provide the class probabilities for the predictions in order to apply conformal prediction.
+        </intro>
+        
+        
+        <option name="Target column">
+        	A column with target column that is being predicted.
+        </option>
+        <option name="Keep All Columns">
+        	If checked all columns from input table will be also included into output table along with calibration columns.
+        </option>
+        <option name="Keep ID column">
+        	If checked selected ID column from input table will be included into output table.
+        </option>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Input">Table provided by predictor nodes with class probabilities.</inPort>
+        
+        <outPort index="0" name="Output">Calibration table with ranks for each class.</outPort>
+    </ports>    
+</knimeNode>

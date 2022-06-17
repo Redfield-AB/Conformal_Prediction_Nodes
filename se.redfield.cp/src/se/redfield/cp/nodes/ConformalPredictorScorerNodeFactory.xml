@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/scorer.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./icons/scorer.png" type="Other" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Conformal Scorer</name>
     
     <shortDescription>
@@ -30,7 +30,7 @@
         	A column that contains predictions produced by Conformal Classifier. Could be both collection or string column type.
         </option>
         <option name="Additional prediction information">
-        	Includes additional columns with some prediction metrics to the output table.
+        	Includes additional columns with some prediction metrics to the per-class output table.
         	<ul>
         		<li>Exact match – number of correct predictions that belong to one class, and not belong to any mixed class.</li>
         		<li>Soft match - number of correct predictions that belong to one of the mixed classes.</li>
@@ -41,11 +41,28 @@
         		<li>Null predictions - number of null predictions</li>
         	</ul>
         </option>
+        <option name="Additional efficiency metrics">
+        	Adds additional columns with efficiency metrics to the total output table. The metrics are taken from the paper "Criteria of efficiency for set-valued classification" by Vovk et al. 
+        	<ul>
+        		<li>The S (“sum”) criterion measures efficiency by the average of the sum of p-values. Smaller values are preferable.</li>
+        		<li>The N (“Number”) criterion uses the average size of the prediction sets. Smaller values are preferable.</li>
+        		<li>The U (“unconfidence”) criterion uses the average unconfidence over the test sequence, where the unconfidence for a test object is the second largest p-value. Smaller values are preferable.</li>
+        		<li>The F (“fuzziness”) criterion uses the average fuzziness where the fuzziness for a test object is defined as the sum of all p-values apart from a largest one. Smaller values are preferable.</li>
+        		<li>The M (“multiple”) criterion uses the percentage of objects in the test sequence for which the prediction set at the given significance level is multiple, i.e., contains more than one label. Smaller values are preferable.</li> 
+        		<li>The E (“excess”) criterion uses the average (over the test sequence, as usual) amount the size of the prediction set exceeds 1. Smaller values are preferable.</li>
+        		<li>The OU (“observed unconfidence”) criterion uses the average observed unconfidence over the test sequence, where the observed unconfidence for a test example is the largest p-value for the false labels. Smaller values are preferable for this test.</li>
+        		<li>The OF (“observed fuzziness”) criterion uses the average sum of the p-values for the false labels, smaller values are preferable.</li>
+        		<li>The OM (“observed multiple”) criterion uses the percentage of observed multiple predictions in the test sequence, where an observed multiple prediction is defined to be a prediction set including a false label. Smaller values are preferable.</li>
+        		<li>The OE (“observed excess”) criterion uses the average number of false labels included in the prediction sets at the given significance level; smaller values are preferable.</li>
+        	</ul>
+        </option>
     </fullDescription>
     
     <ports>
         <inPort index="0" name="Input">Table with ranked predictions and classes.</inPort>
         
-        <outPort index="0" name="Output">The accuracy statistics table.</outPort>
+        <outPort index="0" name="Per-class results">The accuracy statistics table per class.</outPort>
+        
+        <outPort index="1" name="Aggregated results">The accuracy statistics table in total.</outPort>
     </ports>    
 </knimeNode>

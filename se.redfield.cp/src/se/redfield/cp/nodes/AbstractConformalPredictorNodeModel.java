@@ -24,6 +24,9 @@ import java.util.stream.Collectors;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.def.DoubleCell;
+import org.knime.core.data.def.IntCell;
+import org.knime.core.data.def.LongCell;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
@@ -42,19 +45,30 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(AbstractConformalPredictorNodeModel.class);
 
-	private static final String KEY_COLUMN_NAME = "columnName";
+	private static final String KEY_COLUMN_NAME = "targetColumn";
 	private static final String KEY_KEEP_ALL_COLUMNS = "keepAllColumns";
 	private static final String KEY_KEEP_ID_COLUMN = "keepIdColumn";
 	private static final String KEY_ID_COLUMN = "idColumn";
 
 	private static final String CALIBRATION_P_COLUMN_DEFAULT_NAME = "P";
+	private static final String CALIBRATION_RANK_COLUMN_DEFAULT_NAME = "Rank";
 
-	private final SettingsModelString columnNameSettings = createColumnNameSettingsModel();
-	private final SettingsModelBoolean keepAllColumnsSettings = createKeepAllColumnsSettingsModel();
-	private final SettingsModelBoolean keepIdColumnSettings = createKeepIdColumnSettings();
-	private final SettingsModelString idColumnSettings = createIdColumnSettings();
+	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
+	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "p-value (%s)";
 
-	static SettingsModelString createColumnNameSettingsModel() {
+	private static final String KEY_INCLUDE_RANK_COLUMN = "includeRankColumn";
+
+	protected final SettingsModelString targetColumnSettings = createTargetColumnSettings();
+	protected final SettingsModelBoolean keepAllColumnsSettings = createKeepAllColumnsSettingsModel();
+	protected final SettingsModelBoolean keepIdColumnSettings = createKeepIdColumnSettings();
+	protected final SettingsModelString idColumnSettings = createIdColumnSettings();
+	private final SettingsModelBoolean includeRankSettings = createIncludeRankSettings();
+
+	static SettingsModelBoolean createIncludeRankSettings() {
+		return new SettingsModelBoolean(KEY_INCLUDE_RANK_COLUMN, false);
+	}
+
+	static SettingsModelString createTargetColumnSettings() {
 		return new SettingsModelString(KEY_COLUMN_NAME, "");
 	}
 
@@ -82,7 +96,7 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	 * @return probability column name
 	 */
 	public String getProbabilityColumnName(String val) {
-		return getProbabilityColumnName(getSelectedColumnName(), val);
+		return getProbabilityColumnName(getTargetColumnName(), val);
 	}
 
 	/**
@@ -100,8 +114,8 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		return String.format(String.format("P (%s=%s)", column, val));
 	}
 
-	public String getSelectedColumnName() {
-		return columnNameSettings.getStringValue();
+	public String getTargetColumnName() {
+		return targetColumnSettings.getStringValue();
 	}
 
 	public boolean getKeepAllColumns() {
@@ -116,8 +130,24 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		return idColumnSettings.getStringValue();
 	}
 
+	public String getCalibrationRankColumnName() {
+		return CALIBRATION_RANK_COLUMN_DEFAULT_NAME;
+	}
+
 	public String getCalibrationProbabilityColumnName() {
 		return CALIBRATION_P_COLUMN_DEFAULT_NAME;
+	}
+
+	public boolean getIncludeRankColumn() {
+		return includeRankSettings.getBooleanValue();
+	}
+
+	public String getPredictionRankColumnFormat() {
+		return PREDICTION_RANK_COLUMN_DEFAULT_FORMAT;
+	}
+
+	public String getPredictionScoreColumnFormat() {
+		return PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT;
 	}
 
 	/**
@@ -128,11 +158,11 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	 * @throws InvalidSettingsException
 	 */
 	protected void validateSettings(DataTableSpec spec) throws InvalidSettingsException {
-		if (getSelectedColumnName().isEmpty()) {
+		if (getTargetColumnName().isEmpty()) {
 			attemptAutoconfig(spec);
 		}
 
-		if (getSelectedColumnName().isEmpty()) {
+		if (getTargetColumnName().isEmpty()) {
 			throw new InvalidSettingsException("Class column is not selected");
 		}
 
@@ -140,7 +170,7 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 			throw new InvalidSettingsException("Id column is not selected");
 		}
 
-		validateTableSpecs(getSelectedColumnName(), spec);
+		validateTableSpecs(getTargetColumnName(), spec);
 	}
 
 	/**
@@ -154,7 +184,7 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		for (String column : columnNames) {
 			try {
 				validateTableSpecs(column, spec);
-				columnNameSettings.setStringValue(column);
+				targetColumnSettings.setStringValue(column);
 				setWarningMessage(String.format("Node autoconfigured with '%s' column", column));
 			} catch (InvalidSettingsException e) {
 				// ignore
@@ -189,6 +219,26 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 			}
 		}
 
+//		DataColumnSpec columnSpec = spec.getColumnSpec(selectedColumn);
+//		if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
+//				|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
+//				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
+//		{
+//			throw new InvalidSettingsException("Target column " + selectedColumn + " must be numeric.");
+//		}
+//		
+//		if (!spec.containsName(getPredictionColumnName(selectedColumn)))
+//		{
+//			throw new InvalidSettingsException("Prediction column '" + getPredictionColumnName(selectedColumn) + "' must exist.");
+//		}
+//		columnSpec = spec.getColumnSpec(getPredictionColumnName(selectedColumn));
+//		if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
+//				|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
+//				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
+//		{
+//			throw new InvalidSettingsException("Prediction column " + getPredictionColumnName(selectedColumn) + " must be numeric.");
+//		}
+
 		if (!getKeepAllColumns() && getKeepIdColumn() && !spec.containsName(getIdColumn())) {
 			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
 		}
@@ -203,9 +253,9 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	 * @return
 	 */
 	public String[] getRequiredColumnNames(DataTableSpec spec) {
-		List<String> columns = spec.getColumnSpec(getSelectedColumnName()).getDomain().getValues().stream()
+		List<String> columns = spec.getColumnSpec(getTargetColumnName()).getDomain().getValues().stream()
 				.map(c -> getProbabilityColumnName(c.toString())).collect(Collectors.toList());
-		columns.add(getSelectedColumnName());
+		columns.add(getTargetColumnName());
 		if (!getKeepAllColumns() && getKeepIdColumn()) {
 			columns.add(getIdColumn());
 		}
@@ -214,26 +264,29 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
-		columnNameSettings.saveSettingsTo(settings);
+		targetColumnSettings.saveSettingsTo(settings);
 		keepAllColumnsSettings.saveSettingsTo(settings);
 		keepIdColumnSettings.saveSettingsTo(settings);
 		idColumnSettings.saveSettingsTo(settings);
+		includeRankSettings.saveSettingsTo(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
-		columnNameSettings.validateSettings(settings);
+		targetColumnSettings.validateSettings(settings);
 		keepAllColumnsSettings.validateSettings(settings);
 		keepIdColumnSettings.validateSettings(settings);
 		idColumnSettings.validateSettings(settings);
+		includeRankSettings.validateSettings(settings);
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		columnNameSettings.loadSettingsFrom(settings);
+		targetColumnSettings.loadSettingsFrom(settings);
 		keepAllColumnsSettings.loadSettingsFrom(settings);
 		keepIdColumnSettings.loadSettingsFrom(settings);
 		idColumnSettings.loadSettingsFrom(settings);
+		includeRankSettings.loadSettingsFrom(settings);
 	}
 
 	@Override

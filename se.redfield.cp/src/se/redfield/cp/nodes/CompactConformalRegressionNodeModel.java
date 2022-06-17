@@ -29,6 +29,8 @@ import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
+import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
+import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.streamable.InputPortRole;
 import org.knime.core.node.streamable.OutputPortRole;
@@ -38,31 +40,35 @@ import org.knime.core.node.streamable.PortObjectInput;
 import org.knime.core.node.streamable.PortOutput;
 import org.knime.core.node.streamable.StreamableOperator;
 
-import se.redfield.cp.Predictor;
+import se.redfield.cp.CalibratorRegression;
+import se.redfield.cp.PredictorRegression;
 
 /**
  * Conformal Predictor Node. Uses calibration data to calculate Rank and P-value
  * for each row of the input prediction table.
  *
  */
-public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeModel {
+public class CompactConformalRegressionNodeModel extends ConformalPredictorRegressionNodeModel {
 	@SuppressWarnings("unused")
-	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorNodeModel.class);
+	private static final NodeLogger LOGGER = NodeLogger.getLogger(CompactConformalRegressionNodeModel.class);
+	private final CalibratorRegression calibrator = new CalibratorRegression(this);
+	private final PredictorRegression predictor = new PredictorRegression(this);
 
-	public static final int PORT_PREDICTION_TABLE = 0;
-	public static final int PORT_CALIBRATION_TABLE = 1;
-
-	private final Predictor predictor = new Predictor(this);
-
-	protected ConformalPredictorNodeModel() {
-		super(2, 1);
+	protected CompactConformalRegressionNodeModel() {
+		super();
 	}
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
+
+		pushFlowVariableDouble(super.KEY_ERROR_RATE, getErrorRate());
+		
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
-		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), inCalibrationTable,
+		
+		BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
+		
+		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), calibrationTable,
 				exec.createSubExecutionContext(0.1));
 
 		return new BufferedDataTable[] {
@@ -71,10 +77,11 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
+		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
 		validateSettings(inSpecs[PORT_PREDICTION_TABLE]);
-		validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
+//		validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
 
-		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]) };
+		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]) };
 	}
 
 	/**
@@ -85,49 +92,49 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 	 * @throws InvalidSettingsException
 	 */
 	private void validateCalibrationTable(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-			throws InvalidSettingsException {
-		if (!calibrationTableSpec.containsName(getTargetColumnName())) {
+			throws InvalidSettingsException {		
+		if (!calibrationTableSpec.containsName(getCalibrationRankColumnName())) {
 			throw new InvalidSettingsException(
-					String.format("Class column '%s' is missing from the calibration table", getTargetColumnName()));
+					String.format("Rank column '%s' is missing from the calibration table", getTargetColumnName()));
 		}
 
-		if (!calibrationTableSpec.containsName(getCalibrationProbabilityColumnName())) {
+		if (!calibrationTableSpec.containsName(getCalibrationAlphaColumnName())) {
 			throw new InvalidSettingsException(
-					String.format("Probability columns '%s' is missing from the calibration table",
-							getCalibrationProbabilityColumnName()));
+					String.format("Alpha (Nonconformity) column '%s' is missing from the calibration table",
+							getCalibrationAlphaColumnName()));
 		}
 
-		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getTargetColumnName());
-		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-			throw new InvalidSettingsException(
-					"Calibration table: insufficient domain information for column: " + getTargetColumnName());
-		}
-
-		checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
+//		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getSelectedColumnName());
+//		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+//			throw new InvalidSettingsException(
+//					"Calibration table: insufficient domain information for column: " + getSelectedColumnName());
+//		}
+//
+//		checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
 	}
-
-	/**
-	 * Checks if the calibration table contains data for all classes present in
-	 * prediction table
-	 * 
-	 * @param calibrationTableSpec Calibration table spec.
-	 * @param predictionTableSpec  Input prediction table spec.
-	 * @throws InvalidSettingsException
-	 */
-	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-			throws InvalidSettingsException {
-		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
-				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
-		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
-				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
-
-		for (String val : predictionValues) {
-			if (!calibrationClasses.contains(val)) {
-				throw new InvalidSettingsException(
-						String.format("Class '%s' is missing in the calibration table", val));
-			}
-		}
-	}
+//
+//	/**
+//	 * Checks if the calibration table contains data for all classes present in
+//	 * prediction table
+//	 * 
+//	 * @param calibrationTableSpec Calibration table spec.
+//	 * @param predictionTableSpec  Input prediction table spec.
+//	 * @throws InvalidSettingsException
+//	 */
+//	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
+//			throws InvalidSettingsException {
+//		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getSelectedColumnName()).getDomain()
+//				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+//		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getSelectedColumnName()).getDomain()
+//				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+//
+//		for (String val : predictionValues) {
+//			if (!calibrationClasses.contains(val)) {
+//				throw new InvalidSettingsException(
+//						String.format("Class '%s' is missing in the calibration table", val));
+//			}
+//		}
+//	}
 
 	@Override
 	public InputPortRole[] getInputPortRoles() {

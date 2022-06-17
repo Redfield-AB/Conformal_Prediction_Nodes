@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/classifier.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Regression</name>
+    
+    <shortDescription>Calibrates and predicts conformal regression intervals.</shortDescription>
+    
+    <fullDescription>
+        <intro>Calculates the table with lower and upper bounds of the prediction interval for test data based on the provided calibration table.
+        	The interval is determined from user assigned significance level (error rate) and the noncoformity (the absolute error) in the calibration set 
+        	that have a model probability less than or equal to the model probability for the record under consideration. 
+        	Small p-values indicate records that are nonconforming, larger p-values indicate records that are conforming. 
+        	(Reference: Vovk, V., Gammerman, A. and Shafer, G., 2005. Algorithmic learning in a random world. Springer Science &amp; Business Media.)</intro>
+            
+        <option name="Target column">
+        	A column with target column that is being predicted.
+        </option>
+        <option name="Keep All Columns">
+        	If checked all columns from input table will be also included into output table along with calibration columns.
+        </option>
+        <option name="Keep ID column">
+        	If checked selected ID column from input table will be included into output table.
+        </option>
+        
+    </fullDescription>
+    
+    <ports>
+    	<inPort index="1" name="Prediction Table">Table with predictions and optionally difficulty estimates from the test set. Target variable must have the same domain as the calibration table.</inPort>
+        <inPort index="0" name="Calibration Table">Table with predictions and optionally difficulty estimates from the calibration set-</inPort>
+        
+        <outPort index="0" name="Output">Table with calibrated prediction intervals.</outPort>
+    </ports>    
+</knimeNode>

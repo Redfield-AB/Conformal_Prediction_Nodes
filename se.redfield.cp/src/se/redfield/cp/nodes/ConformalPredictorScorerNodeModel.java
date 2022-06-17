@@ -17,9 +17,17 @@ package se.redfield.cp.nodes;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
+import javax.swing.border.EmptyBorder;
+
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DoubleValue;
 import org.knime.core.data.StringValue;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -30,7 +38,9 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
+import org.knime.core.node.defaultnodesettings.SettingsModelFilterString;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
+import org.knime.core.node.util.ColumnSelectionPanel;
 
 import se.redfield.cp.Scorer;
 
@@ -57,12 +67,16 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 	private static final String KEY_TARGET_COLUMN = "targetColumn";
 	private static final String KEY_CLASSES_COLUMN = "classesColumn";
 	private static final String KEY_ADDITIONAL_INFO = "additionalInfo";
+	private static final String KEY_EFFICIENCY_METRICS = "additionalEfficiencyMetrics";
+	public static final String KEY_COLUMN_SELECTION = "pValueColumns";
 
 	private final SettingsModelString targetColumnSettings = createTargetColumnSettings();
 	private final SettingsModelString classesColumnSettings = createClassesColumnSettings();
 	private final SettingsModelString stringSeparatorSettings = ConformalPredictorClassifierNodeModel
 			.createStringSeparatorSettings();
-	private final SettingsModelBoolean additionalInforSettings = createAdditionalInfoSettings();
+	private final SettingsModelBoolean additionalInfoSettings = createAdditionalInfoSettings();
+	private final SettingsModelBoolean additionalEfficiencyMetricsSettings = createAdditionalEfficiencyMetricsSettings();
+	private final SettingsModelFilterString m_pValueCols = createPValueSelectionSettings();
 
 	private final Scorer scorer = new Scorer(this);
 
@@ -78,8 +92,16 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		return new SettingsModelBoolean(KEY_ADDITIONAL_INFO, true);
 	}
 
+	public static SettingsModelBoolean createAdditionalEfficiencyMetricsSettings() {
+		return new SettingsModelBoolean(KEY_EFFICIENCY_METRICS, true);
+	}
+
+	public static SettingsModelFilterString createPValueSelectionSettings() {
+		return new SettingsModelFilterString(KEY_COLUMN_SELECTION);//,new String[0],new String[0]);
+	}
+
 	protected ConformalPredictorScorerNodeModel() {
-		super(1, 1);
+		super(1, 2);
 	}
 
 	public String getTargetColumn() {
@@ -95,8 +117,46 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 	}
 
 	public boolean isAdditionalInfoMode() {
-		return additionalInforSettings.getBooleanValue();
+		return additionalInfoSettings.getBooleanValue();
 	}
+
+	public boolean isAdditionalEfficiencyMetricsMode() {
+		return additionalEfficiencyMetricsSettings.getBooleanValue();
+	}
+	
+	/**
+	 * Returns probability column name for a given value for a selected target
+	 * column.
+	 * 
+	 * @param val target's value
+	 * @return probability column name
+	 */
+	public String getProbabilityColumnName(String val) {
+		if (isAdditionalEfficiencyMetricsMode()) {
+			List<String> columns = getIncludeList();
+			String shortName = String.format(String.format("p-value (%s)", val));
+			for (String str: columns) {
+				if (str.contains(shortName))
+					return str;
+			}
+			// Handle...
+			return "";
+		} else return String.format(String.format("p-value (%s)", val));
+	}
+	
+	private List<String> getIncludeList() {
+		List<String> columns = m_pValueCols.getIncludeList();
+		if (columns.size() == 1) {
+			String strToSplit = columns.get(0);
+			//columns.remove(0);
+			List<String> newColumns = new ArrayList<>(); 
+			for (String str : strToSplit.split(";"))
+				newColumns.add(str);
+			columns = newColumns;
+		}
+		return columns;
+	}
+
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
@@ -104,7 +164,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 			attemptAutoconfig(inSpecs[0]);
 		}
 		validataSettings(inSpecs[0]);
-		return new DataTableSpec[] { scorer.createOutputSpec() };
+		return new DataTableSpec[] { scorer.createOutputSpec(), scorer.createAdditionalEfficiencyMetricSpec()  };
 	}
 
 	/**
@@ -149,6 +209,8 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 			throw new InvalidSettingsException(
 					"Selected classes column '" + getClassesColumn() + "' is missing from the input table.");
 		}
+		
+		validatePValueSettings(spec);
 
 		DataColumnSpec classesColumn = spec.getColumnSpec(getClassesColumn());
 		if (!classesColumn.getType().isCollectionType() && !classesColumn.getType().isCompatible(StringValue.class)) {
@@ -158,10 +220,35 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 			throw new InvalidSettingsException("String separator is empty");
 		}
 	}
+	
+	protected void validatePValueSettings(DataTableSpec spec) throws InvalidSettingsException {
+		if (isAdditionalEfficiencyMetricsMode()) {
+			String selectedColumn = getTargetColumn();
+			DataColumnSpec columnSpec = spec.getColumnSpec(selectedColumn);
+			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+				throw new InvalidSettingsException("Insufficient domain information for column: " + selectedColumn);
+			}
+			List<String> columns =  getIncludeList();
+			Set<DataCell> values = columnSpec.getDomain().getValues();
+			boolean containsEnough = true;
+			for (DataCell cell : values) {
+				String value = cell.toString();
+				String pColumnName = String.format(String.format("p-value (%s)", value));
+				boolean columnOK = false;
+				for (String str: columns) 
+					if (str.contains(pColumnName))
+						columnOK = true;		
+				containsEnough &= columnOK;
+			}
+			if (!containsEnough) {
+				throw new InvalidSettingsException("Probability column not found");
+			}
+		}
+	}
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		return new BufferedDataTable[] { scorer.process(inData[0], exec) };
+		return scorer.process(inData[0], exec);
 	}
 
 	@Override
@@ -169,7 +256,10 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		targetColumnSettings.saveSettingsTo(settings);
 		classesColumnSettings.saveSettingsTo(settings);
 		stringSeparatorSettings.saveSettingsTo(settings);
-		additionalInforSettings.saveSettingsTo(settings);
+		additionalInfoSettings.saveSettingsTo(settings);
+		additionalEfficiencyMetricsSettings.saveSettingsTo(settings);
+		additionalEfficiencyMetricsSettings.saveSettingsTo(settings);
+		m_pValueCols.saveSettingsTo(settings);
 	}
 
 	@Override
@@ -177,7 +267,9 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		targetColumnSettings.validateSettings(settings);
 		classesColumnSettings.validateSettings(settings);
 		stringSeparatorSettings.validateSettings(settings);
-		additionalInforSettings.validateSettings(settings);
+		additionalInfoSettings.validateSettings(settings);
+		additionalEfficiencyMetricsSettings.validateSettings(settings);
+		m_pValueCols.validateSettings(settings);
 	}
 
 	@Override
@@ -185,7 +277,9 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		targetColumnSettings.loadSettingsFrom(settings);
 		classesColumnSettings.loadSettingsFrom(settings);
 		stringSeparatorSettings.loadSettingsFrom(settings);
-		additionalInforSettings.loadSettingsFrom(settings);
+		additionalInfoSettings.loadSettingsFrom(settings);
+		additionalEfficiencyMetricsSettings.loadSettingsFrom(settings);
+		m_pValueCols.loadSettingsFrom(settings);
 	}
 
 	@Override

@@ -17,38 +17,72 @@
    <extension
          point="org.knime.workbench.repository.nodes">
       <node
-            category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorNodeFactory">
-      </node>
-      <node
-            category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorClassifierNodeFactory">
-      </node>
-      <node
-            category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory">
-      </node>
-      <node
-            category-path="/community/conformalPrediction"
-            factory-class="se.redfield.cp.nodes.ConformalPredictorScorerNodeFactory">
-      </node>
-      <node
-            category-path="/community/conformalPrediction"
+            category-path="/community/conformalPrediction/advanced"
             factory-class="se.redfield.cp.nodes.ConformalPredictorTrainingLoopStartNodeFactory">
       </node>
       <node
             after="se.redfield.cp.nodes.ConformalPredictorTrainingLoopStartNodeFactory"
-            category-path="/community/conformalPrediction"
+            category-path="/community/conformalPrediction/advanced"
             factory-class="se.redfield.cp.nodes.ConformalPredictorTrainingLoopEndNodeFactory">
       </node>
       <node
-            category-path="/community/conformalPrediction"
+            after="se.redfield.cp.nodes.ConformalPredictorTrainingLoopEndNodeFactory"
+            category-path="/community/conformalPrediction/advanced"
             factory-class="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory">
       </node>
       <node
             after="se.redfield.cp.nodes.ConformalPredictorLoopStartNodeFactory"
-            category-path="/community/conformalPrediction"
+            category-path="/community/conformalPrediction/advanced"
             factory-class="se.redfield.cp.nodes.ConformalPredictorLoopEndNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPredictorLoopEndNodeFactory"
+            category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPredictorCalibratorNodeFactory"
+            category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPredictorNodeFactory"      
+            category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorClassifierNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPredictorClassifierNodeFactory"      
+            category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorCalibratorRegressionNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPredictorCalibratorRegressionNodeFactory"
+            category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorRegressionNodeFactory">
+      </node>
+      <node
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ConformalPartitionNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPartitionNodeFactory" 
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.CompactConformalClassificationNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.CompactConformalClassificationNodeFactory" 
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.CompactConformalRegressionNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.CompactConformalRegressionNodeFactory" 
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorScorerNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ConformalPredictorScorerNodeFactory" 
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ConformalPredictorRegressionScorerNodeFactory">
       </node>
    </extension>
    <extension
@@ -58,6 +92,12 @@
             level-id="conformalPrediction"
             name="Conformal prediction"
             path="/community">
+      </category>
+            <category
+            icon="icons/redfield_logo.png"
+            level-id="advanced"
+            name="Advanced"
+            path="/community/conformalPrediction">
       </category>
    </extension>
    

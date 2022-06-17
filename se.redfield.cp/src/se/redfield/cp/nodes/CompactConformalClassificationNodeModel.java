@@ -55,6 +55,9 @@ import org.knime.core.node.streamable.OutputPortRole;
 import org.knime.core.node.streamable.PartitionInfo;
 import org.knime.core.node.streamable.StreamableOperator;
 
+import se.redfield.cp.Calibrator;
+import se.redfield.cp.Predictor;
+//import se.redfield.cp.nodes.ConformalPredictorClassifierNodeModel.ClassifierCellFactory;
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
 /**
@@ -63,15 +66,18 @@ import se.redfield.cp.utils.ColumnPatternExtractor;
  * represented as Collection or String column
  *
  */
-public class ConformalPredictorClassifierNodeModel extends NodeModel {
+public class CompactConformalClassificationNodeModel extends AbstractConformalPredictorNodeModel {
 	@SuppressWarnings("unused")
-	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
-	
+	private static final NodeLogger LOGGER = NodeLogger.getLogger(CompactConformalClassificationNodeModel.class);
+
+	public static final int PORT_PREDICTION_TABLE = 1;
+	public static final int PORT_CALIBRATION_TABLE = 0;
+
 	private static final String KEY_ERROR_RATE = "errorRate";
 	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 
-	private static final double DEFAULT_ERROR_RATE = 0.2;
+	private static final double DEFAULT_ERROR_RATE = 0.05;
 	private static final String DEFAULT_SEPARATOR = ";";
 	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
 
@@ -79,7 +85,10 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	private final SettingsModelBoolean classesAsStringSettings = createClassesAsStringSettings();
 	private final SettingsModelString stringSeparatorSettings = createStringSeparatorSettings();
 
+	private Calibrator calibrator = new Calibrator(this);
+	private Predictor predictor= new Predictor(this);
 	private ColumnRearranger rearranger;
+	private Map<String, Integer> scoreColumns;
 
 	static SettingsModelDoubleBounded createErrorRateSettings() {
 		return new SettingsModelDoubleBounded(KEY_ERROR_RATE, DEFAULT_ERROR_RATE, 0, 1);
@@ -93,8 +102,8 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
 	}
 
-	protected ConformalPredictorClassifierNodeModel() {
-		super(1, 1);
+	protected CompactConformalClassificationNodeModel() {
+		super(2, 1);
 	}
 
 	public double getErrorRate() {
@@ -119,17 +128,33 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-
 		pushFlowVariableDouble(KEY_ERROR_RATE, getErrorRate());
-		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inData[0], rearranger, exec) };
+		
+		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
+		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
+		//Calibrate
+		BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
+	
+		//predict
+		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), calibrationTable, 
+				exec.createSubExecutionContext(0.1));
+		inPredictionTable = exec.createColumnRearrangeTable(inPredictionTable, r, exec.createSubProgress(0.9));
+
+		r.append(new ClassifierCellFactory(scoreColumns));
+		
+		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inPredictionTable, rearranger, exec) };
 	}
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		Map<String, Integer> scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern()).match(inSpecs[0]);
+		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
+		validateSettings(inSpecs[PORT_PREDICTION_TABLE]);
+		
+		scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern()).match(
+					predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]));
 		validateSettings(scoreColumns);
 
-		rearranger = createRearranger(inSpecs[0], scoreColumns);
+		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE]), scoreColumns);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}

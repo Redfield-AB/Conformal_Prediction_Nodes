@@ -29,31 +29,43 @@ import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.CellFactory;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.data.def.DoubleCell;
+import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.sort.BufferedDataTableSorter;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-import se.redfield.cp.nodes.AbstractConformalPredictorNodeModel;
-import se.redfield.cp.nodes.ConformalPredictorCalibratorNodeModel;
+import se.redfield.cp.nodes.AbstractConformalPredictorRegressionNodeModel;
+import se.redfield.cp.nodes.CompactConformalRegressionNodeModel;
+import se.redfield.cp.nodes.ConformalPredictorCalibratorRegressionNodeModel;
 
 /**
  * Class used by Conformal Calibrator Node to process input table into output
  * calibration table.
  *
  */
-public class Calibrator {
+public class CalibratorRegression {
 
-	private AbstractConformalPredictorNodeModel model;
+//	private ConformalPredictorCalibratorRegressionNodeModel model;
+	private AbstractConformalPredictorRegressionNodeModel model;
 
 	/**
 	 * Creates instance
 	 * 
 	 * @param model
 	 */
-	public Calibrator(AbstractConformalPredictorNodeModel model) {
-		this.model = model;
+	public CalibratorRegression(ConformalPredictorCalibratorRegressionNodeModel model) {
+		this.model = (AbstractConformalPredictorRegressionNodeModel) model;
+	}
+
+	/**
+	 * Creates instance
+	 * 
+	 * @param model
+	 */
+	public CalibratorRegression(CompactConformalRegressionNodeModel model) {
+		this.model = (AbstractConformalPredictorRegressionNodeModel) model;
 	}
 
 	/**
@@ -67,15 +79,14 @@ public class Calibrator {
 		if (!model.getKeepAllColumns()) {
 			rearranger.keepOnly(model.getRequiredColumnNames(inputTableSpec));
 		}
-		rearranger.append(createPCellFactory(inputTableSpec));
+		rearranger.append(createNonconformityCellFactory(inputTableSpec));
 		rearranger.append(createScoreCellFactory(inputTableSpec));
 		return rearranger.createSpec();
 	}
 
 	/**
-	 * Processes input table to create calibration table. P column (probability for
-	 * a target class) is appended to table and then ranks are assigned based on P
-	 * column value.
+	 * Processes input table to sorted alpha scores for calibration set. Alpha score 
+	 * column (default nonconformity is the absolute error) is appended to table.
 	 * 
 	 * @param inCalibrationTable Input table.
 	 * @param exec               Execution context.
@@ -84,51 +95,70 @@ public class Calibrator {
 	 */
 	public BufferedDataTable process(BufferedDataTable inCalibrationTable, ExecutionContext exec)
 			throws CanceledExecutionException {
+		
+		// collect targets and predictions and setup return table
 		ColumnRearranger appendProbabilityRearranger = new ColumnRearranger(inCalibrationTable.getDataTableSpec());
 
 		if (!model.getKeepAllColumns()) {
 			appendProbabilityRearranger.keepOnly(model.getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
 		}
-		appendProbabilityRearranger.append(createPCellFactory(inCalibrationTable.getDataTableSpec()));
+		//changed to createNonConformityCellFactory
+		appendProbabilityRearranger.append(createNonconformityCellFactory(inCalibrationTable.getDataTableSpec()));
 
 		BufferedDataTable appendedProbabilityTable = exec.createColumnRearrangeTable(inCalibrationTable,
 				appendProbabilityRearranger, exec.createSubProgress(0.25));
 
 		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable,
-				Arrays.asList(model.getTargetColumnName(), model.getCalibrationProbabilityColumnName()),
-				new boolean[] { true, false });
+				Arrays.asList(model.getCalibrationAlphaColumnName()),
+				new boolean[] { false });
 		BufferedDataTable sortedTable = sorter.sort(exec.createSubExecutionContext(0.5));
 
 		ColumnRearranger appendScoreRearranger = new ColumnRearranger(sortedTable.getDataTableSpec());
 		appendScoreRearranger.append(createScoreCellFactory(sortedTable.getSpec()));
 
 		return exec.createColumnRearrangeTable(sortedTable, appendScoreRearranger, exec.createSubProgress(0.25));
-	}
+	} 
 
 	/**
-	 * Creates cell factory that appends P column to input table.
+	 * Creates cell factory that appends the nonconformity column to input table.
 	 * 
 	 * @param inputTableSpec Input table spec.
 	 * @return
 	 */
-	private CellFactory createPCellFactory(DataTableSpec inputTableSpec) {
-		int columnIndex = inputTableSpec.findColumnIndex(model.getTargetColumnName());
-		Map<String, Integer> probabilityColumns = inputTableSpec.getColumnSpec(columnIndex).getDomain().getValues()
-				.stream().map(DataCell::toString).collect(Collectors.toMap(str -> str,
-						str -> inputTableSpec.findColumnIndex(model.getProbabilityColumnName(str))));
+	private CellFactory createNonconformityCellFactory(DataTableSpec inputTableSpec) {
+		int targetColumnIndex = inputTableSpec.findColumnIndex(model.getTargetColumnName()); // get target column
+		int predictionColumnIndex = inputTableSpec.findColumnIndex(model.getPredictionColumnName()); // get prediction column
+		int sigmaColumnIndex = inputTableSpec.findColumnIndex(model.getSigmaColumnName());
 
 		return new AbstractCellFactory(
-				new DataColumnSpecCreator(model.getCalibrationProbabilityColumnName(), DoubleCell.TYPE).createSpec()) {
+				new DataColumnSpecCreator(model.getCalibrationAlphaColumnName(), DoubleCell.TYPE).createSpec()) {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
-				DataCell dataCell = row.getCell(columnIndex);
-				if (dataCell.isMissing()) {
-					throw new MissingValueException((MissingValue) dataCell, "Target column contains missing values");
+				DataCell targetDataCell = row.getCell(targetColumnIndex);
+				if (targetDataCell.isMissing()) {
+					throw new MissingValueException((MissingValue) targetDataCell, "Target column contains missing values");
 				}
-				Integer probabilityCol = probabilityColumns.get(dataCell.toString());
+				Double dTarget = getDoubleValueFromCell(targetDataCell, "Target column is not a numeric column");				
 
-				return new DataCell[] { row.getCell(probabilityCol) };
+				DataCell predictionDataCell = row.getCell(predictionColumnIndex);
+				if (predictionDataCell.isMissing()) {
+					throw new MissingValueException((MissingValue) predictionDataCell, "Prediction column contains missing values");
+				}
+				Double dPrediction = getDoubleValueFromCell(predictionDataCell, "Prediction column is not double column");
+				
+				double nonconformityScore = 0;
+				if (model.getNormalized()) {
+					DataCell sigmaDataCell = row.getCell(sigmaColumnIndex);
+					if (predictionDataCell.isMissing()) {
+						throw new MissingValueException((MissingValue) sigmaDataCell, "Sigma column contains missing values");
+					}
+					Double dSigma = getDoubleValueFromCell(sigmaDataCell, "Sigma column is not double column");
+					nonconformityScore = Math.abs(dTarget - dPrediction) / (dSigma + model.getBeta());
+				} else
+					nonconformityScore = Math.abs(dTarget - dPrediction);
+				
+				return new DataCell[] { new DoubleCell(nonconformityScore) };
 			}
 		};
 	}
@@ -141,24 +171,30 @@ public class Calibrator {
 	 * @return
 	 */
 	private CellFactory createScoreCellFactory(DataTableSpec inputTableSpec) {
-		int columnIndex = inputTableSpec.findColumnIndex(model.getTargetColumnName());
-
 		return new AbstractCellFactory(
 				new DataColumnSpecCreator(model.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
 
 			private long counter = 0;
-			private String prevValue = null;
 
 			@Override
-			public DataCell[] getCells(DataRow row) {
-				String value = row.getCell(columnIndex).toString();
-				if (prevValue == null || !prevValue.equals(value)) {
-					counter = 0;
-					prevValue = value;
-				}
-
+			public DataCell[] getCells(DataRow row) {				
 				return new DataCell[] { new LongCell(counter++) };
 			}
 		};
+	}
+	
+	private double getDoubleValueFromCell(DataCell cell, String errorMessage) {
+		if (cell.getType().getCellClass().equals((DoubleCell.class))) {
+			// Cast the cell as we know is must be a DoubleCell.
+			return ((DoubleCell) cell).getDoubleValue();					
+		} else if (cell.getType().getCellClass().equals((IntCell.class))) {
+			// Cast the cell as we know is must be a IntCell.
+			return (double) ((IntCell) cell).getIntValue();				
+		} else if (cell.getType().getCellClass().equals((LongCell.class))) {
+			// Cast the cell as we know is must be a LongCell.
+			return ((LongCell) cell).getDoubleValue();				
+		} else {
+			throw new MissingValueException((MissingValue) cell, errorMessage);
+		}
 	}
 }
