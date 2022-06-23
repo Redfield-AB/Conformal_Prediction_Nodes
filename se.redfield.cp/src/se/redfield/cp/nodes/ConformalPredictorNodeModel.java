@@ -16,10 +16,8 @@
 package se.redfield.cp.nodes;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
-import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.node.BufferedDataTable;
@@ -28,7 +26,6 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.streamable.InputPortRole;
 import org.knime.core.node.streamable.OutputPortRole;
@@ -54,8 +51,8 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	private final Predictor predictor = new Predictor(this);
 
-	protected ConformalPredictorNodeModel(boolean visibleTarget) {
-		super(2, 1, visibleTarget);
+	protected ConformalPredictorNodeModel() {
+		super(2, 1);
 	}
 
 	@Override
@@ -73,8 +70,9 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
 		validateTables(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
-		
-		//		validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
+
+		// validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE],
+		// inSpecs[PORT_PREDICTION_TABLE]);
 //		
 		Set<DataCell> values = inSpecs[PORT_CALIBRATION_TABLE].getColumnSpec(getTargetColumnName()).getDomain()
 				.getValues();

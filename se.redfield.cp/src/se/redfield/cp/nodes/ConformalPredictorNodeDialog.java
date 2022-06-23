@@ -15,16 +15,13 @@
  */
 package se.redfield.cp.nodes;
 
-import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-
 /**
  * Node dialog for Conformal Predictor node.
  *
  */
 public class ConformalPredictorNodeDialog extends AbstractConformalPredictorNodeDialog {
 
-	public ConformalPredictorNodeDialog(boolean visibleTarget) {
-		super(ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE, visibleTarget);
+	public ConformalPredictorNodeDialog() {
+		super(ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE);
 	}
 }

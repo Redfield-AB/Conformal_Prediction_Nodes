@@ -24,11 +24,10 @@ import org.knime.core.node.NodeView;
  *
  */
 public class CompactConformalClassificationNodeFactory extends NodeFactory<CompactConformalClassificationNodeModel> {
-	private static final boolean visibleTarget = true;
-	
+
 	@Override
 	public CompactConformalClassificationNodeModel createNodeModel() {
-		return new CompactConformalClassificationNodeModel(visibleTarget);
+		return new CompactConformalClassificationNodeModel();
 	}
 
 	@Override
@@ -49,7 +48,7 @@ public class CompactConformalClassificationNodeFactory extends NodeFactory<Compa
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new CompactConformalClassificationNodeDialog(visibleTarget);
+		return new CompactConformalClassificationNodeDialog();
 	}
 
 }

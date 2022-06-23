@@ -15,11 +15,7 @@
  */
 package se.redfield.cp.nodes;
 
-import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataValue;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NotConfigurableException;
-import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
@@ -36,19 +32,19 @@ public abstract class AbstractConformalPredictorRegressionNodeDialog extends Abs
 	private SettingsModelBoolean normalizedSetting;
 
 	@SuppressWarnings("unchecked")
-	public AbstractConformalPredictorRegressionNodeDialog(int tableIndex, boolean visibleTarget) {
-		super(tableIndex, visibleTarget);
+	public AbstractConformalPredictorRegressionNodeDialog(int tableIndex) {
+		super(tableIndex);
 		createNewGroup("Conformal Regression");
 		SettingsModelDoubleBounded betaSettings = ConformalPredictorRegressionNodeModel.createBetaSettings();
 
-
-		SettingsModelString sigmaColumnSettings = AbstractConformalPredictorRegressionNodeModel.createSigmaColumnNameSettingsModel();
+		SettingsModelString sigmaColumnSettings = AbstractConformalPredictorRegressionNodeModel
+				.createSigmaColumnNameSettingsModel();
 		normalizedSetting = AbstractConformalPredictorRegressionNodeModel.createNormalizedSettingsModel();
-		
+
 		normalizedSetting.addChangeListener(e -> {
 			sigmaColumnSettings.setEnabled(normalizedSetting.getBooleanValue());
 			betaSettings.setEnabled(normalizedSetting.getBooleanValue());
-		});		
+		});
 		sigmaColumnSettings.setEnabled(normalizedSetting.getBooleanValue());
 		betaSettings.setEnabled(normalizedSetting.getBooleanValue());
 
@@ -56,8 +52,8 @@ public abstract class AbstractConformalPredictorRegressionNodeDialog extends Abs
 
 		addDialogComponent(new DialogComponentColumnNameSelection(sigmaColumnSettings, "Difficulty column:", tableIndex,
 				DataValue.class));
-		addDialogComponent(new DialogComponentNumber(betaSettings, "Beta", 0.05,
-				createFlowVariableModel(betaSettings)));
+		addDialogComponent(
+				new DialogComponentNumber(betaSettings, "Beta", 0.05, createFlowVariableModel(betaSettings)));
 	}
 
 }

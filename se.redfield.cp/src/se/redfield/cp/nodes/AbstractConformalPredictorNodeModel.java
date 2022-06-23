@@ -24,9 +24,6 @@ import java.util.stream.Collectors;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.IntCell;
-import org.knime.core.data.def.LongCell;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
@@ -65,8 +62,6 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	protected final SettingsModelBoolean keepIdColumnSettings = createKeepIdColumnSettings();
 	protected final SettingsModelString idColumnSettings = createIdColumnSettings();
 	private final SettingsModelBoolean includeRankSettings = createIncludeRankSettings();
-	
-	private boolean visibleTarget = true;
 
 	static SettingsModelBoolean createIncludeRankSettings() {
 		return new SettingsModelBoolean(KEY_INCLUDE_RANK_COLUMN, false);
@@ -92,13 +87,8 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		return new SettingsModelString(KEY_ID_COLUMN, "");
 	}
 
-	protected AbstractConformalPredictorNodeModel(int nrInDataPorts, int nrOutDataPorts, boolean viewTarget) {
+	protected AbstractConformalPredictorNodeModel(int nrInDataPorts, int nrOutDataPorts) {
 		super(nrInDataPorts, nrOutDataPorts);
-		visibleTarget = viewTarget;
-	}
-
-	public boolean isVisibleTarget() {
-		return visibleTarget;
 	}
 
 	/**
@@ -178,11 +168,9 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 		if (getTargetColumnName().isEmpty()) {
 			attemptAutoconfig(spec);
 		}
-		
-		if (isVisibleTarget()) {
-			if (getTargetColumnName().isEmpty()) {
-				throw new InvalidSettingsException("Class column is not selected");
-			}
+
+		if (getTargetColumnName().isEmpty()) {
+			throw new InvalidSettingsException("Class column is not selected");
 		}
 
 		if (!getKeepAllColumns() && getKeepIdColumn() && getIdColumn().isEmpty()) {
@@ -225,20 +213,18 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	 */
 	protected void validateTableSpecs(DataTableSpec spec) throws InvalidSettingsException {
 		DataColumnSpec columnSpec;
-		
-		if (isVisibleTarget()) {
-			columnSpec = spec.getColumnSpec(getTargetColumnName());
-			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-				throw new InvalidSettingsException("Insufficient domain information for column: " + getTargetColumnName());
-			}
-	
-			Set<DataCell> values = columnSpec.getDomain().getValues();
-			for (DataCell cell : values) {
-				String value = cell.toString();
-				String pColumnName = getProbabilityColumnName(value);
-				if (!spec.containsName(pColumnName)) {
-					throw new InvalidSettingsException("Probability column not found: " + pColumnName);
-				}
+
+		columnSpec = spec.getColumnSpec(getTargetColumnName());
+		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+			throw new InvalidSettingsException("Insufficient domain information for column: " + getTargetColumnName());
+		}
+
+		Set<DataCell> values = columnSpec.getDomain().getValues();
+		for (DataCell cell : values) {
+			String value = cell.toString();
+			String pColumnName = getProbabilityColumnName(value);
+			if (!spec.containsName(pColumnName)) {
+				throw new InvalidSettingsException("Probability column not found: " + pColumnName);
 			}
 		}
 
@@ -261,20 +247,18 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	 */
 	protected void validateTableSpecs(String selectedColumn, DataTableSpec spec) throws InvalidSettingsException {
 		DataColumnSpec columnSpec;
-		
-		if (isVisibleTarget()) {
-			columnSpec = spec.getColumnSpec(selectedColumn);
-			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-				throw new InvalidSettingsException("Insufficient domain information for column: " + selectedColumn);
-			}
-	
-			Set<DataCell> values = columnSpec.getDomain().getValues();
-			for (DataCell cell : values) {
-				String value = cell.toString();
-				String pColumnName = getProbabilityColumnName(selectedColumn, value);
-				if (!spec.containsName(pColumnName)) {
-					throw new InvalidSettingsException("Probability column not found: " + pColumnName);
-				}
+
+		columnSpec = spec.getColumnSpec(selectedColumn);
+		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+			throw new InvalidSettingsException("Insufficient domain information for column: " + selectedColumn);
+		}
+
+		Set<DataCell> values = columnSpec.getDomain().getValues();
+		for (DataCell cell : values) {
+			String value = cell.toString();
+			String pColumnName = getProbabilityColumnName(selectedColumn, value);
+			if (!spec.containsName(pColumnName)) {
+				throw new InvalidSettingsException("Probability column not found: " + pColumnName);
 			}
 		}
 
@@ -292,21 +276,19 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 	 */
 	protected void validateTables(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
 			throws InvalidSettingsException {
-		
-		//Validate calibration table
-		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getTargetColumnName());
-		if (isVisibleTarget()) {
-			if (!calibrationTableSpec.containsName(getTargetColumnName())) {		
-				throw new InvalidSettingsException(
-						String.format("Class column '%s' is missing from the calibration table", getTargetColumnName()));
-			}
 
-			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-				throw new InvalidSettingsException(
-						"Calibration table: insufficient domain information for column: " + getTargetColumnName());
-			}
+		// Validate calibration table
+		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getTargetColumnName());
+		if (!calibrationTableSpec.containsName(getTargetColumnName())) {
+			throw new InvalidSettingsException(
+					String.format("Class column '%s' is missing from the calibration table", getTargetColumnName()));
 		}
-		
+
+		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
+			throw new InvalidSettingsException(
+					"Calibration table: insufficient domain information for column: " + getTargetColumnName());
+		}
+
 		Set<DataCell> values = columnSpec.getDomain().getValues();
 		for (DataCell cell : values) {
 			String value = cell.toString();
@@ -315,15 +297,16 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 				throw new InvalidSettingsException("Probability column not found: " + pColumnName);
 			}
 		}
-		
-		//Validate prediction table
+
+		// Validate prediction table
 		columnSpec = predictionTableSpec.getColumnSpec(getTargetColumnName());
-		
+
 		if (columnSpec != null) {
 			if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-				throw new InvalidSettingsException("Insufficient domain information for column: " + getTargetColumnName());
+				throw new InvalidSettingsException(
+						"Insufficient domain information for column: " + getTargetColumnName());
 			}
-	
+
 			values = columnSpec.getDomain().getValues();
 			for (DataCell cell : values) {
 				String value = cell.toString();
@@ -353,8 +336,8 @@ public abstract class AbstractConformalPredictorNodeModel extends NodeModel {
 			throws InvalidSettingsException {
 		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
 				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
-		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
-				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
+		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getTargetColumnName()).getDomain().getValues()
+				.stream().map(DataCell::toString).collect(Collectors.toSet());
 
 		for (String val : predictionValues) {
 			if (!calibrationClasses.contains(val)) {

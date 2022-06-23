@@ -15,11 +15,6 @@
  */
 package se.redfield.cp.nodes;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.knime.core.data.DataCell;
-import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.node.BufferedDataTable;
@@ -28,7 +23,6 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
@@ -53,7 +47,7 @@ public class ConformalPredictorRegressionNodeModel extends AbstractConformalPred
 
 	public static final int PORT_PREDICTION_TABLE = 1;
 	public static final int PORT_CALIBRATION_TABLE = 0;
-	
+
 	private static final String DEFAULT_SEPARATOR = ";";
 	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 
@@ -64,17 +58,17 @@ public class ConformalPredictorRegressionNodeModel extends AbstractConformalPred
 
 	private static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
 	private static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "p-value (%s)";
-	
+
 	private final PredictorRegression predictor = new PredictorRegression(this);
 
-	protected ConformalPredictorRegressionNodeModel(boolean visibleTarget) {
-		super(2, 1, visibleTarget);
+	protected ConformalPredictorRegressionNodeModel() {
+		super(2, 1);
 	}
-	
+
 	static SettingsModelString createStringSeparatorSettings() {
 		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
 	}
-	
+
 	protected static final String KEY_ERROR_RATE = "errorRate";
 
 	private static final double DEFAULT_ERROR_RATE = 0.05;
@@ -98,11 +92,11 @@ public class ConformalPredictorRegressionNodeModel extends AbstractConformalPred
 	public String getPredictionLowerBoundColumnFormat() {
 		return PREDICTION_LOWER_COLUMN_DEFAULT_FORMAT;
 	}
-		
+
 	public String getLowerBoundColumnName() {
 		return getLowerBoundColumnName(getTargetColumnName());
 	}
-	
+
 	public String getLowerBoundColumnName(String val) {
 		return String.format(String.format(getPredictionLowerBoundColumnFormat(), val));
 	}
@@ -110,11 +104,11 @@ public class ConformalPredictorRegressionNodeModel extends AbstractConformalPred
 	public String getPredictionUpperBoundColumnFormat() {
 		return PREDICTION_UPPER_COLUMN_DEFAULT_FORMAT;
 	}
-	
+
 	public String getUpperBoundColumnName() {
 		return getUpperBoundColumnName(getTargetColumnName());
 	}
-	
+
 	public String getUpperBoundColumnName(String val) {
 		return String.format(String.format(getPredictionUpperBoundColumnFormat(), val));
 	}
@@ -140,7 +134,8 @@ public class ConformalPredictorRegressionNodeModel extends AbstractConformalPred
 		validateSettings(inSpecs[PORT_PREDICTION_TABLE]);
 		validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
 
-		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]) };
+		return new DataTableSpec[] {
+				predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]) };
 	}
 
 	/**
@@ -151,7 +146,7 @@ public class ConformalPredictorRegressionNodeModel extends AbstractConformalPred
 	 * @throws InvalidSettingsException
 	 */
 	private void validateCalibrationTable(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-			throws InvalidSettingsException {		
+			throws InvalidSettingsException {
 		if (!calibrationTableSpec.containsName(getCalibrationRankColumnName())) {
 			throw new InvalidSettingsException(
 					String.format("Rank column '%s' is missing from the calibration table", getTargetColumnName()));

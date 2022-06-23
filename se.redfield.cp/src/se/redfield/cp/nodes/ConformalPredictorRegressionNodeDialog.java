@@ -15,14 +15,8 @@
  */
 package se.redfield.cp.nodes;
 
-import org.knime.core.data.DataTableSpec;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NotConfigurableException;
-import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 /**
  * Node dialog for Conformal Predictor node.
@@ -30,10 +24,8 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  */
 public class ConformalPredictorRegressionNodeDialog extends AbstractConformalPredictorRegressionNodeDialog {
 
-
-
-	public ConformalPredictorRegressionNodeDialog(boolean visibleTarget) {
-		super(ConformalPredictorRegressionNodeModel.PORT_CALIBRATION_TABLE, visibleTarget);
+	public ConformalPredictorRegressionNodeDialog() {
+		super(ConformalPredictorRegressionNodeModel.PORT_CALIBRATION_TABLE);
 		createNewGroup("User defined error rate");
 		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorClassifierNodeModel.createErrorRateSettings();
 

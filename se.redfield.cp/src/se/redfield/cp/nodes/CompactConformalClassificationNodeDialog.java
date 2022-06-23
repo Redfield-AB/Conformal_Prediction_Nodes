@@ -18,7 +18,6 @@ package se.redfield.cp.nodes;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NotConfigurableException;
-import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
 import org.knime.core.node.defaultnodesettings.DialogComponentString;
@@ -35,8 +34,8 @@ public class CompactConformalClassificationNodeDialog extends AbstractConformalP
 	private SettingsModelBoolean classesAsStringSettings;
 	private SettingsModelString stringSeparatorSettings;
 
-	public CompactConformalClassificationNodeDialog(boolean visibleTarget) {
-		super(CompactConformalClassificationNodeModel.PORT_CALIBRATION_TABLE, visibleTarget);
+	public CompactConformalClassificationNodeDialog() {
+		super(CompactConformalClassificationNodeModel.PORT_CALIBRATION_TABLE);
 
 		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorClassifierNodeModel.createErrorRateSettings();
 		classesAsStringSettings = ConformalPredictorClassifierNodeModel.createClassesAsStringSettings();

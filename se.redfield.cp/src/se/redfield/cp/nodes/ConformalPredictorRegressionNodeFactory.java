@@ -24,11 +24,10 @@ import org.knime.core.node.NodeView;
  *
  */
 public class ConformalPredictorRegressionNodeFactory extends NodeFactory<ConformalPredictorRegressionNodeModel> {
-	private static final boolean visibleTarget = true;	
-	
+
 	@Override
 	public ConformalPredictorRegressionNodeModel createNodeModel() {
-		return new ConformalPredictorRegressionNodeModel(visibleTarget);
+		return new ConformalPredictorRegressionNodeModel();
 	}
 
 	@Override
@@ -37,7 +36,8 @@ public class ConformalPredictorRegressionNodeFactory extends NodeFactory<Conform
 	}
 
 	@Override
-	public NodeView<ConformalPredictorRegressionNodeModel> createNodeView(int viewIndex, ConformalPredictorRegressionNodeModel nodeModel) {
+	public NodeView<ConformalPredictorRegressionNodeModel> createNodeView(int viewIndex,
+			ConformalPredictorRegressionNodeModel nodeModel) {
 		return null;
 	}
 
@@ -48,7 +48,7 @@ public class ConformalPredictorRegressionNodeFactory extends NodeFactory<Conform
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new ConformalPredictorRegressionNodeDialog(visibleTarget);
+		return new ConformalPredictorRegressionNodeDialog();
 	}
 
 }

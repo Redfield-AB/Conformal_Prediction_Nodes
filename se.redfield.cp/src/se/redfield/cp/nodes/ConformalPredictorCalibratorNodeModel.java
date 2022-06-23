@@ -33,8 +33,8 @@ public class ConformalPredictorCalibratorNodeModel extends AbstractConformalPred
 
 	private final Calibrator calibrator = new Calibrator(this);
 
-	protected ConformalPredictorCalibratorNodeModel(boolean visibleTarget) {
-		super(1, 1, visibleTarget);
+	protected ConformalPredictorCalibratorNodeModel() {
+		super(1, 1);
 	}
 
 	public String getCalibrationRankColumnName() {

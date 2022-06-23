@@ -15,22 +15,12 @@
  */
 package se.redfield.cp.nodes;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
-import org.knime.core.node.CanceledExecutionException;
-import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
-import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
@@ -49,9 +39,9 @@ public abstract class AbstractConformalPredictorRegressionNodeModel extends Abst
 	private static final String NORMALIZED_COLUMN_NAME = "normalized";
 	protected final SettingsModelBoolean normalizedSettings = createNormalizedSettingsModel();
 	protected final SettingsModelString sigmaSettings = createSigmaColumnNameSettingsModel();
-	
+
 	private final SettingsModelDoubleBounded betaSettings = createBetaSettings();
-	
+
 	protected static final String KEY_BETA = "beta";
 
 	private static final double DEFAULT_BETA = 0.25;
@@ -59,13 +49,13 @@ public abstract class AbstractConformalPredictorRegressionNodeModel extends Abst
 	static SettingsModelDoubleBounded createBetaSettings() {
 		return new SettingsModelDoubleBounded(KEY_BETA, DEFAULT_BETA, 0, 1);
 	}
-	
+
 	public double getBeta() {
 		return betaSettings.getDoubleValue();
 	}
-	
-	protected AbstractConformalPredictorRegressionNodeModel(int nrInDataPorts, int nrOutDataPorts, boolean visibleTarget) {
-		super(nrInDataPorts, nrOutDataPorts, visibleTarget);
+
+	protected AbstractConformalPredictorRegressionNodeModel(int nrInDataPorts, int nrOutDataPorts) {
+		super(nrInDataPorts, nrOutDataPorts);
 	}
 
 	static SettingsModelBoolean createNormalizedSettingsModel() {
@@ -75,7 +65,6 @@ public abstract class AbstractConformalPredictorRegressionNodeModel extends Abst
 	public boolean getNormalized() {
 		return normalizedSettings.getBooleanValue();
 	}
-
 
 	static SettingsModelString createSigmaColumnNameSettingsModel() {
 		return new SettingsModelString(KEY_SIGMA_COLUMN_NAME, "");
@@ -131,24 +120,21 @@ public abstract class AbstractConformalPredictorRegressionNodeModel extends Abst
 	protected void validateTableSpecs(DataTableSpec spec) throws InvalidSettingsException {
 		DataColumnSpec columnSpec = spec.getColumnSpec(getTargetColumnName());
 		if (columnSpec != null) {
-			 
-			if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
-					|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
-					|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
-			{
+
+			if (!(columnSpec.getType().getCellClass().equals((IntCell.class))
+					|| columnSpec.getType().getCellClass().equals((DoubleCell.class))
+					|| columnSpec.getType().getCellClass().equals((LongCell.class)))) {
 				throw new InvalidSettingsException("Target column " + getTargetColumnName() + " must be numeric.");
 			}
 		}
-		
-		if (!spec.containsName(getPredictionColumnName()))
-		{
+
+		if (!spec.containsName(getPredictionColumnName())) {
 			throw new InvalidSettingsException("Prediction column '" + getPredictionColumnName() + "' must exist.");
 		}
 		columnSpec = spec.getColumnSpec(getPredictionColumnName());
-		if(!(columnSpec.getType().getCellClass().equals((IntCell.class)) 
-				|| columnSpec.getType().getCellClass().equals((DoubleCell.class)) 
-				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) 
-		{
+		if (!(columnSpec.getType().getCellClass().equals((IntCell.class))
+				|| columnSpec.getType().getCellClass().equals((DoubleCell.class))
+				|| columnSpec.getType().getCellClass().equals((LongCell.class)))) {
 			throw new InvalidSettingsException("Prediction column " + getPredictionColumnName() + " must be numeric.");
 		}
 
@@ -156,7 +142,6 @@ public abstract class AbstractConformalPredictorRegressionNodeModel extends Abst
 			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
 		}
 	}
-
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {

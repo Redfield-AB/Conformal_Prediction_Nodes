@@ -39,7 +39,7 @@ public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSe
 	private SettingsModelBoolean includeRank;
 
 	@SuppressWarnings("unchecked")
-	public AbstractConformalPredictorNodeDialog(int tableIndex, boolean visibleTarget) {
+	public AbstractConformalPredictorNodeDialog(int tableIndex) {
 		super();
 
 		targetColumnSettings = AbstractConformalPredictorNodeModel.createTargetColumnSettings();
@@ -56,11 +56,10 @@ public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSe
 			}
 		});
 		keepIdColumnSetting.addChangeListener(e -> idColumnSettings.setEnabled(keepIdColumnSetting.getBooleanValue()));
-		if (visibleTarget)
-			addDialogComponent(new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", tableIndex,
-					DataValue.class));
-		addDialogComponent(new DialogComponentColumnNameSelection(predictionColumnSettings, "Prediction column:", tableIndex,
+		addDialogComponent(new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", tableIndex,
 				DataValue.class));
+		addDialogComponent(new DialogComponentColumnNameSelection(predictionColumnSettings, "Prediction column:",
+				tableIndex, DataValue.class));
 
 		createNewGroup("Define output");
 
@@ -68,7 +67,6 @@ public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSe
 		addDialogComponent(new DialogComponentBoolean(keepIdColumnSetting, "Keep ID column"));
 		addDialogComponent(
 				new DialogComponentColumnNameSelection(idColumnSettings, "ID column:", tableIndex, DataValue.class));
-
 
 		addDialogComponent(new DialogComponentBoolean(includeRank, "Include Rank column"));
 	}

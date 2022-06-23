@@ -24,12 +24,10 @@ import org.knime.core.node.NodeView;
  *
  */
 public class ConformalPredictorCalibratorNodeFactory extends NodeFactory<ConformalPredictorCalibratorNodeModel> {
-	private static final boolean visibleTarget = true;
-	
-	
+
 	@Override
 	public ConformalPredictorCalibratorNodeModel createNodeModel() {
-		return new ConformalPredictorCalibratorNodeModel(visibleTarget);
+		return new ConformalPredictorCalibratorNodeModel();
 	}
 
 	@Override
@@ -50,7 +48,7 @@ public class ConformalPredictorCalibratorNodeFactory extends NodeFactory<Conform
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new ConformalPredictorCalibratorNodeDialog(visibleTarget);
+		return new ConformalPredictorCalibratorNodeDialog();
 	}
 
 }

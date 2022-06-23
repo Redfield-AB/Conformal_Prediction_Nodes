@@ -15,11 +15,6 @@
  */
 package se.redfield.cp.nodes;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import org.knime.core.data.DataCell;
-import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.node.BufferedDataTable;
@@ -28,9 +23,6 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.streamable.InputPortRole;
 import org.knime.core.node.streamable.OutputPortRole;
@@ -54,20 +46,20 @@ public class CompactConformalRegressionNodeModel extends ConformalPredictorRegre
 	private final CalibratorRegression calibrator = new CalibratorRegression(this);
 	private final PredictorRegression predictor = new PredictorRegression(this);
 
-	protected CompactConformalRegressionNodeModel(boolean visibleTarget) {
-		super(visibleTarget);
+	protected CompactConformalRegressionNodeModel() {
+		super();
 	}
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
 
 		pushFlowVariableDouble(super.KEY_ERROR_RATE, getErrorRate());
-		
+
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
-		
+
 		BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
-		
+
 		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), calibrationTable,
 				exec.createSubExecutionContext(0.1));
 
@@ -81,7 +73,8 @@ public class CompactConformalRegressionNodeModel extends ConformalPredictorRegre
 		validateSettings(inSpecs[PORT_PREDICTION_TABLE]);
 //		validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
 
-		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]) };
+		return new DataTableSpec[] {
+				predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]) };
 	}
 
 	/**
@@ -92,7 +85,7 @@ public class CompactConformalRegressionNodeModel extends ConformalPredictorRegre
 	 * @throws InvalidSettingsException
 	 */
 	private void validateCalibrationTable(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-			throws InvalidSettingsException {		
+			throws InvalidSettingsException {
 		if (!calibrationTableSpec.containsName(getCalibrationRankColumnName())) {
 			throw new InvalidSettingsException(
 					String.format("Rank column '%s' is missing from the calibration table", getTargetColumnName()));

@@ -31,8 +31,8 @@ public class ConformalPredictorCalibratorRegressionNodeModel extends AbstractCon
 
 	private final CalibratorRegression calibrator = new CalibratorRegression(this);
 
-	protected ConformalPredictorCalibratorRegressionNodeModel(boolean visibleTarget) {
-		super(1, 1, visibleTarget);
+	protected ConformalPredictorCalibratorRegressionNodeModel() {
+		super(1, 1);
 	}
 
 	@Override

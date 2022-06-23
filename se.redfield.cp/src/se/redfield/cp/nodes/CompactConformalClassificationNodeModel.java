@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import java.util.Set;
 
 import org.knime.core.data.DataCell;
@@ -44,7 +43,6 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
-import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
@@ -87,7 +85,7 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 	private final SettingsModelString stringSeparatorSettings = createStringSeparatorSettings();
 
 	private Calibrator calibrator = new Calibrator(this);
-	private Predictor predictor= new Predictor(this);
+	private Predictor predictor = new Predictor(this);
 	private ColumnRearranger rearranger;
 	private Map<String, Integer> scoreColumns;
 
@@ -103,8 +101,8 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
 	}
 
-	protected CompactConformalClassificationNodeModel(boolean visibleTarget) {
-		super(2, 1, visibleTarget);
+	protected CompactConformalClassificationNodeModel() {
+		super(2, 1);
 	}
 
 	public double getErrorRate() {
@@ -130,19 +128,19 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
 		pushFlowVariableDouble(KEY_ERROR_RATE, getErrorRate());
-		
+
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
-		//Calibrate
+		// Calibrate
 		BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
-	
-		//predict
-		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), calibrationTable, 
+
+		// predict
+		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), calibrationTable,
 				exec.createSubExecutionContext(0.1));
 		inPredictionTable = exec.createColumnRearrangeTable(inPredictionTable, r, exec.createSubProgress(0.9));
 
 		r.append(new ClassifierCellFactory(scoreColumns));
-		
+
 		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inPredictionTable, rearranger, exec) };
 	}
 
@@ -150,18 +148,18 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
 		validateTables(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
-		
+
 		Set<DataCell> values = inSpecs[PORT_CALIBRATION_TABLE].getColumnSpec(getTargetColumnName()).getDomain()
 				.getValues();
-		scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern()).match(
-					predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values));
+		scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern())
+				.match(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values));
 		validateSettings(scoreColumns);
 
-		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values), scoreColumns);
+		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values),
+				scoreColumns);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}
-
 
 	/**
 	 * Validated settings.
