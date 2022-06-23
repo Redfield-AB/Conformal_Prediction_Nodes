@@ -36,7 +36,6 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.nodes.AbstractConformalPredictorNodeModel;
-import se.redfield.cp.nodes.ConformalPredictorCalibratorNodeModel;
 
 /**
  * Class used by Conformal Calibrator Node to process input table into output

@@ -37,14 +37,12 @@ import org.knime.core.data.RowKey;
 import org.knime.core.data.collection.CollectionDataValue;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-import se.redfield.cp.nodes.ConformalPredictorScorerNodeModel;
 import se.redfield.cp.nodes.ConformalPredictorScorerNodeModel;
 
 /**
@@ -111,13 +109,13 @@ public class Scorer {
 	/**
 	 * Processes input table. Callects the following metrics for each row: *
 	 * <ul>
-	 * <li>Exact match – number of correct predictions that belong to one class, and
+	 * <li>Exact match ï¿½ number of correct predictions that belong to one class, and
 	 * not belong to any mixed class.</li>
 	 * <li>Soft match - number of correct predictions that belong to one of the
 	 * mixed classes.</li>
-	 * <li>Total match – Exact_match + Soft_match.</li>
-	 * <li>Error – number of predictions that does not match real target class.</li>
-	 * <li>Total – total number of records that belongs to the current target
+	 * <li>Total match ï¿½ Exact_match + Soft_match.</li>
+	 * <li>Error ï¿½ number of predictions that does not match real target class.</li>
+	 * <li>Total ï¿½ total number of records that belongs to the current target
 	 * class.</li>
 	 * <li>Efficiency = Exact_match/(Exact_match + Error)</li>
 	 * <li>Validity = Total_match/Total</li>
@@ -137,7 +135,7 @@ public class Scorer {
 		DataTableSpec spec = inTable.getDataTableSpec();
 		int targetIdx = spec.findColumnIndex(model.getTargetColumn());
 		int classesIdx = spec.findColumnIndex(model.getClassesColumn());
-				
+
 		long total = inTable.size();
 		long count = 0;
 
@@ -161,39 +159,41 @@ public class Scorer {
 			} else if (classes.size() == 1) {
 				score.inc(Metric.SINGLE_CLASS);
 			}
-			
-			
+
 			if (model.isAdditionalEfficiencyMetricsMode()) {
 				efficiencyScores.inc(Metric.COUNT);
-				
-				Map<String, Double> pValues = inputTableSpec.getColumnSpec(targetIdx).getDomain().getValues()
-						.stream().map(DataCell::toString).collect(Collectors.toMap(str -> str,
-								str -> ((DoubleCell) row.getCell(inputTableSpec.findColumnIndex(model.getProbabilityColumnName(str)))).getDoubleValue()));
-				double max=0,second=0,sum=0;
+
+				Map<String, Double> pValues = inputTableSpec.getColumnSpec(targetIdx).getDomain().getValues().stream()
+						.map(DataCell::toString)
+						.collect(Collectors.toMap(str -> str,
+								str -> ((DoubleCell) row
+										.getCell(inputTableSpec.findColumnIndex(model.getProbabilityColumnName(str))))
+										.getDoubleValue()));
+				double max = 0, second = 0, sum = 0;
 				for (Double p : pValues.values()) {
-					sum+=p;
-					efficiencyScores.add(Metric.S, p);//Average Sum of p-values
-					if (p>max) {
+					sum += p;
+					efficiencyScores.add(Metric.S, p);// Average Sum of p-values
+					if (p > max) {
 						max = p;
 						second = max;
-					} else if (p>second) {
+					} else if (p > second) {
 						second = p;
 					}
-				}				
-				efficiencyScores.add(Metric.U, second);//Unconfidence
-				efficiencyScores.add(Metric.F, sum-max);//Fuziness				
+				}
+				efficiencyScores.add(Metric.U, second);// Unconfidence
+				efficiencyScores.add(Metric.F, sum - max);// Fuziness
 				efficiencyScores.add(Metric.N, classes.size());
-				if (classes.size() > 1)					
-					efficiencyScores.inc(Metric.M);			
-				efficiencyScores.add(Metric.E, classes.size()-1);
-				if (max==pValues.get(target))
+				if (classes.size() > 1)
+					efficiencyScores.inc(Metric.M);
+				efficiencyScores.add(Metric.E, classes.size() - 1);
+				if (max == pValues.get(target))
 					efficiencyScores.add(Metric.OU, second);
 				else
 					efficiencyScores.add(Metric.OU, max);
-				efficiencyScores.add(Metric.OF, sum-pValues.get(target));//Observed Fuziness	
-				
+				efficiencyScores.add(Metric.OF, sum - pValues.get(target));// Observed Fuziness
+
 				if (classes.contains(target)) {
-					efficiencyScores.add(Metric.OE, classes.size()-1);
+					efficiencyScores.add(Metric.OE, classes.size() - 1);
 					if (classes.size() > 1)
 						efficiencyScores.inc(Metric.OM);
 				} else {
@@ -201,13 +201,8 @@ public class Scorer {
 					if (classes.size() > 0)
 						efficiencyScores.inc(Metric.OM);
 				}
-				
-				
-					
-					
-				
+
 			}
-			
 
 			exec.checkCanceled();
 			exec.setProgress((double) count++ / total);
@@ -228,7 +223,8 @@ public class Scorer {
 	 * @param exec   Execution context.
 	 * @return
 	 */
-	private BufferedDataTable[] createOutputTables(Map<String, ClassScores> scores, ClassScores efficiencyScores, ExecutionContext exec) {
+	private BufferedDataTable[] createOutputTables(Map<String, ClassScores> scores, ClassScores efficiencyScores,
+			ExecutionContext exec) {
 		BufferedDataContainer cont = exec.createDataContainer(createOutputSpec());
 		BufferedDataContainer efficiencyCont = exec.createDataContainer(createAdditionalEfficiencyMetricSpec());
 
@@ -237,17 +233,18 @@ public class Scorer {
 			cont.addRowToTable(createRow(s, idx++));
 		}
 		cont.close();
-		
+
 		idx = 0;
 		efficiencyCont.addRowToTable(createSummaryRow(scores, efficiencyScores, idx++));
 		efficiencyCont.close();
-		
-		return new BufferedDataTable[] { cont.getTable(), efficiencyCont.getTable()};
+
+		return new BufferedDataTable[] { cont.getTable(), efficiencyCont.getTable() };
 	}
 
 	private DataRow createSummaryRow(Map<String, ClassScores> scores, ClassScores score, long idx) {
 		List<DataCell> cells = new ArrayList<>();
-		double efficency=0, validity=0, strictMatch=0, softMatch=0, totalMatch=0, error=0, total=0, single=0, empty=0;
+		double efficency = 0, validity = 0, strictMatch = 0, softMatch = 0, totalMatch = 0, error = 0, total = 0,
+				single = 0, empty = 0;
 		int c = scores.size();
 		for (ClassScores s : scores.values()) {
 			efficency += s.getEfficiency();
@@ -262,8 +259,8 @@ public class Scorer {
 				empty += s.get(Metric.NULL_CLASS);
 			}
 		}
-		cells.add(new DoubleCell(efficency/c));
-		cells.add(new DoubleCell(validity/c));
+		cells.add(new DoubleCell(efficency / c));
+		cells.add(new DoubleCell(validity / c));
 		if (model.isAdditionalInfoMode()) {
 			cells.add(new DoubleCell(strictMatch));
 			cells.add(new DoubleCell(softMatch));
@@ -274,16 +271,16 @@ public class Scorer {
 			cells.add(new DoubleCell(empty));
 		}
 		if (model.isAdditionalEfficiencyMetricsMode()) {
-			cells.add(new DoubleCell(score.getS()));  //Sum of p-values 
-			cells.add(new DoubleCell(score.getU()));  //Unconfidence 
-			cells.add(new DoubleCell(score.getF()));  //Fuzziness
-			cells.add(new DoubleCell(score.getOU())); //Observed unconfidence
-			cells.add(new DoubleCell(score.getOF())); //Observed Fuzziness
-			cells.add(new DoubleCell(score.getN()));  //Number of Labels
-			cells.add(new DoubleCell(score.getM()));  //Multiple
-			cells.add(new DoubleCell(score.getE()));  //Excess
-			cells.add(new DoubleCell(score.getOM())); //Observed multiple
-			cells.add(new DoubleCell(score.getOE())); //Observed Excess
+			cells.add(new DoubleCell(score.getS())); // Sum of p-values
+			cells.add(new DoubleCell(score.getU())); // Unconfidence
+			cells.add(new DoubleCell(score.getF())); // Fuzziness
+			cells.add(new DoubleCell(score.getOU())); // Observed unconfidence
+			cells.add(new DoubleCell(score.getOF())); // Observed Fuzziness
+			cells.add(new DoubleCell(score.getN())); // Number of Labels
+			cells.add(new DoubleCell(score.getM())); // Multiple
+			cells.add(new DoubleCell(score.getE())); // Excess
+			cells.add(new DoubleCell(score.getOM())); // Observed multiple
+			cells.add(new DoubleCell(score.getOE())); // Observed Excess
 		}
 		return new DefaultRow(RowKey.createRowKey(idx), cells);
 	}
