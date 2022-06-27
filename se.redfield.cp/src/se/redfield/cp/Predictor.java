@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
@@ -38,7 +39,7 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 
-import se.redfield.cp.nodes.AbstractConformalPredictorNodeModel;
+import se.redfield.cp.settings.PredictorSettings;
 
 /**
  * Class used by Conformal Predictor node to process input table and calculate
@@ -47,10 +48,10 @@ import se.redfield.cp.nodes.AbstractConformalPredictorNodeModel;
  */
 public class Predictor {
 
-	private AbstractConformalPredictorNodeModel model;
+	private PredictorSettings settings;
 
-	public Predictor(AbstractConformalPredictorNodeModel model) {
-		this.model = model;
+	public Predictor(PredictorSettings model) {
+		this.settings = model;
 	}
 
 	/**
@@ -59,19 +60,31 @@ public class Predictor {
 	 * @param inPredictionTableSpecs Input prediction table spec.
 	 * @return
 	 */
-	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs, Set<DataCell> values) {
+	public DataTableSpec createOuputTableSpec(DataTableSpec inCalibrationTableSpec,
+			DataTableSpec inPredictionTableSpecs) {
 		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
-		if (!model.getKeepAllColumns()) {
-			r.keepOnly(model.getRequiredColumnNames(inPredictionTableSpecs));
+		if (!settings.getKeepAllColumns()) {
+			r.keepOnly(getRequiredColumnNames(inCalibrationTableSpec));
 		}
 
-//		Set<DataCell> values = inPredictionTableSpecs.getColumnSpec(model.getTargetColumnName()).getDomain()
-//				.getValues();
+		Set<DataCell> values = inCalibrationTableSpec.getColumnSpec(settings.getTargetColumnName()).getDomain()
+				.getValues();
 		for (DataCell v : values) {
 			r.append(new ScoreCellFactory(v.toString(), inPredictionTableSpecs, null));
 		}
 
 		return r.createSpec();
+	}
+
+	private String[] getRequiredColumnNames(DataTableSpec inCalibrationTableSpec) {
+		List<String> columns = inCalibrationTableSpec.getColumnSpec(settings.getTargetColumnName()).getDomain()
+				.getValues().stream().map(c -> settings.getProbabilityColumnName(c.toString()))
+				.collect(Collectors.toList());
+
+		if (settings.getKeepIdColumn()) {
+			columns.add(settings.getIdColumn());
+		}
+		return columns.toArray(new String[] {});
 	}
 
 	/**
@@ -86,12 +99,13 @@ public class Predictor {
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
-		Set<DataCell> values = inCalibrationTable.getDataTableSpec().getColumnSpec(model.getTargetColumnName()).getDomain().getValues();
+		Set<DataCell> values = inCalibrationTable.getDataTableSpec().getColumnSpec(settings.getTargetColumnName())
+				.getDomain().getValues();
 
 		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 
-		if (!model.getKeepAllColumns()) {
-			r.keepOnly(model.getRequiredColumnNames(predictionTableSpec));
+		if (!settings.getKeepAllColumns()) {
+			r.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
 		}
 
 		for (DataCell v : values) {
@@ -113,9 +127,9 @@ public class Predictor {
 	private Map<String, List<Double>> collectCalibrationProbabilities(BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> result = new HashMap<>();
-		int valIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(model.getTargetColumnName());
+		int valIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(settings.getTargetColumnName());
 		int probIndex = inCalibrationTable.getDataTableSpec()
-				.findColumnIndex(model.getCalibrationProbabilityColumnName());
+				.findColumnIndex(settings.getCalibrationProbabilityColumnName());
 
 		long rowCount = inCalibrationTable.size();
 		long index = 0;
@@ -155,13 +169,12 @@ public class Predictor {
 	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
 		List<DataColumnSpec> columns = new ArrayList<>();
 
-		if (model.getIncludeRankColumn()) {
-			columns.add(new DataColumnSpecCreator(String.format(model.getPredictionRankColumnFormat(), value),
+		if (settings.getIncludeRankColumn()) {
+			columns.add(new DataColumnSpecCreator(String.format(settings.getPredictionRankColumnFormat(), value),
 					LongCell.TYPE).createSpec());
 		}
-		columns.add(
-				new DataColumnSpecCreator(String.format(model.getPredictionScoreColumnFormat(), value), DoubleCell.TYPE)
-						.createSpec());
+		columns.add(new DataColumnSpecCreator(String.format(settings.getPredictionScoreColumnFormat(), value),
+				DoubleCell.TYPE).createSpec());
 
 		return columns.toArray(new DataColumnSpec[] {});
 	}
@@ -172,13 +185,15 @@ public class Predictor {
 	 */
 	private class ScoreCellFactory extends AbstractCellFactory {
 
-		private int pColumnIndex;
-		private List<Double> probabilities;
+		private final int pColumnIndex;
+		private final List<Double> probabilities;
+		private final Random rand;
 
 		public ScoreCellFactory(String value, DataTableSpec inSpec, List<Double> probabilities) {
 			super(createScoreColumnsSpecs(value));
-			this.pColumnIndex = inSpec.findColumnIndex(model.getProbabilityColumnName(value));
+			this.pColumnIndex = inSpec.findColumnIndex(settings.getProbabilityColumnName(value));
 			this.probabilities = probabilities;
+			rand = new Random();
 		}
 
 		@Override
@@ -186,15 +201,14 @@ public class Predictor {
 			double p = ((DoubleValue) row.getCell(pColumnIndex)).getDoubleValue();
 			int rank = getRank(p);
 			int[] ranks = getRanks(p);
-			//Does not take into consideration that many probabilities can be equal to p
+			// Does not take into consideration that many probabilities can be equal to p
 			// TODO adjust the calculation to calculate the exact p value
 			// FIXED
-			Random rand = new Random();
-			double score = (((double) probabilities.size() - ranks[1]) + rand.nextDouble() * (((double) ranks[1] - ranks[0])))
-					/ (probabilities.size() + 1);
+			double score = (((double) probabilities.size() - ranks[1])
+					+ rand.nextDouble() * ((double) ranks[1] - ranks[0])) / (probabilities.size() + 1);
 			DoubleCell scoreCell = new DoubleCell(score);
 
-			if (model.getIncludeRankColumn()) {
+			if (settings.getIncludeRankColumn()) {
 				return new DataCell[] { new LongCell(rank), scoreCell };
 			} else {
 				return new DataCell[] { scoreCell };
@@ -222,8 +236,9 @@ public class Predictor {
 		}
 
 		/**
-		 * Calculated the rank for a given probability as well as the rank for the nearest smaller value. 
-		 * Rank is the position probability would take in a sorted list of probabilities from the calibration table.
+		 * Calculated the rank for a given probability as well as the rank for the
+		 * nearest smaller value. Rank is the position probability would take in a
+		 * sorted list of probabilities from the calibration table.
 		 * 
 		 * @param p Probability.
 		 * @return [Rank, smaller rank].
@@ -236,7 +251,7 @@ public class Predictor {
 				idx += 1;
 			}
 			idxs[1] = idx - 1;
-			return idxs;	
+			return idxs;
 		}
 	}
 

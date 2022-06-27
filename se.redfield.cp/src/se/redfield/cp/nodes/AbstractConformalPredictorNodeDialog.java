@@ -47,7 +47,7 @@ public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSe
 		keepAllSettings = AbstractConformalPredictorNodeModel.createKeepAllColumnsSettingsModel();
 		keepIdColumnSetting = AbstractConformalPredictorNodeModel.createKeepIdColumnSettings();
 		idColumnSettings = AbstractConformalPredictorNodeModel.createIdColumnSettings();
-		includeRank = ConformalPredictorNodeModel.createIncludeRankSettings();
+		// includeRank = ConformalPredictorNodeModel.createIncludeRankSettings();
 
 		keepAllSettings.addChangeListener(e -> {
 			keepIdColumnSetting.setEnabled(!keepAllSettings.getBooleanValue());
@@ -68,7 +68,8 @@ public abstract class AbstractConformalPredictorNodeDialog extends DefaultNodeSe
 		addDialogComponent(
 				new DialogComponentColumnNameSelection(idColumnSettings, "ID column:", tableIndex, DataValue.class));
 
-		addDialogComponent(new DialogComponentBoolean(includeRank, "Include Rank column"));
+		// addDialogComponent(new DialogComponentBoolean(includeRank, "Include Rank
+		// column"));
 	}
 
 	@Override

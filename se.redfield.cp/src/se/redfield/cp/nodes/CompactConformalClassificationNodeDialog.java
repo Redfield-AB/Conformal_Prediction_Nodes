@@ -15,45 +15,47 @@
  */
 package se.redfield.cp.nodes;
 
-import org.knime.core.data.DataTableSpec;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NotConfigurableException;
+import org.knime.core.data.DataValue;
+import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
+import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
 import org.knime.core.node.defaultnodesettings.DialogComponentString;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
+
+import se.redfield.cp.settings.CompactClassificationNodeSettigns;
+import se.redfield.cp.settings.ui.DialogComponentProbabilityFormat;
 
 /**
  * Node dialog for Classifier node
  *
  */
-public class CompactConformalClassificationNodeDialog extends AbstractConformalPredictorNodeDialog {
+public class CompactConformalClassificationNodeDialog extends DefaultNodeSettingsPane {
 
-	private SettingsModelBoolean classesAsStringSettings;
-	private SettingsModelString stringSeparatorSettings;
+	private final CompactClassificationNodeSettigns settings = new CompactClassificationNodeSettigns();
 
+	@SuppressWarnings("unchecked")
 	public CompactConformalClassificationNodeDialog() {
-		super(CompactConformalClassificationNodeModel.PORT_CALIBRATION_TABLE);
+		super();
 
-		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorClassifierNodeModel.createErrorRateSettings();
-		classesAsStringSettings = ConformalPredictorClassifierNodeModel.createClassesAsStringSettings();
-		stringSeparatorSettings = ConformalPredictorClassifierNodeModel.createStringSeparatorSettings();
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "Target column:",
+				CompactConformalClassificationNodeModel.PORT_CALIBRATION_TABLE.getIdx(), DataValue.class));
+		addDialogComponent(new DialogComponentProbabilityFormat(settings.getTargetSettings()));
 
-		classesAsStringSettings
-				.addChangeListener(e -> stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue()));
+		createNewGroup("Define output");
+
+		addDialogComponent(new DialogComponentBoolean(settings.getKeepAllColumnsModel(), "Keep All Columns"));
+		addDialogComponent(new DialogComponentBoolean(settings.getKeepIdColumnModel(), "Keep ID column"));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getIdColumnModel(), "ID column:",
+				CompactConformalClassificationNodeModel.PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
+
+		addDialogComponent(new DialogComponentBoolean(settings.getIncludeRankModel(), "Include Rank column"));
+
 		createNewGroup("User defined error rate");
-		addDialogComponent(new DialogComponentNumber(errorRateSettings, "Error rate (significance level)", 0.05,
-				createFlowVariableModel(errorRateSettings)));
+		addDialogComponent(new DialogComponentNumber(settings.getErrorRateModel(), "Error rate (significance level)",
+				0.05, createFlowVariableModel(settings.getErrorRateModel())));
 		createNewGroup("Additional output");
-		addDialogComponent(new DialogComponentBoolean(classesAsStringSettings, "Output Classes as String"));
-		addDialogComponent(new DialogComponentString(stringSeparatorSettings, "String separator"));
+		addDialogComponent(new DialogComponentBoolean(settings.getClassesAsStringModel(), "Output Classes as String"));
+		addDialogComponent(new DialogComponentString(settings.getStringSeparatorModel(), "String separator"));
 	}
 
-	@Override
-	public void loadAdditionalSettingsFrom(NodeSettingsRO settings, DataTableSpec[] specs)
-			throws NotConfigurableException {
-		stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue());
-	}
 }

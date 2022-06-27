@@ -16,6 +16,7 @@
 package se.redfield.cp;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-import se.redfield.cp.nodes.AbstractConformalPredictorNodeModel;
+import se.redfield.cp.settings.CalibratorSettings;
 
 /**
  * Class used by Conformal Calibrator Node to process input table into output
@@ -44,15 +45,15 @@ import se.redfield.cp.nodes.AbstractConformalPredictorNodeModel;
  */
 public class Calibrator {
 
-	private AbstractConformalPredictorNodeModel model;
+	private CalibratorSettings settings;
 
 	/**
 	 * Creates instance
 	 * 
-	 * @param model
+	 * @param settings
 	 */
-	public Calibrator(AbstractConformalPredictorNodeModel model) {
-		this.model = model;
+	public Calibrator(CalibratorSettings settings) {
+		this.settings = settings;
 	}
 
 	/**
@@ -63,8 +64,8 @@ public class Calibrator {
 	 */
 	public DataTableSpec createOutputSpec(DataTableSpec inputTableSpec) {
 		ColumnRearranger rearranger = new ColumnRearranger(inputTableSpec);
-		if (!model.getKeepAllColumns()) {
-			rearranger.keepOnly(model.getRequiredColumnNames(inputTableSpec));
+		if (!settings.getKeepAllColumns()) {
+			rearranger.keepOnly(getRequiredColumnNames(inputTableSpec));
 		}
 		rearranger.append(createPCellFactory(inputTableSpec));
 		rearranger.append(createScoreCellFactory(inputTableSpec));
@@ -85,8 +86,8 @@ public class Calibrator {
 			throws CanceledExecutionException {
 		ColumnRearranger appendProbabilityRearranger = new ColumnRearranger(inCalibrationTable.getDataTableSpec());
 
-		if (!model.getKeepAllColumns()) {
-			appendProbabilityRearranger.keepOnly(model.getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
+		if (!settings.getKeepAllColumns()) {
+			appendProbabilityRearranger.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
 		}
 		appendProbabilityRearranger.append(createPCellFactory(inCalibrationTable.getDataTableSpec()));
 
@@ -94,7 +95,7 @@ public class Calibrator {
 				appendProbabilityRearranger, exec.createSubProgress(0.25));
 
 		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable,
-				Arrays.asList(model.getTargetColumnName(), model.getCalibrationProbabilityColumnName()),
+				Arrays.asList(settings.getTargetColumnName(), settings.getCalibrationProbabilityColumnName()),
 				new boolean[] { true, false });
 		BufferedDataTable sortedTable = sorter.sort(exec.createSubExecutionContext(0.5));
 
@@ -111,13 +112,14 @@ public class Calibrator {
 	 * @return
 	 */
 	private CellFactory createPCellFactory(DataTableSpec inputTableSpec) {
-		int columnIndex = inputTableSpec.findColumnIndex(model.getTargetColumnName());
+		int columnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName());
 		Map<String, Integer> probabilityColumns = inputTableSpec.getColumnSpec(columnIndex).getDomain().getValues()
 				.stream().map(DataCell::toString).collect(Collectors.toMap(str -> str,
-						str -> inputTableSpec.findColumnIndex(model.getProbabilityColumnName(str))));
+						str -> inputTableSpec.findColumnIndex(settings.getProbabilityColumnName(str))));
 
 		return new AbstractCellFactory(
-				new DataColumnSpecCreator(model.getCalibrationProbabilityColumnName(), DoubleCell.TYPE).createSpec()) {
+				new DataColumnSpecCreator(settings.getCalibrationProbabilityColumnName(), DoubleCell.TYPE)
+						.createSpec()) {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
@@ -140,10 +142,10 @@ public class Calibrator {
 	 * @return
 	 */
 	private CellFactory createScoreCellFactory(DataTableSpec inputTableSpec) {
-		int columnIndex = inputTableSpec.findColumnIndex(model.getTargetColumnName());
+		int columnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName());
 
 		return new AbstractCellFactory(
-				new DataColumnSpecCreator(model.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
+				new DataColumnSpecCreator(settings.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
 
 			private long counter = 0;
 			private String prevValue = null;
@@ -159,5 +161,15 @@ public class Calibrator {
 				return new DataCell[] { new LongCell(counter++) };
 			}
 		};
+	}
+
+	private String[] getRequiredColumnNames(DataTableSpec spec) {
+		List<String> columns = spec.getColumnSpec(settings.getTargetColumnName()).getDomain().getValues().stream()
+				.map(c -> settings.getProbabilityColumnName(c.toString())).collect(Collectors.toList());
+		columns.add(settings.getTargetColumnName());
+		if (settings.getKeepIdColumn()) {
+			columns.add(settings.getIdColumn());
+		}
+		return columns.toArray(new String[] {});
 	}
 }

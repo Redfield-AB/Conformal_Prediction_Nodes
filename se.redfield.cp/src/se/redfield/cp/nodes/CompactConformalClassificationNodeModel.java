@@ -43,11 +43,9 @@ import org.knime.core.node.ExecutionContext;
 import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.streamable.InputPortRole;
 import org.knime.core.node.streamable.OutputPortRole;
@@ -56,8 +54,10 @@ import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.Calibrator;
 import se.redfield.cp.Predictor;
+import se.redfield.cp.settings.CompactClassificationNodeSettigns;
 //import se.redfield.cp.nodes.ConformalPredictorClassifierNodeModel.ClassifierCellFactory;
 import se.redfield.cp.utils.ColumnPatternExtractor;
+import se.redfield.cp.utils.PortDef;
 
 /**
  * Conformal Classifier node. Assigns predicted classes to each row based on
@@ -65,72 +65,28 @@ import se.redfield.cp.utils.ColumnPatternExtractor;
  * represented as Collection or String column
  *
  */
-public class CompactConformalClassificationNodeModel extends AbstractConformalPredictorNodeModel {
+public class CompactConformalClassificationNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(CompactConformalClassificationNodeModel.class);
 
-	public static final int PORT_PREDICTION_TABLE = 1;
-	public static final int PORT_CALIBRATION_TABLE = 0;
+	public static final PortDef PORT_PREDICTION_TABLE = new PortDef(1, "Prediction table");
+	public static final PortDef PORT_CALIBRATION_TABLE = new PortDef(0, "Calibration table");
 
-	private static final String KEY_ERROR_RATE = "errorRate";
-	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
-	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
-
-	private static final double DEFAULT_ERROR_RATE = 0.05;
-	private static final String DEFAULT_SEPARATOR = ";";
-	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
-
-	private final SettingsModelDoubleBounded errorRateSettings = createErrorRateSettings();
-	private final SettingsModelBoolean classesAsStringSettings = createClassesAsStringSettings();
-	private final SettingsModelString stringSeparatorSettings = createStringSeparatorSettings();
-
-	private Calibrator calibrator = new Calibrator(this);
-	private Predictor predictor = new Predictor(this);
+	private CompactClassificationNodeSettigns settings = new CompactClassificationNodeSettigns();
+	private Calibrator calibrator = new Calibrator(settings);
+	private Predictor predictor = new Predictor(settings);
 	private ColumnRearranger rearranger;
-	private Map<String, Integer> scoreColumns;
-
-	static SettingsModelDoubleBounded createErrorRateSettings() {
-		return new SettingsModelDoubleBounded(KEY_ERROR_RATE, DEFAULT_ERROR_RATE, 0, 1);
-	}
-
-	static SettingsModelBoolean createClassesAsStringSettings() {
-		return new SettingsModelBoolean(KEY_CLASSES_AS_STRING, false);
-	}
-
-	static SettingsModelString createStringSeparatorSettings() {
-		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
-	}
 
 	protected CompactConformalClassificationNodeModel() {
 		super(2, 1);
 	}
 
-	public double getErrorRate() {
-		return errorRateSettings.getDoubleValue();
-	}
-
-	public boolean getClassesAsString() {
-		return classesAsStringSettings.getBooleanValue();
-	}
-
-	public String getStringSeparator() {
-		return stringSeparatorSettings.getStringValue();
-	}
-
-	private String getScoreColumnPattern() {
-		return ConformalPredictorLoopEndNodeModel.P_VALUE_COLUMN_REGEX;
-	}
-
-	private String getClassesColumnName() {
-		return DEFAULT_CLASSES_COLUMN_NAME;
-	}
-
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		pushFlowVariableDouble(KEY_ERROR_RATE, getErrorRate());
+		// pushFlowVariableDouble(KEY_ERROR_RATE, getErrorRate());
 
-		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
-		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
+		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE.getIdx()];
+		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE.getIdx()];
 		// Calibrate
 		BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
 
@@ -139,24 +95,20 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 				exec.createSubExecutionContext(0.1));
 		inPredictionTable = exec.createColumnRearrangeTable(inPredictionTable, r, exec.createSubProgress(0.9));
 
-		r.append(new ClassifierCellFactory(scoreColumns));
-
 		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inPredictionTable, rearranger, exec) };
 	}
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
-		validateTables(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
+		settings.validateSettings(inSpecs);
 
-		Set<DataCell> values = inSpecs[PORT_CALIBRATION_TABLE].getColumnSpec(getTargetColumnName()).getDomain()
-				.getValues();
-		scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern())
-				.match(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values));
+		Map<String, Integer> scoreColumns = new ColumnPatternExtractor(settings.getScoreColumnPattern())
+				.match(predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
+						inSpecs[PORT_PREDICTION_TABLE.getIdx()]));
 		validateSettings(scoreColumns);
 
-		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values),
-				scoreColumns);
+		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
+				inSpecs[PORT_PREDICTION_TABLE.getIdx()]), scoreColumns);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}
@@ -174,9 +126,6 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 			throw new InvalidSettingsException("No p-values columns found in provided table");
 		}
 
-		if (getClassesAsString() && getStringSeparator().isEmpty()) {
-			throw new InvalidSettingsException("String separator is empty");
-		}
 	}
 
 	/**
@@ -212,7 +161,7 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 
 			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
 				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				if (score > getErrorRate()) {
+				if (score > settings.getErrorRate()) {
 					classes.add(e.getKey());
 				}
 			}
@@ -221,8 +170,8 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 			if (classes.isEmpty()) {
 				result = new MissingCell("No class asigned");
 			} else {
-				if (getClassesAsString()) {
-					result = new StringCell(String.join(getStringSeparator(), classes));
+				if (settings.getClassesAsString()) {
+					result = new StringCell(String.join(settings.getStringSeparator(), classes));
 				} else {
 					result = CollectionCellFactory
 							.createSetCell(classes.stream().map(StringCell::new).collect(toList()));
@@ -240,8 +189,8 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 	 * @return
 	 */
 	private DataColumnSpec createClassColumnSpec() {
-		DataType type = getClassesAsString() ? StringCell.TYPE : SetCell.getCollectionType(StringCell.TYPE);
-		return new DataColumnSpecCreator(getClassesColumnName(), type).createSpec();
+		DataType type = settings.getClassesAsString() ? StringCell.TYPE : SetCell.getCollectionType(StringCell.TYPE);
+		return new DataColumnSpecCreator(settings.getClassesColumnName(), type).createSpec();
 	}
 
 	@Override
@@ -262,23 +211,17 @@ public class CompactConformalClassificationNodeModel extends AbstractConformalPr
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
-		errorRateSettings.saveSettingsTo(settings);
-		classesAsStringSettings.saveSettingsTo(settings);
-		stringSeparatorSettings.saveSettingsTo(settings);
+		this.settings.saveSettingsTo(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
-		errorRateSettings.validateSettings(settings);
-		classesAsStringSettings.validateSettings(settings);
-		stringSeparatorSettings.validateSettings(settings);
+		this.settings.validateSettings(settings);
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		errorRateSettings.loadSettingsFrom(settings);
-		classesAsStringSettings.loadSettingsFrom(settings);
-		stringSeparatorSettings.loadSettingsFrom(settings);
+		this.settings.loadSettingFrom(settings);
 	}
 
 	@Override

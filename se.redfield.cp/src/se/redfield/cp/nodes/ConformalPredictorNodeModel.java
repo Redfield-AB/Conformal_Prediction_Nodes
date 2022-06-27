@@ -15,15 +15,18 @@
  */
 package se.redfield.cp.nodes;
 
-import java.util.Set;
+import java.io.File;
+import java.io.IOException;
 
-import org.knime.core.data.DataCell;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.node.BufferedDataTable;
+import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
+import org.knime.core.node.ExecutionMonitor;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeLogger;
+import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.port.PortObjectSpec;
@@ -36,20 +39,24 @@ import org.knime.core.node.streamable.PortOutput;
 import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.Predictor;
+import se.redfield.cp.settings.PredictorNodeSettings;
+import se.redfield.cp.utils.PortDef;
 
 /**
  * Conformal Predictor Node. Uses calibration data to calculate Rank and P-value
  * for each row of the input prediction table.
  *
  */
-public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeModel {
+public class ConformalPredictorNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorNodeModel.class);
 
-	public static final int PORT_PREDICTION_TABLE = 0;
-	public static final int PORT_CALIBRATION_TABLE = 1;
+	public static final PortDef PORT_PREDICTION_TABLE = new PortDef(0, "Prediction table");
+	public static final PortDef PORT_CALIBRATION_TABLE = new PortDef(1, "Calibration table");
 
-	private final Predictor predictor = new Predictor(this);
+	private final PredictorNodeSettings settings = new PredictorNodeSettings();
+
+	private final Predictor predictor = new Predictor(settings);
 
 	protected ConformalPredictorNodeModel() {
 		super(2, 1);
@@ -57,8 +64,8 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE];
-		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE];
+		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE.getIdx()];
+		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE.getIdx()];
 		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), inCalibrationTable,
 				exec.createSubExecutionContext(0.1));
 
@@ -68,68 +75,29 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		validateSettings(inSpecs[PORT_CALIBRATION_TABLE]);
-		validateTables(inSpecs[PORT_CALIBRATION_TABLE], inSpecs[PORT_PREDICTION_TABLE]);
+		if (settings.getTargetColumnName().isEmpty()) {
+			attemptAutoconfig(inSpecs);
+		}
 
-		// validateCalibrationTable(inSpecs[PORT_CALIBRATION_TABLE],
-		// inSpecs[PORT_PREDICTION_TABLE]);
-//		
-		Set<DataCell> values = inSpecs[PORT_CALIBRATION_TABLE].getColumnSpec(getTargetColumnName()).getDomain()
-				.getValues();
-		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE], values) };
+		settings.validateSettings(inSpecs);
+
+		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
+				inSpecs[PORT_PREDICTION_TABLE.getIdx()]) };
 	}
 
-//	/**
-//	 * Validates calibration table spec.
-//	 * 
-//	 * @param calibrationTableSpec Calibration table spec.
-//	 * @param predictionTableSpec  Input Prediction table spec.
-//	 * @throws InvalidSettingsException
-//	 */
-//	private void validateCalibrationTable(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-//			throws InvalidSettingsException {
-//		if (!calibrationTableSpec.containsName(getTargetColumnName())) {
-//			throw new InvalidSettingsException(
-//					String.format("Class column '%s' is missing from the calibration table", getTargetColumnName()));
-//		}
-//
-//		if (!calibrationTableSpec.containsName(getCalibrationProbabilityColumnName())) {
-//			throw new InvalidSettingsException(
-//					String.format("Probability columns '%s' is missing from the calibration table",
-//							getCalibrationProbabilityColumnName()));
-//		}
-//
-//		DataColumnSpec columnSpec = calibrationTableSpec.getColumnSpec(getTargetColumnName());
-//		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
-//			throw new InvalidSettingsException(
-//					"Calibration table: insufficient domain information for column: " + getTargetColumnName());
-//		}
-//
-//		checkAllClassesPresent(calibrationTableSpec, predictionTableSpec);
-//	}
-//
-//	/**
-//	 * Checks if the calibration table contains data for all classes present in
-//	 * prediction table
-//	 * 
-//	 * @param calibrationTableSpec Calibration table spec.
-//	 * @param predictionTableSpec  Input prediction table spec.
-//	 * @throws InvalidSettingsException
-//	 */
-//	private void checkAllClassesPresent(DataTableSpec calibrationTableSpec, DataTableSpec predictionTableSpec)
-//			throws InvalidSettingsException {
-//		Set<String> calibrationClasses = calibrationTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
-//				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
-//		Set<String> predictionValues = predictionTableSpec.getColumnSpec(getTargetColumnName()).getDomain()
-//				.getValues().stream().map(DataCell::toString).collect(Collectors.toSet());
-//
-//		for (String val : predictionValues) {
-//			if (!calibrationClasses.contains(val)) {
-//				throw new InvalidSettingsException(
-//						String.format("Class '%s' is missing in the calibration table", val));
-//			}
-//		}
-//	}
+	private void attemptAutoconfig(DataTableSpec[] inSpecs) {
+		String[] columnNames = inSpecs[PORT_CALIBRATION_TABLE.getIdx()].getColumnNames();
+		for (String column : columnNames) {
+			try {
+				settings.getTargetColumnModel().setStringValue(column);
+				settings.validateSettings(inSpecs);
+				setWarningMessage(String.format("Node autoconfigured with '%s' column", column));
+				return;
+			} catch (InvalidSettingsException e) {
+				settings.getTargetColumnModel().setStringValue("");
+			}
+		}
+	}
 
 	@Override
 	public InputPortRole[] getInputPortRoles() {
@@ -149,27 +117,44 @@ public class ConformalPredictorNodeModel extends AbstractConformalPredictorNodeM
 
 			@Override
 			public void runFinal(PortInput[] inputs, PortOutput[] outputs, ExecutionContext exec) throws Exception {
-				BufferedDataTable inCalibrationTable = (BufferedDataTable) ((PortObjectInput) inputs[PORT_CALIBRATION_TABLE])
-						.getPortObject();
-				ColumnRearranger rearranger = predictor.createRearranger((DataTableSpec) inSpecs[PORT_PREDICTION_TABLE],
-						inCalibrationTable, exec);
-				rearranger.createStreamableFunction(PORT_PREDICTION_TABLE, 0).runFinal(inputs, outputs, exec);
+				BufferedDataTable inCalibrationTable = (BufferedDataTable) ((PortObjectInput) inputs[PORT_CALIBRATION_TABLE
+						.getIdx()]).getPortObject();
+				ColumnRearranger rearranger = predictor.createRearranger(
+						(DataTableSpec) inSpecs[PORT_PREDICTION_TABLE.getIdx()], inCalibrationTable, exec);
+				rearranger.createStreamableFunction(PORT_PREDICTION_TABLE.getIdx(), 0).runFinal(inputs, outputs, exec);
 			}
 		};
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		super.loadValidatedSettingsFrom(settings);
+		this.settings.loadSettingFrom(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
-		super.validateSettings(settings);
+		this.settings.validateSettings(settings);
 	}
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
-		super.saveSettingsTo(settings);
+		this.settings.saveSettingsTo(settings);
+	}
+
+	@Override
+	protected void loadInternals(File nodeInternDir, ExecutionMonitor exec)
+			throws IOException, CanceledExecutionException {
+		// no internals
+	}
+
+	@Override
+	protected void saveInternals(File nodeInternDir, ExecutionMonitor exec)
+			throws IOException, CanceledExecutionException {
+		// no internals
+	}
+
+	@Override
+	protected void reset() {
+		// nothing to do
 	}
 }

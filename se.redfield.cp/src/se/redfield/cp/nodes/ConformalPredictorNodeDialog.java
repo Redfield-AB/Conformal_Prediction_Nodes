@@ -15,13 +15,37 @@
  */
 package se.redfield.cp.nodes;
 
+import org.knime.core.data.DataValue;
+import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
+import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
+
+import se.redfield.cp.settings.PredictorNodeSettings;
+import se.redfield.cp.settings.ui.DialogComponentProbabilityFormat;
+
 /**
  * Node dialog for Conformal Predictor node.
  *
  */
-public class ConformalPredictorNodeDialog extends AbstractConformalPredictorNodeDialog {
+public class ConformalPredictorNodeDialog extends DefaultNodeSettingsPane {
 
+	private final PredictorNodeSettings settings = new PredictorNodeSettings();
+
+	@SuppressWarnings("unchecked")
 	public ConformalPredictorNodeDialog() {
-		super(ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE);
+		super();
+
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "Target column:",
+				ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE.getIdx(), DataValue.class));
+		addDialogComponent(new DialogComponentProbabilityFormat(settings.getTargetSettings()));
+
+		createNewGroup("Define output");
+
+		addDialogComponent(new DialogComponentBoolean(settings.getKeepAllColumnsModel(), "Keep All Columns"));
+		addDialogComponent(new DialogComponentBoolean(settings.getKeepIdColumnModel(), "Keep ID column"));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getIdColumnModel(), "ID column:",
+				ConformalPredictorNodeModel.PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
+
+		addDialogComponent(new DialogComponentBoolean(settings.getIncludeRankModel(), "Include Rank column"));
 	}
 }
