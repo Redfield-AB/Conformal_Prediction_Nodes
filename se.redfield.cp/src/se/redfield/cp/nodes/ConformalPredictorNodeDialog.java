@@ -35,16 +35,18 @@ public class ConformalPredictorNodeDialog extends DefaultNodeSettingsPane {
 	public ConformalPredictorNodeDialog() {
 		super();
 
-		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "Target column:",
-				ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE.getIdx(), DataValue.class));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetSettings().getTargetColumnModel(),
+				"Target column:", ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE.getIdx(), DataValue.class));
 		addDialogComponent(new DialogComponentProbabilityFormat(settings.getTargetSettings()));
 
 		createNewGroup("Define output");
 
-		addDialogComponent(new DialogComponentBoolean(settings.getKeepAllColumnsModel(), "Keep All Columns"));
-		addDialogComponent(new DialogComponentBoolean(settings.getKeepIdColumnModel(), "Keep ID column"));
-		addDialogComponent(new DialogComponentColumnNameSelection(settings.getIdColumnModel(), "ID column:",
-				ConformalPredictorNodeModel.PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepAllColumnsModel(), "Keep All Columns"));
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepIdColumnModel(), "Keep ID column"));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getKeepColumns().getIdColumnModel(),
+				"ID column:", ConformalPredictorNodeModel.PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
 
 		addDialogComponent(new DialogComponentBoolean(settings.getIncludeRankModel(), "Include Rank column"));
 	}

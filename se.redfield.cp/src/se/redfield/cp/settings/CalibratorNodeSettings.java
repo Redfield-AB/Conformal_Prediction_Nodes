@@ -15,108 +15,49 @@
  */
 package se.redfield.cp.settings;
 
+import java.util.function.Consumer;
+
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.nodes.ConformalPredictorCalibratorNodeModel;
 
 public class CalibratorNodeSettings implements CalibratorSettings {
 
-	private static final String KEY_KEEP_ALL_COLUMNS = "keepAllColumns";
-	private static final String KEY_KEEP_ID_COLUMN = "keepIdColumn";
-	private static final String KEY_ID_COLUMN = "idColumn";
-
 	private final TargetSettings targetSettings;
-	protected final SettingsModelBoolean keepAllColumns;
-	protected final SettingsModelBoolean keepIdColumn;
-	protected final SettingsModelString idColumn;
+	private final KeepColumnsSettings keepColumns;
 
 	public CalibratorNodeSettings() {
 		targetSettings = new TargetSettings(ConformalPredictorCalibratorNodeModel.PORT_INPUT_TABLE,
 				ConformalPredictorCalibratorNodeModel.PORT_INPUT_TABLE);
-		keepAllColumns = new SettingsModelBoolean(KEY_KEEP_ALL_COLUMNS, true);
-		keepIdColumn = new SettingsModelBoolean(KEY_KEEP_ID_COLUMN, false);
-		idColumn = new SettingsModelString(KEY_ID_COLUMN, "");
-
-		keepAllColumns.addChangeListener(e -> {
-			keepIdColumn.setEnabled(!keepAllColumns.getBooleanValue());
-			if (!keepIdColumn.isEnabled()) {
-				keepIdColumn.setBooleanValue(false);
-			}
-		});
-		keepIdColumn.addChangeListener(e -> idColumn.setEnabled(keepIdColumn.getBooleanValue()));
-
-		keepIdColumn.setEnabled(false);
-		idColumn.setEnabled(false);
+		keepColumns = new KeepColumnsSettings(ConformalPredictorCalibratorNodeModel.PORT_INPUT_TABLE);
 	}
 
+	@Override
 	public TargetSettings getTargetSettings() {
 		return targetSettings;
 	}
 
-	public SettingsModelString getTargetColumnModel() {
-		return targetSettings.getTargetColumnModel();
-	}
-
 	@Override
-	public String getTargetColumnName() {
-		return targetSettings.getTargetColumn();
-	}
-
-	public SettingsModelBoolean getKeepAllColumnsModel() {
-		return keepAllColumns;
-	}
-
-	@Override
-	public boolean getKeepAllColumns() {
-		return keepAllColumns.getBooleanValue();
-	}
-
-	public SettingsModelBoolean getKeepIdColumnModel() {
-		return keepIdColumn;
-	}
-
-	public boolean getKeepIdColumn() {
-		return keepIdColumn.getBooleanValue();
-	}
-
-	public SettingsModelString getIdColumnModel() {
-		return idColumn;
-	}
-
-	public String getIdColumn() {
-		return idColumn.getStringValue();
-	}
-
-	@Override
-	public String getProbabilityColumnName(String value) {
-		return targetSettings.getProbabilityColumnName(value);
+	public KeepColumnsSettings getKeepColumns() {
+		return keepColumns;
 	}
 
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetSettings.loadSettingsFrom(settings);
-		keepAllColumns.loadSettingsFrom(settings);
-		keepIdColumn.loadSettingsFrom(settings);
-		idColumn.loadSettingsFrom(settings);
+		keepColumns.loadSettingFrom(settings);
 	}
 
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetSettings.saveSettingsTo(settings);
-		keepAllColumns.saveSettingsTo(settings);
-		keepIdColumn.saveSettingsTo(settings);
-		idColumn.saveSettingsTo(settings);
+		keepColumns.saveSettingsTo(settings);
 	}
 
 	private void validate() throws InvalidSettingsException {
 		targetSettings.validate();
-
-		if (!getKeepAllColumns() && getKeepIdColumn() && getIdColumn().isEmpty()) {
-			throw new InvalidSettingsException("Id column is not selected");
-		}
+		keepColumns.validate();
 	}
 
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
@@ -125,14 +66,12 @@ public class CalibratorNodeSettings implements CalibratorSettings {
 		temp.validate();
 	}
 
-	public void validateSettings(DataTableSpec[] inSpecs) throws InvalidSettingsException {
+	public void validateSettings(DataTableSpec[] inSpecs, Consumer<String> msgConsumer)
+			throws InvalidSettingsException {
+		targetSettings.validateSettings(inSpecs, msgConsumer);
+		keepColumns.validateSettings(inSpecs);
+
 		validate();
-
-		targetSettings.validateSettings(inSpecs);
-
-		if (!getKeepAllColumns() && getKeepIdColumn() && !inSpecs[0].containsName(getIdColumn())) {
-			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
-		}
 	}
 
 }

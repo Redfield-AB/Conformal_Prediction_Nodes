@@ -19,15 +19,9 @@ public interface PredictorSettings {
 	public static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
 	public static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "p-value (%s)";
 
-	public String getTargetColumnName();
+	public TargetSettings getTargetSettings();
 
-	public String getProbabilityColumnName(String value);
-
-	public boolean getKeepAllColumns();
-
-	public boolean getKeepIdColumn();
-
-	public String getIdColumn();
+	public KeepColumnsSettings getKeepColumns();
 
 	public boolean getIncludeRankColumn();
 

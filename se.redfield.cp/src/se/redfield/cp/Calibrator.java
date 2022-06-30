@@ -37,6 +37,7 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.settings.CalibratorSettings;
+import se.redfield.cp.settings.TargetSettings;
 
 /**
  * Class used by Conformal Calibrator Node to process input table into output
@@ -64,7 +65,7 @@ public class Calibrator {
 	 */
 	public DataTableSpec createOutputSpec(DataTableSpec inputTableSpec) {
 		ColumnRearranger rearranger = new ColumnRearranger(inputTableSpec);
-		if (!settings.getKeepAllColumns()) {
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
 			rearranger.keepOnly(getRequiredColumnNames(inputTableSpec));
 		}
 		rearranger.append(createPCellFactory(inputTableSpec));
@@ -86,7 +87,7 @@ public class Calibrator {
 			throws CanceledExecutionException {
 		ColumnRearranger appendProbabilityRearranger = new ColumnRearranger(inCalibrationTable.getDataTableSpec());
 
-		if (!settings.getKeepAllColumns()) {
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
 			appendProbabilityRearranger.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
 		}
 		appendProbabilityRearranger.append(createPCellFactory(inCalibrationTable.getDataTableSpec()));
@@ -94,8 +95,8 @@ public class Calibrator {
 		BufferedDataTable appendedProbabilityTable = exec.createColumnRearrangeTable(inCalibrationTable,
 				appendProbabilityRearranger, exec.createSubProgress(0.25));
 
-		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable,
-				Arrays.asList(settings.getTargetColumnName(), settings.getCalibrationProbabilityColumnName()),
+		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable, Arrays
+				.asList(settings.getTargetSettings().getTargetColumn(), settings.getCalibrationProbabilityColumnName()),
 				new boolean[] { true, false });
 		BufferedDataTable sortedTable = sorter.sort(exec.createSubExecutionContext(0.5));
 
@@ -112,10 +113,11 @@ public class Calibrator {
 	 * @return
 	 */
 	private CellFactory createPCellFactory(DataTableSpec inputTableSpec) {
-		int columnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName());
+		TargetSettings targetSettings = settings.getTargetSettings();
+		int columnIndex = inputTableSpec.findColumnIndex(targetSettings.getTargetColumn());
 		Map<String, Integer> probabilityColumns = inputTableSpec.getColumnSpec(columnIndex).getDomain().getValues()
 				.stream().map(DataCell::toString).collect(Collectors.toMap(str -> str,
-						str -> inputTableSpec.findColumnIndex(settings.getProbabilityColumnName(str))));
+						str -> inputTableSpec.findColumnIndex(targetSettings.getProbabilityColumnName(str))));
 
 		return new AbstractCellFactory(
 				new DataColumnSpecCreator(settings.getCalibrationProbabilityColumnName(), DoubleCell.TYPE)
@@ -142,7 +144,7 @@ public class Calibrator {
 	 * @return
 	 */
 	private CellFactory createScoreCellFactory(DataTableSpec inputTableSpec) {
-		int columnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName());
+		int columnIndex = inputTableSpec.findColumnIndex(settings.getTargetSettings().getTargetColumn());
 
 		return new AbstractCellFactory(
 				new DataColumnSpecCreator(settings.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
@@ -164,11 +166,12 @@ public class Calibrator {
 	}
 
 	private String[] getRequiredColumnNames(DataTableSpec spec) {
-		List<String> columns = spec.getColumnSpec(settings.getTargetColumnName()).getDomain().getValues().stream()
-				.map(c -> settings.getProbabilityColumnName(c.toString())).collect(Collectors.toList());
-		columns.add(settings.getTargetColumnName());
-		if (settings.getKeepIdColumn()) {
-			columns.add(settings.getIdColumn());
+		List<String> columns = spec.getColumnSpec(settings.getTargetSettings().getTargetColumn()).getDomain()
+				.getValues().stream().map(c -> settings.getTargetSettings().getProbabilityColumnName(c.toString()))
+				.collect(Collectors.toList());
+		columns.add(settings.getTargetSettings().getTargetColumn());
+		if (settings.getKeepColumns().getKeepIdColumn()) {
+			columns.add(settings.getKeepColumns().getIdColumn());
 		}
 		return columns.toArray(new String[] {});
 	}

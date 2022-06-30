@@ -19,15 +19,9 @@ public interface CalibratorSettings {
 	public static final String CALIBRATION_P_COLUMN_DEFAULT_NAME = "P";
 	public static final String CALIBRATION_RANK_COLUMN_DEFAULT_NAME = "Rank";
 
-	public String getTargetColumnName();
+	public TargetSettings getTargetSettings();
 
-	public String getProbabilityColumnName(String value);
-
-	public boolean getKeepAllColumns();
-
-	public boolean getKeepIdColumn();
-
-	public String getIdColumn();
+	public KeepColumnsSettings getKeepColumns();
 
 	public default String getCalibrationProbabilityColumnName() {
 		return CALIBRATION_P_COLUMN_DEFAULT_NAME;

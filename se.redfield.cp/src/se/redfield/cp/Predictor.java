@@ -63,12 +63,12 @@ public class Predictor {
 	public DataTableSpec createOuputTableSpec(DataTableSpec inCalibrationTableSpec,
 			DataTableSpec inPredictionTableSpecs) {
 		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
-		if (!settings.getKeepAllColumns()) {
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
 			r.keepOnly(getRequiredColumnNames(inCalibrationTableSpec));
 		}
 
-		Set<DataCell> values = inCalibrationTableSpec.getColumnSpec(settings.getTargetColumnName()).getDomain()
-				.getValues();
+		Set<DataCell> values = inCalibrationTableSpec.getColumnSpec(settings.getTargetSettings().getTargetColumn())
+				.getDomain().getValues();
 		for (DataCell v : values) {
 			r.append(new ScoreCellFactory(v.toString(), inPredictionTableSpecs, null));
 		}
@@ -77,12 +77,13 @@ public class Predictor {
 	}
 
 	private String[] getRequiredColumnNames(DataTableSpec inCalibrationTableSpec) {
-		List<String> columns = inCalibrationTableSpec.getColumnSpec(settings.getTargetColumnName()).getDomain()
-				.getValues().stream().map(c -> settings.getProbabilityColumnName(c.toString()))
+		List<String> columns = inCalibrationTableSpec.getColumnSpec(settings.getTargetSettings().getTargetColumn())
+				.getDomain().getValues().stream()
+				.map(c -> settings.getTargetSettings().getProbabilityColumnName(c.toString()))
 				.collect(Collectors.toList());
 
-		if (settings.getKeepIdColumn()) {
-			columns.add(settings.getIdColumn());
+		if (settings.getKeepColumns().getKeepIdColumn()) {
+			columns.add(settings.getKeepColumns().getIdColumn());
 		}
 		return columns.toArray(new String[] {});
 	}
@@ -99,12 +100,12 @@ public class Predictor {
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
-		Set<DataCell> values = inCalibrationTable.getDataTableSpec().getColumnSpec(settings.getTargetColumnName())
-				.getDomain().getValues();
+		Set<DataCell> values = inCalibrationTable.getDataTableSpec()
+				.getColumnSpec(settings.getTargetSettings().getTargetColumn()).getDomain().getValues();
 
 		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 
-		if (!settings.getKeepAllColumns()) {
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
 			r.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
 		}
 
@@ -127,7 +128,8 @@ public class Predictor {
 	private Map<String, List<Double>> collectCalibrationProbabilities(BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> result = new HashMap<>();
-		int valIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(settings.getTargetColumnName());
+		int valIndex = inCalibrationTable.getDataTableSpec()
+				.findColumnIndex(settings.getTargetSettings().getTargetColumn());
 		int probIndex = inCalibrationTable.getDataTableSpec()
 				.findColumnIndex(settings.getCalibrationProbabilityColumnName());
 
@@ -191,7 +193,7 @@ public class Predictor {
 
 		public ScoreCellFactory(String value, DataTableSpec inSpec, List<Double> probabilities) {
 			super(createScoreColumnsSpecs(value));
-			this.pColumnIndex = inSpec.findColumnIndex(settings.getProbabilityColumnName(value));
+			this.pColumnIndex = inSpec.findColumnIndex(settings.getTargetSettings().getProbabilityColumnName(value));
 			this.probabilities = probabilities;
 			rand = new Random();
 		}

@@ -15,84 +15,39 @@
  */
 package se.redfield.cp.settings;
 
+import static se.redfield.cp.nodes.ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE;
+import static se.redfield.cp.nodes.ConformalPredictorNodeModel.PORT_PREDICTION_TABLE;
+
+import java.util.function.Consumer;
+
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
-
-import se.redfield.cp.nodes.ConformalPredictorNodeModel;
 
 public class PredictorNodeSettings implements PredictorSettings {
 
-	private static final String KEY_KEEP_ALL_COLUMNS = "keepAllColumns";
-	private static final String KEY_KEEP_ID_COLUMN = "keepIdColumn";
-	private static final String KEY_ID_COLUMN = "idColumn";
 	private static final String KEY_INCLUDE_RANK_COLUMN = "includeRankColumn";
 
 	private final TargetSettings targetSettings;
-	private final SettingsModelBoolean keepAllColumns;
-	private final SettingsModelBoolean keepIdColumn;
-	private final SettingsModelString idColumn;
+	private final KeepColumnsSettings keepColumns;
 	private final SettingsModelBoolean includeRank;
 
 	public PredictorNodeSettings() {
-		targetSettings = new TargetSettings(ConformalPredictorNodeModel.PORT_CALIBRATION_TABLE,
-				ConformalPredictorNodeModel.PORT_PREDICTION_TABLE);
-		keepAllColumns = new SettingsModelBoolean(KEY_KEEP_ALL_COLUMNS, true);
-		keepIdColumn = new SettingsModelBoolean(KEY_KEEP_ID_COLUMN, false);
-		idColumn = new SettingsModelString(KEY_ID_COLUMN, "");
+		targetSettings = new TargetSettings(PORT_CALIBRATION_TABLE, PORT_PREDICTION_TABLE);
+		keepColumns = new KeepColumnsSettings(PORT_PREDICTION_TABLE);
 		includeRank = new SettingsModelBoolean(KEY_INCLUDE_RANK_COLUMN, false);
-
-		keepAllColumns.addChangeListener(e -> {
-			keepIdColumn.setEnabled(!keepAllColumns.getBooleanValue());
-			if (!keepIdColumn.isEnabled()) {
-				keepIdColumn.setBooleanValue(false);
-			}
-		});
-		keepIdColumn.addChangeListener(e -> idColumn.setEnabled(keepIdColumn.getBooleanValue()));
-
-		keepIdColumn.setEnabled(false);
-		idColumn.setEnabled(false);
 	}
 
+	@Override
 	public TargetSettings getTargetSettings() {
 		return targetSettings;
 	}
 
-	public SettingsModelString getTargetColumnModel() {
-		return targetSettings.getTargetColumnModel();
-	}
-
 	@Override
-	public String getTargetColumnName() {
-		return targetSettings.getTargetColumn();
-	}
-
-	public SettingsModelBoolean getKeepAllColumnsModel() {
-		return keepAllColumns;
-	}
-
-	@Override
-	public boolean getKeepAllColumns() {
-		return keepAllColumns.getBooleanValue();
-	}
-
-	public SettingsModelBoolean getKeepIdColumnModel() {
-		return keepIdColumn;
-	}
-
-	public boolean getKeepIdColumn() {
-		return keepIdColumn.getBooleanValue();
-	}
-
-	public SettingsModelString getIdColumnModel() {
-		return idColumn;
-	}
-
-	public String getIdColumn() {
-		return idColumn.getStringValue();
+	public KeepColumnsSettings getKeepColumns() {
+		return keepColumns;
 	}
 
 	public SettingsModelBoolean getIncludeRankModel() {
@@ -104,33 +59,21 @@ public class PredictorNodeSettings implements PredictorSettings {
 		return includeRank.getBooleanValue();
 	}
 
-	@Override
-	public String getProbabilityColumnName(String value) {
-		return targetSettings.getProbabilityColumnName(value);
-	}
-
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetSettings.loadSettingsFrom(settings);
-		keepAllColumns.loadSettingsFrom(settings);
-		keepIdColumn.loadSettingsFrom(settings);
-		idColumn.loadSettingsFrom(settings);
+		keepColumns.loadSettingFrom(settings);
 		includeRank.loadSettingsFrom(settings);
 	}
 
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetSettings.saveSettingsTo(settings);
-		keepAllColumns.saveSettingsTo(settings);
-		keepIdColumn.saveSettingsTo(settings);
-		idColumn.saveSettingsTo(settings);
+		keepColumns.saveSettingsTo(settings);
 		includeRank.saveSettingsTo(settings);
 	}
 
 	private void validate() throws InvalidSettingsException {
 		targetSettings.validate();
-
-		if (!getKeepAllColumns() && getKeepIdColumn() && getIdColumn().isEmpty()) {
-			throw new InvalidSettingsException("Id column is not selected");
-		}
+		keepColumns.validate();
 	}
 
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
@@ -139,15 +82,12 @@ public class PredictorNodeSettings implements PredictorSettings {
 		temp.validate();
 	}
 
-	public void validateSettings(DataTableSpec[] inSpecs) throws InvalidSettingsException {
+	public void validateSettings(DataTableSpec[] inSpecs, Consumer<String> msgConsumer)
+			throws InvalidSettingsException {
+		targetSettings.validateSettings(inSpecs, msgConsumer);
+		keepColumns.validateSettings(inSpecs);
+
 		validate();
-
-		targetSettings.validateSettings(inSpecs);
-
-		if (!getKeepAllColumns() && getKeepIdColumn()
-				&& !inSpecs[ConformalPredictorNodeModel.PORT_PREDICTION_TABLE.getIdx()].containsName(getIdColumn())) {
-			throw new InvalidSettingsException("Id column not found: " + getIdColumn());
-		}
 	}
 
 }

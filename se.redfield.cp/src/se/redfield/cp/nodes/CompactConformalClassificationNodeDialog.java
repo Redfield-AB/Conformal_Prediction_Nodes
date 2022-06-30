@@ -37,25 +37,31 @@ public class CompactConformalClassificationNodeDialog extends DefaultNodeSetting
 	public CompactConformalClassificationNodeDialog() {
 		super();
 
-		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "Target column:",
-				CompactConformalClassificationNodeModel.PORT_CALIBRATION_TABLE.getIdx(), DataValue.class));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetSettings().getTargetColumnModel(),
+				"Target column:", CompactConformalClassificationNodeModel.PORT_CALIBRATION_TABLE.getIdx(),
+				DataValue.class));
 		addDialogComponent(new DialogComponentProbabilityFormat(settings.getTargetSettings()));
 
 		createNewGroup("Define output");
 
-		addDialogComponent(new DialogComponentBoolean(settings.getKeepAllColumnsModel(), "Keep All Columns"));
-		addDialogComponent(new DialogComponentBoolean(settings.getKeepIdColumnModel(), "Keep ID column"));
-		addDialogComponent(new DialogComponentColumnNameSelection(settings.getIdColumnModel(), "ID column:",
-				CompactConformalClassificationNodeModel.PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepAllColumnsModel(), "Keep All Columns"));
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepIdColumnModel(), "Keep ID column"));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getKeepColumns().getIdColumnModel(),
+				"ID column:", CompactConformalClassificationNodeModel.PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
 
 		addDialogComponent(new DialogComponentBoolean(settings.getIncludeRankModel(), "Include Rank column"));
 
 		createNewGroup("User defined error rate");
-		addDialogComponent(new DialogComponentNumber(settings.getErrorRateModel(), "Error rate (significance level)",
-				0.05, createFlowVariableModel(settings.getErrorRateModel())));
+		addDialogComponent(new DialogComponentNumber(settings.getClassifierSettings().getErrorRateModel(),
+				"Error rate (significance level)", 0.05,
+				createFlowVariableModel(settings.getClassifierSettings().getErrorRateModel())));
 		createNewGroup("Additional output");
-		addDialogComponent(new DialogComponentBoolean(settings.getClassesAsStringModel(), "Output Classes as String"));
-		addDialogComponent(new DialogComponentString(settings.getStringSeparatorModel(), "String separator"));
+		addDialogComponent(new DialogComponentBoolean(settings.getClassifierSettings().getClassesAsStringModel(),
+				"Output Classes as String"));
+		addDialogComponent(new DialogComponentString(settings.getClassifierSettings().getStringSeparatorModel(),
+				"String separator"));
 	}
 
 }

@@ -16,6 +16,7 @@
 package se.redfield.cp.settings;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
@@ -98,8 +99,11 @@ public class TargetSettings {
 		}
 	}
 
-	public void validateSettings(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		validate();
+	public void validateSettings(DataTableSpec[] inSpecs, Consumer<String> msgConsumer)
+			throws InvalidSettingsException {
+		if (getTargetColumn().isEmpty()) {
+			attemptAutoconfig(inSpecs, msgConsumer);
+		}
 
 		DataColumnSpec columnSpec = inSpecs[targetColumnTable.getIdx()].getColumnSpec(getTargetColumn());
 		if (!columnSpec.getDomain().hasValues() || columnSpec.getDomain().getValues().isEmpty()) {
@@ -117,6 +121,22 @@ public class TargetSettings {
 					throw new InvalidSettingsException(
 							table.getName() + ": Probability column not found: " + pColumnName);
 				}
+			}
+		}
+
+		validate();
+	}
+
+	private void attemptAutoconfig(DataTableSpec[] inSpecs, Consumer<String> msgConsumer) {
+		String[] columnNames = inSpecs[targetColumnTable.getIdx()].getColumnNames();
+		for (String column : columnNames) {
+			try {
+				targetColumn.setStringValue(column);
+				validateSettings(inSpecs, msgConsumer);
+				msgConsumer.accept(String.format("Node autoconfigured with '%s' column", column));
+				return;
+			} catch (InvalidSettingsException e) {
+				targetColumn.setStringValue("");
 			}
 		}
 	}

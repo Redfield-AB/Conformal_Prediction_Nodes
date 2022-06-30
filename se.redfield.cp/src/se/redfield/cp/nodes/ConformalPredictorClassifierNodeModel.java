@@ -15,28 +15,11 @@
  */
 package se.redfield.cp.nodes;
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import org.knime.core.data.DataCell;
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataColumnSpecCreator;
-import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
-import org.knime.core.data.DoubleValue;
-import org.knime.core.data.MissingCell;
-import org.knime.core.data.collection.CollectionCellFactory;
-import org.knime.core.data.collection.SetCell;
-import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.ColumnRearranger;
-import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -46,16 +29,14 @@ import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.port.PortObjectSpec;
 import org.knime.core.node.streamable.InputPortRole;
 import org.knime.core.node.streamable.OutputPortRole;
 import org.knime.core.node.streamable.PartitionInfo;
 import org.knime.core.node.streamable.StreamableOperator;
 
-import se.redfield.cp.utils.ColumnPatternExtractor;
+import se.redfield.cp.ClassifierCellFactory;
+import se.redfield.cp.settings.ClassifierSettings;
 
 /**
  * Conformal Classifier node. Assigns predicted classes to each row based on
@@ -66,155 +47,41 @@ import se.redfield.cp.utils.ColumnPatternExtractor;
 public class ConformalPredictorClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorClassifierNodeModel.class);
-	
-	private static final String KEY_ERROR_RATE = "errorRate";
-	private static final String KEY_CLASSES_AS_STRING = "classesAsString";
-	private static final String KEY_STRING_SEPARATOR = "stringSeparator";
 
-	private static final double DEFAULT_ERROR_RATE = 0.2;
-	private static final String DEFAULT_SEPARATOR = ";";
-	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
-
-	private final SettingsModelDoubleBounded errorRateSettings = createErrorRateSettings();
-	private final SettingsModelBoolean classesAsStringSettings = createClassesAsStringSettings();
-	private final SettingsModelString stringSeparatorSettings = createStringSeparatorSettings();
+	private final ClassifierSettings settings = new ClassifierSettings();
 
 	private ColumnRearranger rearranger;
-
-	static SettingsModelDoubleBounded createErrorRateSettings() {
-		return new SettingsModelDoubleBounded(KEY_ERROR_RATE, DEFAULT_ERROR_RATE, 0, 1);
-	}
-
-	static SettingsModelBoolean createClassesAsStringSettings() {
-		return new SettingsModelBoolean(KEY_CLASSES_AS_STRING, false);
-	}
-
-	static SettingsModelString createStringSeparatorSettings() {
-		return new SettingsModelString(KEY_STRING_SEPARATOR, DEFAULT_SEPARATOR);
-	}
 
 	protected ConformalPredictorClassifierNodeModel() {
 		super(1, 1);
 	}
 
-	public double getErrorRate() {
-		return errorRateSettings.getDoubleValue();
-	}
-
-	public boolean getClassesAsString() {
-		return classesAsStringSettings.getBooleanValue();
-	}
-
-	public String getStringSeparator() {
-		return stringSeparatorSettings.getStringValue();
-	}
-
-	private String getScoreColumnPattern() {
-		return ConformalPredictorLoopEndNodeModel.P_VALUE_COLUMN_REGEX;
-	}
-
-	private String getClassesColumnName() {
-		return DEFAULT_CLASSES_COLUMN_NAME;
-	}
-
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-
-		pushFlowVariableDouble(KEY_ERROR_RATE, getErrorRate());
+		pushFlowVariableDouble(ClassifierSettings.KEY_ERROR_RATE, settings.getErrorRate());
 		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inData[0], rearranger, exec) };
 	}
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		Map<String, Integer> scoreColumns = new ColumnPatternExtractor(getScoreColumnPattern()).match(inSpecs[0]);
-		validateSettings(scoreColumns);
+		DataTableSpec inSpec = inSpecs[0];
 
-		rearranger = createRearranger(inSpecs[0], scoreColumns);
+		settings.configure(inSpec);
+		rearranger = createRearranger(inSpec);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}
 
 	/**
-	 * Validated settings.
-	 * 
-	 * @param scoreColumns Score columns collected from the input table.
-	 * @throws InvalidSettingsException If scoreColumns is empty or if string
-	 *                                  separator is empty in case String output
-	 *                                  mode is selected
-	 */
-	private void validateSettings(Map<String, Integer> scoreColumns) throws InvalidSettingsException {
-		if (scoreColumns.isEmpty()) {
-			throw new InvalidSettingsException("No p-values columns found in provided table");
-		}
-
-		if (getClassesAsString() && getStringSeparator().isEmpty()) {
-			throw new InvalidSettingsException("String separator is empty");
-		}
-	}
-
-	/**
 	 * Creates ColumnRearranger
 	 * 
-	 * @param inSpec       Input table spec
-	 * @param scoreColumns Collected score columns
+	 * @param inSpec Input table spec
 	 * @return rearranger
 	 */
-	private ColumnRearranger createRearranger(DataTableSpec inSpec, Map<String, Integer> scoreColumns) {
+	private ColumnRearranger createRearranger(DataTableSpec inSpec) {
 		ColumnRearranger r = new ColumnRearranger(inSpec);
-		r.append(new ClassifierCellFactory(scoreColumns));
+		r.append(new ClassifierCellFactory(settings));
 		return r;
-	}
-
-	/**
-	 * CellFactory used to create Classes column. Collects all classes that has
-	 * P-value greater than selected threshold.
-	 *
-	 */
-	private class ClassifierCellFactory extends AbstractCellFactory {
-
-		private Map<String, Integer> scoreColumns;
-
-		public ClassifierCellFactory(Map<String, Integer> scoreColumns) {
-			super(createClassColumnSpec());
-			this.scoreColumns = scoreColumns;
-		}
-
-		@Override
-		public DataCell[] getCells(DataRow row) {
-			Set<String> classes = new HashSet<>();
-
-			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
-				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				if (score > getErrorRate()) {
-					classes.add(e.getKey());
-				}
-			}
-
-			DataCell result;
-			if (classes.isEmpty()) {
-				result = new MissingCell("No class asigned");
-			} else {
-				if (getClassesAsString()) {
-					result = new StringCell(String.join(getStringSeparator(), classes));
-				} else {
-					result = CollectionCellFactory
-							.createSetCell(classes.stream().map(StringCell::new).collect(toList()));
-				}
-			}
-
-			return new DataCell[] { result };
-		}
-
-	}
-
-	/**
-	 * Created {@link DataColumnSpec} from classes column
-	 * 
-	 * @return
-	 */
-	private DataColumnSpec createClassColumnSpec() {
-		DataType type = getClassesAsString() ? StringCell.TYPE : SetCell.getCollectionType(StringCell.TYPE);
-		return new DataColumnSpecCreator(getClassesColumnName(), type).createSpec();
 	}
 
 	@Override
@@ -235,23 +102,17 @@ public class ConformalPredictorClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected void saveSettingsTo(NodeSettingsWO settings) {
-		errorRateSettings.saveSettingsTo(settings);
-		classesAsStringSettings.saveSettingsTo(settings);
-		stringSeparatorSettings.saveSettingsTo(settings);
+		this.settings.saveSettingsTo(settings);
 	}
 
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
-		errorRateSettings.validateSettings(settings);
-		classesAsStringSettings.validateSettings(settings);
-		stringSeparatorSettings.validateSettings(settings);
+		this.settings.validateSettings(settings);
 	}
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		errorRateSettings.loadSettingsFrom(settings);
-		classesAsStringSettings.loadSettingsFrom(settings);
-		stringSeparatorSettings.loadSettingsFrom(settings);
+		this.settings.loadSettingsFrom(settings);
 	}
 
 	@Override

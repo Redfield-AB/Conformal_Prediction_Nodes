@@ -15,14 +15,6 @@
  */
 package se.redfield.cp.nodes;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.util.List;
-
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataValue;
@@ -32,14 +24,10 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
-import org.knime.core.node.defaultnodesettings.DialogComponentColumnFilter;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
 import org.knime.core.node.defaultnodesettings.DialogComponentString;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelFilterString;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
-import org.knime.core.node.util.ColumnFilterPanel;
-import org.knime.core.node.util.ColumnSelectionPanel;
 
 /**
  * Node dialog for Predictor Scorer Node.
@@ -53,7 +41,6 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 //	private ColumnSelectionPanel pValueSelectionPanel;
 //	private SettingsModelFilterString m_pValueCols;
 	private SettingsModelBoolean additionalEfficiencyMetricsSettings;
-    
 
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorScorerNodeDialog() {
@@ -61,10 +48,10 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 
 		SettingsModelString targetColumnSettings = ConformalPredictorScorerNodeModel.createTargetColumnSettings();
 		classesColumnSettings = ConformalPredictorScorerNodeModel.createClassesColumnSettings();
-		SettingsModelString stringSeparatorSettings = ConformalPredictorClassifierNodeModel
-				.createStringSeparatorSettings();
+		SettingsModelString stringSeparatorSettings = ConformalPredictorScorerNodeModel.createStringSeparatorSettings();
 		SettingsModelBoolean additionalInfoSettings = ConformalPredictorScorerNodeModel.createAdditionalInfoSettings();
-		additionalEfficiencyMetricsSettings = ConformalPredictorScorerNodeModel.createAdditionalEfficiencyMetricsSettings();
+		additionalEfficiencyMetricsSettings = ConformalPredictorScorerNodeModel
+				.createAdditionalEfficiencyMetricsSettings();
 
 		stringSeparatorComp = new DialogComponentString(stringSeparatorSettings, "String separator:");
 		stringSeparatorComp.getComponentPanel().setVisible(false);
@@ -73,7 +60,7 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 
 //		m_pValueCols = ConformalPredictorScorerNodeModel.createPValueSelectionSettings();
 //        additionalEfficiencyMetricsSettings.addChangeListener(e->calcPValueSelectionVisibilty());
-		
+
 		addDialogComponent(
 				new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", 0, DataValue.class));
 		addDialogComponent(new DialogComponentColumnNameSelection(classesColumnSettings, "Classes column:", 0,
@@ -81,7 +68,8 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 		addDialogComponent(stringSeparatorComp);
 		createNewGroup("Output");
 		addDialogComponent(new DialogComponentBoolean(additionalInfoSettings, "Additional prediction information"));
-		addDialogComponent(new DialogComponentBoolean(additionalEfficiencyMetricsSettings, "Additional efficiency metrics"));
+		addDialogComponent(
+				new DialogComponentBoolean(additionalEfficiencyMetricsSettings, "Additional efficiency metrics"));
 //		addDialogComponent(new DialogComponentColumnFilter(m_pValueCols,0));
 	}
 

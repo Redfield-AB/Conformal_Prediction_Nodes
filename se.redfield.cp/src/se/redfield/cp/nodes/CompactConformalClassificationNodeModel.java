@@ -15,28 +15,11 @@
  */
 package se.redfield.cp.nodes;
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
-import org.knime.core.data.DataCell;
-import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataColumnSpecCreator;
-import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataType;
-import org.knime.core.data.DoubleValue;
-import org.knime.core.data.MissingCell;
-import org.knime.core.data.collection.CollectionCellFactory;
-import org.knime.core.data.collection.SetCell;
-import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.ColumnRearranger;
-import org.knime.core.data.def.StringCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -46,17 +29,12 @@ import org.knime.core.node.NodeLogger;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.port.PortObjectSpec;
-import org.knime.core.node.streamable.InputPortRole;
-import org.knime.core.node.streamable.OutputPortRole;
-import org.knime.core.node.streamable.PartitionInfo;
-import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.Calibrator;
+import se.redfield.cp.ClassifierCellFactory;
 import se.redfield.cp.Predictor;
+import se.redfield.cp.settings.ClassifierSettings;
 import se.redfield.cp.settings.CompactClassificationNodeSettigns;
-//import se.redfield.cp.nodes.ConformalPredictorClassifierNodeModel.ClassifierCellFactory;
-import se.redfield.cp.utils.ColumnPatternExtractor;
 import se.redfield.cp.utils.PortDef;
 
 /**
@@ -83,7 +61,7 @@ public class CompactConformalClassificationNodeModel extends NodeModel {
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		// pushFlowVariableDouble(KEY_ERROR_RATE, getErrorRate());
+		pushFlowVariableDouble(ClassifierSettings.KEY_ERROR_RATE, settings.getClassifierSettings().getErrorRate());
 
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE.getIdx()];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE.getIdx()];
@@ -100,113 +78,27 @@ public class CompactConformalClassificationNodeModel extends NodeModel {
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		settings.validateSettings(inSpecs);
+		settings.validateSettings(inSpecs, this::setWarningMessage);
+		DataTableSpec predictionTableSpec = predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
+				inSpecs[PORT_PREDICTION_TABLE.getIdx()]);
 
-		Map<String, Integer> scoreColumns = new ColumnPatternExtractor(settings.getScoreColumnPattern())
-				.match(predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
-						inSpecs[PORT_PREDICTION_TABLE.getIdx()]));
-		validateSettings(scoreColumns);
-
-		rearranger = createRearranger(predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
-				inSpecs[PORT_PREDICTION_TABLE.getIdx()]), scoreColumns);
+		rearranger = createRearranger(predictionTableSpec);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}
 
 	/**
-	 * Validated settings.
-	 * 
-	 * @param scoreColumns Score columns collected from the input table.
-	 * @throws InvalidSettingsException If scoreColumns is empty or if string
-	 *                                  separator is empty in case String output
-	 *                                  mode is selected
-	 */
-	private void validateSettings(Map<String, Integer> scoreColumns) throws InvalidSettingsException {
-		if (scoreColumns.isEmpty()) {
-			throw new InvalidSettingsException("No p-values columns found in provided table");
-		}
-
-	}
-
-	/**
 	 * Creates ColumnRearranger
 	 * 
-	 * @param inSpec       Input table spec
-	 * @param scoreColumns Collected score columns
+	 * @param inSpec Input table spec
 	 * @return rearranger
+	 * @throws InvalidSettingsException
 	 */
-	private ColumnRearranger createRearranger(DataTableSpec inSpec, Map<String, Integer> scoreColumns) {
+	private ColumnRearranger createRearranger(DataTableSpec inSpec) throws InvalidSettingsException {
+		settings.getClassifierSettings().configure(inSpec);
 		ColumnRearranger r = new ColumnRearranger(inSpec);
-		r.append(new ClassifierCellFactory(scoreColumns));
+		r.append(new ClassifierCellFactory(settings.getClassifierSettings()));
 		return r;
-	}
-
-	/**
-	 * CellFactory used to create Classes column. Collects all classes that has
-	 * P-value greater than selected threshold.
-	 *
-	 */
-	private class ClassifierCellFactory extends AbstractCellFactory {
-
-		private Map<String, Integer> scoreColumns;
-
-		public ClassifierCellFactory(Map<String, Integer> scoreColumns) {
-			super(createClassColumnSpec());
-			this.scoreColumns = scoreColumns;
-		}
-
-		@Override
-		public DataCell[] getCells(DataRow row) {
-			Set<String> classes = new HashSet<>();
-
-			for (Entry<String, Integer> e : scoreColumns.entrySet()) {
-				double score = ((DoubleValue) row.getCell(e.getValue())).getDoubleValue();
-				if (score > settings.getErrorRate()) {
-					classes.add(e.getKey());
-				}
-			}
-
-			DataCell result;
-			if (classes.isEmpty()) {
-				result = new MissingCell("No class asigned");
-			} else {
-				if (settings.getClassesAsString()) {
-					result = new StringCell(String.join(settings.getStringSeparator(), classes));
-				} else {
-					result = CollectionCellFactory
-							.createSetCell(classes.stream().map(StringCell::new).collect(toList()));
-				}
-			}
-
-			return new DataCell[] { result };
-		}
-
-	}
-
-	/**
-	 * Created {@link DataColumnSpec} from classes column
-	 * 
-	 * @return
-	 */
-	private DataColumnSpec createClassColumnSpec() {
-		DataType type = settings.getClassesAsString() ? StringCell.TYPE : SetCell.getCollectionType(StringCell.TYPE);
-		return new DataColumnSpecCreator(settings.getClassesColumnName(), type).createSpec();
-	}
-
-	@Override
-	public StreamableOperator createStreamableOperator(PartitionInfo partitionInfo, PortObjectSpec[] inSpecs)
-			throws InvalidSettingsException {
-		return rearranger.createStreamableFunction();
-	}
-
-	@Override
-	public InputPortRole[] getInputPortRoles() {
-		return new InputPortRole[] { InputPortRole.DISTRIBUTED_STREAMABLE };
-	}
-
-	@Override
-	public OutputPortRole[] getOutputPortRoles() {
-		return new OutputPortRole[] { OutputPortRole.DISTRIBUTED };
 	}
 
 	@Override

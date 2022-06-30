@@ -50,27 +50,9 @@ public class ConformalPredictorCalibratorNodeModel extends NodeModel {
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		if (settings.getTargetColumnName().isEmpty()) {
-			attemptAutoconfig(inSpecs);
-		}
-
-		settings.validateSettings(inSpecs);
+		settings.validateSettings(inSpecs, this::setWarningMessage);
 
 		return new DataTableSpec[] { calibrator.createOutputSpec(inSpecs[PORT_INPUT_TABLE.getIdx()]) };
-	}
-
-	private void attemptAutoconfig(DataTableSpec[] inSpecs) {
-		String[] columnNames = inSpecs[PORT_INPUT_TABLE.getIdx()].getColumnNames();
-		for (String column : columnNames) {
-			try {
-				settings.getTargetColumnModel().setStringValue(column);
-				settings.validateSettings(inSpecs);
-				setWarningMessage(String.format("Node autoconfigured with '%s' column", column));
-				return;
-			} catch (InvalidSettingsException e) {
-				settings.getTargetColumnModel().setStringValue("");
-			}
-		}
 	}
 
 	@Override
