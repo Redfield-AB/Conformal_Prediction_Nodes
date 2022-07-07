@@ -15,14 +15,52 @@
  */
 package se.redfield.cp.nodes;
 
+import org.knime.core.data.DataValue;
+import org.knime.core.data.DoubleValue;
+import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
+import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
+import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
+
+import se.redfield.cp.settings.CalibratorRegressionNodeSettings;
+
 /**
- * Node Dialog for Calibrator node.
+ * Node Dialog for Calibrator(Regression) node.
  *
  */
-public class ConformalPredictorCalibratorRegressionNodeDialog extends AbstractConformalPredictorRegressionNodeDialog {
+public class ConformalPredictorCalibratorRegressionNodeDialog extends DefaultNodeSettingsPane {
 
+	private final CalibratorRegressionNodeSettings settings = new CalibratorRegressionNodeSettings();
+
+	@SuppressWarnings("unchecked")
 	public ConformalPredictorCalibratorRegressionNodeDialog() {
-		super(0);
+		super();
+		int tableIndex = ConformalPredictorCalibratorRegressionNodeModel.PORT_INPUT_TABLE.getIdx();
+
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "Target column:",
+				tableIndex, DoubleValue.class));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getPredictionColumnModel(),
+				"Prediction column:", tableIndex, DoubleValue.class));
+
+		createNewGroup("Conformal Regression");
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getRegressionSettings().getNormalizedModel(), "Use Normalization"));
+
+		addDialogComponent(new DialogComponentColumnNameSelection(
+				settings.getRegressionSettings().getSigmaColumnModel(), "Difficulty column:",
+				tableIndex, false, DoubleValue.class));
+		addDialogComponent(new DialogComponentNumber(settings.getRegressionSettings().getBetaModel(), "Beta", 0.05,
+				createFlowVariableModel(settings.getRegressionSettings().getBetaModel())));
+
+		createNewGroup("Define output");
+
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepAllColumnsModel(), "Keep All Columns"));
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepIdColumnModel(), "Keep ID column"));
+		addDialogComponent(
+				new DialogComponentColumnNameSelection(settings.getKeepColumns().getIdColumnModel(), "ID column:",
+						tableIndex, DataValue.class));
 	}
 
 }

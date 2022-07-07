@@ -15,7 +15,9 @@
  */
 package se.redfield.cp;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
@@ -34,7 +36,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-import se.redfield.cp.nodes.AbstractConformalPredictorRegressionNodeModel;
+import se.redfield.cp.settings.CalibratorRegressionSettings;
 
 /**
  * Class used by Conformal Calibrator Node to process input table into output
@@ -43,15 +45,15 @@ import se.redfield.cp.nodes.AbstractConformalPredictorRegressionNodeModel;
  */
 public class CalibratorRegression {
 
-	private AbstractConformalPredictorRegressionNodeModel model;
+	private CalibratorRegressionSettings settings;
 
 	/**
 	 * Creates instance
 	 * 
-	 * @param model
+	 * @param settings
 	 */
-	public CalibratorRegression(AbstractConformalPredictorRegressionNodeModel model) {
-		this.model = model;
+	public CalibratorRegression(CalibratorRegressionSettings settings) {
+		this.settings = settings;
 	}
 
 	/**
@@ -62,8 +64,8 @@ public class CalibratorRegression {
 	 */
 	public DataTableSpec createOutputSpec(DataTableSpec inputTableSpec) {
 		ColumnRearranger rearranger = new ColumnRearranger(inputTableSpec);
-		if (!model.getKeepAllColumns()) {
-			rearranger.keepOnly(model.getRequiredColumnNames(inputTableSpec));
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
+			rearranger.keepOnly(getRequiredColumnNames(inputTableSpec));
 		}
 		rearranger.append(createNonconformityCellFactory(inputTableSpec));
 		rearranger.append(createScoreCellFactory(inputTableSpec));
@@ -85,8 +87,8 @@ public class CalibratorRegression {
 		// collect targets and predictions and setup return table
 		ColumnRearranger appendProbabilityRearranger = new ColumnRearranger(inCalibrationTable.getDataTableSpec());
 
-		if (!model.getKeepAllColumns()) {
-			appendProbabilityRearranger.keepOnly(model.getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
+			appendProbabilityRearranger.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
 		}
 		// changed to createNonConformityCellFactory
 		appendProbabilityRearranger.append(createNonconformityCellFactory(inCalibrationTable.getDataTableSpec()));
@@ -95,7 +97,7 @@ public class CalibratorRegression {
 				appendProbabilityRearranger, exec.createSubProgress(0.25));
 
 		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable,
-				Arrays.asList(model.getCalibrationAlphaColumnName()), new boolean[] { false });
+				Arrays.asList(settings.getCalibrationAlphaColumnName()), new boolean[] { false });
 		BufferedDataTable sortedTable = sorter.sort(exec.createSubExecutionContext(0.5));
 
 		ColumnRearranger appendScoreRearranger = new ColumnRearranger(sortedTable.getDataTableSpec());
@@ -111,13 +113,13 @@ public class CalibratorRegression {
 	 * @return
 	 */
 	private CellFactory createNonconformityCellFactory(DataTableSpec inputTableSpec) {
-		int targetColumnIndex = inputTableSpec.findColumnIndex(model.getTargetColumnName()); // get target column
-		int predictionColumnIndex = inputTableSpec.findColumnIndex(model.getPredictionColumnName()); // get prediction
+		int targetColumnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName()); // get target column
+		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName()); // get prediction
 																										// column
-		int sigmaColumnIndex = inputTableSpec.findColumnIndex(model.getSigmaColumnName());
+		int sigmaColumnIndex = inputTableSpec.findColumnIndex(settings.getRegressionSettings().getSigmaColumn());
 
 		return new AbstractCellFactory(
-				new DataColumnSpecCreator(model.getCalibrationAlphaColumnName(), DoubleCell.TYPE).createSpec()) {
+				new DataColumnSpecCreator(settings.getCalibrationAlphaColumnName(), DoubleCell.TYPE).createSpec()) {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
@@ -137,14 +139,15 @@ public class CalibratorRegression {
 						"Prediction column is not double column");
 
 				double nonconformityScore = 0;
-				if (model.getNormalized()) {
+				if (settings.getRegressionSettings().getNormalized()) {
 					DataCell sigmaDataCell = row.getCell(sigmaColumnIndex);
 					if (predictionDataCell.isMissing()) {
 						throw new MissingValueException((MissingValue) sigmaDataCell,
 								"Sigma column contains missing values");
 					}
 					Double dSigma = getDoubleValueFromCell(sigmaDataCell, "Sigma column is not double column");
-					nonconformityScore = Math.abs(dTarget - dPrediction) / (dSigma + model.getBeta());
+					nonconformityScore = Math.abs(dTarget - dPrediction)
+							/ (dSigma + settings.getRegressionSettings().getBeta());
 				} else
 					nonconformityScore = Math.abs(dTarget - dPrediction);
 
@@ -162,7 +165,7 @@ public class CalibratorRegression {
 	 */
 	private CellFactory createScoreCellFactory(DataTableSpec inputTableSpec) {
 		return new AbstractCellFactory(
-				new DataColumnSpecCreator(model.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
+				new DataColumnSpecCreator(settings.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
 
 			private long counter = 0;
 
@@ -179,12 +182,25 @@ public class CalibratorRegression {
 			return ((DoubleCell) cell).getDoubleValue();
 		} else if (cell.getType().getCellClass().equals((IntCell.class))) {
 			// Cast the cell as we know is must be a IntCell.
-			return (double) ((IntCell) cell).getIntValue();
+			return ((IntCell) cell).getIntValue();
 		} else if (cell.getType().getCellClass().equals((LongCell.class))) {
 			// Cast the cell as we know is must be a LongCell.
 			return ((LongCell) cell).getDoubleValue();
 		} else {
 			throw new MissingValueException((MissingValue) cell, errorMessage);
 		}
+	}
+
+	private String[] getRequiredColumnNames(DataTableSpec spec) {
+		List<String> columns = new ArrayList<>();
+		columns.add(settings.getTargetColumnName());
+		columns.add(settings.getPredictionColumnName());
+		if (settings.getRegressionSettings().getNormalized()) {
+			columns.add(settings.getRegressionSettings().getSigmaColumn());
+		}
+		if (settings.getKeepColumns().getKeepIdColumn()) {
+			columns.add(settings.getKeepColumns().getIdColumn());
+		}
+		return columns.toArray(new String[] {});
 	}
 }

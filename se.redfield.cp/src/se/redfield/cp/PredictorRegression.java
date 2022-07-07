@@ -35,8 +35,7 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-//import se.redfield.cp.PredictorRegression.ScoreCellFactory;
-import se.redfield.cp.nodes.ConformalPredictorRegressionNodeModel;
+import se.redfield.cp.settings.PredictorRegressionSettings;
 
 /**
  * Class used by Conformal Predictor node to process input table and calculate
@@ -45,10 +44,10 @@ import se.redfield.cp.nodes.ConformalPredictorRegressionNodeModel;
  */
 public class PredictorRegression {
 
-	private ConformalPredictorRegressionNodeModel model;
+	private PredictorRegressionSettings settings;
 
-	public PredictorRegression(ConformalPredictorRegressionNodeModel model) {
-		this.model = model;
+	public PredictorRegression(PredictorRegressionSettings settings) {
+		this.settings = settings;
 	}
 
 	/**
@@ -59,8 +58,8 @@ public class PredictorRegression {
 	 */
 	public DataTableSpec createOuputTableSpec(DataTableSpec inCalibrationTableSpecs, DataTableSpec inPredictionTableSpecs) {
 		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
-		if (!model.getKeepAllColumns()) {
-			r.keepOnly(model.getRequiredColumnNames(inPredictionTableSpecs));
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
+			r.keepOnly(getRequiredColumnNames(inPredictionTableSpecs));
 		}
 		r.append(createPredictionLowerBoundCellFactory(inPredictionTableSpecs,null));
 		r.append(createPredictionUpperBoundCellFactory(inPredictionTableSpecs,null));
@@ -80,8 +79,8 @@ public class PredictorRegression {
 			ExecutionContext exec) throws CanceledExecutionException {
 		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 
-		if (!model.getKeepAllColumns()) {
-			r.keepOnly(model.getRequiredColumnNames(predictionTableSpec));
+		if (!settings.getKeepColumns().getKeepAllColumns()) {
+			r.keepOnly(getRequiredColumnNames(predictionTableSpec));
 		}
 
 		r.append(createPredictionLowerBoundCellFactory(predictionTableSpec, inCalibrationTable));
@@ -105,14 +104,14 @@ public class PredictorRegression {
 	 * @return
 	 */
 	private CellFactory createPredictionIntervalCellFactory(DataTableSpec inputTableSpec, BufferedDataTable inCalibrationTable, boolean isLower) {
-		int predictionColumnIndex = inputTableSpec.findColumnIndex(model.getPredictionColumnName()); // get prediction column	
-		int sigmaColumnIndex = inputTableSpec.findColumnIndex(model.getSigmaColumnName());
+		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName()); // get prediction column	
+		int sigmaColumnIndex = inputTableSpec.findColumnIndex(settings.getRegressionSettings().getSigmaColumn());
 
 		String columnName; 
 		if (isLower) {
-			columnName = model.getLowerBoundColumnName();
+			columnName = settings.getLowerBoundColumnName();
 		} else {
-			columnName = model.getUpperBoundColumnName();
+			columnName = settings.getUpperBoundColumnName();
 		}
 		
 		return new AbstractCellFactory(
@@ -123,8 +122,8 @@ public class PredictorRegression {
 				int alphaColumnIndex = 0;
 				double alpha = 0;//Get the alpha from the (significant level)'th percentile among the calibration instances
 				if (inCalibrationTable != null) {
-					alphaColumnIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(model.getCalibrationAlphaColumnName()); // get target column
-					alpha = getAlpha(alphaColumnIndex, inCalibrationTable, model.getErrorRate());
+					alphaColumnIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(settings.getCalibrationAlphaColumnName()); // get target column
+					alpha = getAlpha(alphaColumnIndex, inCalibrationTable, settings.getErrorRate());
 				}			
 
 				DataCell predictionDataCell = row.getCell(predictionColumnIndex);
@@ -135,7 +134,7 @@ public class PredictorRegression {
 				
 				double bound;
 
-				if (model.getNormalized()) {
+				if (settings.getRegressionSettings().getNormalized()) {
 					DataCell sigmaDataCell = row.getCell(sigmaColumnIndex);
 					if (predictionDataCell.isMissing()) {
 						throw new MissingValueException((MissingValue) sigmaDataCell, "Sigma column contains missing values");
@@ -143,9 +142,9 @@ public class PredictorRegression {
 					Double dSigma = getDoubleValueFromCell(sigmaDataCell, "Sigma column is not double column");					
 
 					if (isLower) 
-						bound = dPrediction - alpha*(dSigma + model.getBeta());
+						bound = dPrediction - alpha * (dSigma + settings.getRegressionSettings().getBeta());
 					else
-						bound = dPrediction + alpha*(dSigma + model.getBeta());
+						bound = dPrediction + alpha * (dSigma + settings.getRegressionSettings().getBeta());
 				} else {
 					if (isLower) 
 						bound = dPrediction - alpha;
@@ -180,7 +179,7 @@ public class PredictorRegression {
 			return ((DoubleCell) cell).getDoubleValue();					
 		} else if (cell.getType().getCellClass().equals((IntCell.class))) {
 			// Cast the cell as we know ii must be a IntCell.
-			return (double) ((IntCell) cell).getIntValue();				
+			return ((IntCell) cell).getIntValue();				
 		} else if (cell.getType().getCellClass().equals((LongCell.class))) {
 			// Cast the cell as we know ii must be a LongCell.
 			return ((LongCell) cell).getDoubleValue();				
@@ -189,4 +188,15 @@ public class PredictorRegression {
 		}
 	}
 
+	private String[] getRequiredColumnNames(DataTableSpec spec) {
+		List<String> columns = new ArrayList<>();
+		columns.add(settings.getPredictionColumnName());
+		if (settings.getRegressionSettings().getNormalized()) {
+			columns.add(settings.getRegressionSettings().getSigmaColumn());
+		}
+		if (settings.getKeepColumns().getKeepIdColumn()) {
+			columns.add(settings.getKeepColumns().getIdColumn());
+		}
+		return columns.toArray(new String[] {});
+	}
 }

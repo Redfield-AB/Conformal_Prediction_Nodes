@@ -15,11 +15,8 @@
  */
 package se.redfield.cp.nodes;
 
-import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DataValue;
-import org.knime.core.data.StringValue;
-import org.knime.core.data.collection.CollectionDataValue;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
@@ -46,7 +43,7 @@ public class ConformalPredictorScorerRegressionNodeDialog extends DefaultNodeSet
 		SettingsModelString upperboundColumnSettings = ConformalPredictorScorerRegressionNodeModel.createUpperBoundColumnSettings();
 		SettingsModelString lowerboundColumnSettings = ConformalPredictorScorerRegressionNodeModel.createLowerBoundColumnSettings();
 
-		SettingsModelString stringSeparatorSettings = ConformalPredictorRegressionNodeModel
+		SettingsModelString stringSeparatorSettings = ConformalPredictorScorerRegressionNodeModel
 				.createStringSeparatorSettings();
 		SettingsModelBoolean additionalInfoSettings = ConformalPredictorScorerRegressionNodeModel.createAdditionalInfoSettings();
 

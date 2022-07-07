@@ -15,21 +15,51 @@
  */
 package se.redfield.cp.nodes;
 
+import static se.redfield.cp.nodes.ConformalPredictorRegressionNodeModel.PORT_PREDICTION_TABLE;
+
+import org.knime.core.data.DataValue;
+import org.knime.core.data.DoubleValue;
+import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
+import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
+import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
+
+import se.redfield.cp.settings.PredictorRegressionNodeSettings;
 
 /**
  * Node dialog for Conformal Predictor node.
  *
  */
-public class ConformalPredictorRegressionNodeDialog extends AbstractConformalPredictorRegressionNodeDialog {
+public class ConformalPredictorRegressionNodeDialog extends DefaultNodeSettingsPane {
 
+	private PredictorRegressionNodeSettings settings = new PredictorRegressionNodeSettings();
+
+	@SuppressWarnings("unchecked")
 	public ConformalPredictorRegressionNodeDialog() {
-		super(ConformalPredictorRegressionNodeModel.PORT_CALIBRATION_TABLE);
-		createNewGroup("User defined error rate");
-		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorRegressionNodeModel.createErrorRateSettings();
+		super();
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getPredictionColumnModel(),
+				"Prediction column:", PORT_PREDICTION_TABLE.getIdx(), DoubleValue.class));
 
-		addDialogComponent(new DialogComponentNumber(errorRateSettings, "Error rate (significance level)", 0.05,
-				createFlowVariableModel(errorRateSettings)));
+		createNewGroup("Conformal Regression");
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getRegressionSettings().getNormalizedModel(), "Use Normalization"));
+
+		addDialogComponent(
+				new DialogComponentColumnNameSelection(settings.getRegressionSettings().getSigmaColumnModel(),
+						"Difficulty column:", PORT_PREDICTION_TABLE.getIdx(), false, DoubleValue.class));
+		addDialogComponent(new DialogComponentNumber(settings.getRegressionSettings().getBetaModel(), "Beta", 0.05,
+				createFlowVariableModel(settings.getRegressionSettings().getBetaModel())));
+
+		createNewGroup("User defined error rate");
+		addDialogComponent(new DialogComponentNumber(settings.getErrorRateModel(), "Error rate (significance level)",
+				0.05, createFlowVariableModel(settings.getErrorRateModel())));
+
+		createNewGroup("Define output");
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepAllColumnsModel(), "Keep All Columns"));
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getKeepColumns().getKeepIdColumnModel(), "Keep ID column"));
+		addDialogComponent(new DialogComponentColumnNameSelection(settings.getKeepColumns().getIdColumnModel(),
+				"ID column:", PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
 	}
 }
