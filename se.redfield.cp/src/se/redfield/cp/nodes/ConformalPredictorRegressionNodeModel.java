@@ -74,8 +74,7 @@ public class ConformalPredictorRegressionNodeModel extends NodeModel {
 		settings.validateSettings(inSpecs);
 
 		return new DataTableSpec[] {
-				predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
-						inSpecs[PORT_PREDICTION_TABLE.getIdx()]) };
+				predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE.getIdx()]) };
 	}
 
 	@Override
@@ -101,8 +100,9 @@ public class ConformalPredictorRegressionNodeModel extends NodeModel {
 						.getPortObject();
 				ColumnRearranger rearranger = predictor.createRearranger(
 						(DataTableSpec) inSpecs[PORT_PREDICTION_TABLE.getIdx()],
-						inCalibrationTable, exec);
-				rearranger.createStreamableFunction(PORT_PREDICTION_TABLE.getIdx(), 0).runFinal(inputs, outputs, exec);
+						inCalibrationTable, exec.createSubExecutionContext(0.1));
+				rearranger.createStreamableFunction(PORT_PREDICTION_TABLE.getIdx(), 0).runFinal(inputs, outputs,
+						exec.createSubExecutionContext(0.9));
 			}
 		};
 	}

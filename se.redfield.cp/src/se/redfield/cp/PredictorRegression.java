@@ -22,26 +22,19 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.MissingValue;
-import org.knime.core.data.MissingValueException;
+import org.knime.core.data.DoubleValue;
 import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.CellFactory;
 import org.knime.core.data.container.CloseableRowIterator;
 import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.IntCell;
-import org.knime.core.data.def.LongCell;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.settings.PredictorRegressionSettings;
+import se.redfield.cp.utils.KnimeUtils;
 
-/**
- * Class used by Conformal Predictor node to process input table and calculate
- * Rank and P-value for each row based on the calibration table probabilities.
- *
- */
 public class PredictorRegression {
 
 	private PredictorRegressionSettings settings;
@@ -56,13 +49,8 @@ public class PredictorRegression {
 	 * @param inPredictionTableSpecs Input prediction table spec.
 	 * @return
 	 */
-	public DataTableSpec createOuputTableSpec(DataTableSpec inCalibrationTableSpecs, DataTableSpec inPredictionTableSpecs) {
-		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
-		if (!settings.getKeepColumns().getKeepAllColumns()) {
-			r.keepOnly(getRequiredColumnNames(inPredictionTableSpecs));
-		}
-		r.append(createPredictionLowerBoundCellFactory(inPredictionTableSpecs,null));
-		r.append(createPredictionUpperBoundCellFactory(inPredictionTableSpecs,null));
+	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs) {
+		ColumnRearranger r = createRearranger(inPredictionTableSpecs, 0);
 		return r.createSpec();
 	}
 
@@ -77,24 +65,30 @@ public class PredictorRegression {
 	 */
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
+		double alpha = getAlpha(inCalibrationTable, exec);
+
+		return createRearranger(predictionTableSpec, alpha);
+	}
+
+	private ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, double alpha) {
 		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 
 		if (!settings.getKeepColumns().getKeepAllColumns()) {
-			r.keepOnly(getRequiredColumnNames(predictionTableSpec));
+			r.keepOnly(getRequiredColumnNames());
 		}
 
-		r.append(createPredictionLowerBoundCellFactory(predictionTableSpec, inCalibrationTable));
-		r.append(createPredictionUpperBoundCellFactory(predictionTableSpec, inCalibrationTable));
-		
+		r.append(createPredictionLowerBoundCellFactory(predictionTableSpec, alpha));
+		r.append(createPredictionUpperBoundCellFactory(predictionTableSpec, alpha));
+
 		return r;
 	}
-	
-	private CellFactory createPredictionLowerBoundCellFactory(DataTableSpec inputTableSpec, BufferedDataTable inCalibrationTable) {
-		return createPredictionIntervalCellFactory(inputTableSpec, inCalibrationTable, true);
+
+	private CellFactory createPredictionLowerBoundCellFactory(DataTableSpec inputTableSpec, double alpha) {
+		return createPredictionIntervalCellFactory(inputTableSpec, alpha, true);
 	}
-	
-	private CellFactory createPredictionUpperBoundCellFactory(DataTableSpec inputTableSpec, BufferedDataTable inCalibrationTable) {
-		return createPredictionIntervalCellFactory(inputTableSpec, inCalibrationTable, false);
+
+	private CellFactory createPredictionUpperBoundCellFactory(DataTableSpec inputTableSpec, double alpha) {
+		return createPredictionIntervalCellFactory(inputTableSpec, alpha, false);
 	}
 
 	/**
@@ -103,50 +97,39 @@ public class PredictorRegression {
 	 * @param inputTableSpec Input table spec.
 	 * @return
 	 */
-	private CellFactory createPredictionIntervalCellFactory(DataTableSpec inputTableSpec, BufferedDataTable inCalibrationTable, boolean isLower) {
-		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName()); // get prediction column	
+	private CellFactory createPredictionIntervalCellFactory(DataTableSpec inputTableSpec, double alpha,
+			boolean isLower) {
+		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName());
 		int sigmaColumnIndex = inputTableSpec.findColumnIndex(settings.getRegressionSettings().getSigmaColumn());
 
-		String columnName; 
+		String columnName;
 		if (isLower) {
 			columnName = settings.getLowerBoundColumnName();
 		} else {
 			columnName = settings.getUpperBoundColumnName();
 		}
-		
-		return new AbstractCellFactory(
-				new DataColumnSpecCreator(columnName, DoubleCell.TYPE).createSpec()) {
+
+		return new AbstractCellFactory(new DataColumnSpecCreator(columnName, DoubleCell.TYPE).createSpec()) {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
-				int alphaColumnIndex = 0;
-				double alpha = 0;//Get the alpha from the (significant level)'th percentile among the calibration instances
-				if (inCalibrationTable != null) {
-					alphaColumnIndex = inCalibrationTable.getDataTableSpec().findColumnIndex(settings.getCalibrationAlphaColumnName()); // get target column
-					alpha = getAlpha(alphaColumnIndex, inCalibrationTable, settings.getErrorRate());
-				}			
+				DataCell predictionDataCell = KnimeUtils.nonMissing(row.getCell(predictionColumnIndex),
+						"Prediction column contains missing values");
+				double dPrediction = ((DoubleValue) predictionDataCell).getDoubleValue();
 
-				DataCell predictionDataCell = row.getCell(predictionColumnIndex);
-				if (predictionDataCell.isMissing()) {
-					throw new MissingValueException((MissingValue) predictionDataCell, "Prediction column contains missing values");
-				}
-				Double dPrediction = getDoubleValueFromCell(predictionDataCell, "Prediction column is not double column");
-				
 				double bound;
 
 				if (settings.getRegressionSettings().getNormalized()) {
-					DataCell sigmaDataCell = row.getCell(sigmaColumnIndex);
-					if (predictionDataCell.isMissing()) {
-						throw new MissingValueException((MissingValue) sigmaDataCell, "Sigma column contains missing values");
-					}
-					Double dSigma = getDoubleValueFromCell(sigmaDataCell, "Sigma column is not double column");					
+					DataCell sigmaDataCell = KnimeUtils.nonMissing(row.getCell(sigmaColumnIndex),
+							"Sigma column contains missing values");
+					double dSigma = ((DoubleValue) sigmaDataCell).getDoubleValue();
 
-					if (isLower) 
+					if (isLower)
 						bound = dPrediction - alpha * (dSigma + settings.getRegressionSettings().getBeta());
 					else
 						bound = dPrediction + alpha * (dSigma + settings.getRegressionSettings().getBeta());
 				} else {
-					if (isLower) 
+					if (isLower)
 						bound = dPrediction - alpha;
 					else
 						bound = dPrediction + alpha;
@@ -156,39 +139,34 @@ public class PredictorRegression {
 		};
 	}
 
-	private double getAlpha(int alphaColumnIndex, BufferedDataTable inCalibrationTable, double errorRate) {
-		List<Double> alphas = new ArrayList<Double>();
+	/**
+	 * @param inCalibrationTable the calibration table.
+	 * @return the alpha from the (significant level)'th percentile among the
+	 *         calibration instances.
+	 * @throws CanceledExecutionException
+	 */
+	private double getAlpha(BufferedDataTable inCalibrationTable, ExecutionContext exec)
+			throws CanceledExecutionException {
+		int alphaColumnIndex = inCalibrationTable.getDataTableSpec()
+				.findColumnIndex(settings.getCalibrationAlphaColumnName()); // get target column
+		double errorRate = settings.getErrorRate();
+
+		List<Double> alphas = new ArrayList<>();
 		CloseableRowIterator rowIterator = inCalibrationTable.iterator();
 		while (rowIterator.hasNext()) {
 			DataRow currentRow = rowIterator.next();
 			DataCell cell = currentRow.getCell(alphaColumnIndex);
-			//Since we created the alpha column as DoubleCells, it should be DoubleCell 
-			if (cell.getType().getCellClass().equals((DoubleCell.class))) {
-				DoubleCell doubleCell = (DoubleCell) cell;
-				alphas.add(doubleCell.getDoubleValue());
-			}
+			alphas.add(((DoubleValue) cell).getDoubleValue());
+
+			exec.checkCanceled();
+			exec.setProgress((double) alphas.size() / inCalibrationTable.size());
 		}
-		int index = (int) (alphas.size() * errorRate);		
-		
+		int index = (int) (alphas.size() * errorRate);
+
 		return alphas.get(index);
 	}
-	
-	private double getDoubleValueFromCell(DataCell cell, String errorMessage) {
-		if (cell.getType().getCellClass().equals((DoubleCell.class))) {
-			// Cast the cell as we know ii must be a DoubleCell.
-			return ((DoubleCell) cell).getDoubleValue();					
-		} else if (cell.getType().getCellClass().equals((IntCell.class))) {
-			// Cast the cell as we know ii must be a IntCell.
-			return ((IntCell) cell).getIntValue();				
-		} else if (cell.getType().getCellClass().equals((LongCell.class))) {
-			// Cast the cell as we know ii must be a LongCell.
-			return ((LongCell) cell).getDoubleValue();				
-		} else {
-			throw new MissingValueException((MissingValue) cell, errorMessage);
-		}
-	}
 
-	private String[] getRequiredColumnNames(DataTableSpec spec) {
+	private String[] getRequiredColumnNames() {
 		List<String> columns = new ArrayList<>();
 		columns.add(settings.getPredictionColumnName());
 		if (settings.getRegressionSettings().getNormalized()) {

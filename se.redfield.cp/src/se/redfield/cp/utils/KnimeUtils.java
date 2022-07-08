@@ -15,8 +15,11 @@
  */
 package se.redfield.cp.utils;
 
+import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.MissingValue;
+import org.knime.core.data.MissingValueException;
 import org.knime.core.data.RowKey;
 
 /**
@@ -62,5 +65,21 @@ public class KnimeUtils {
 	 */
 	public static DataTableSpec createSpec(DataTableSpec base, DataColumnSpec... colums) {
 		return new DataTableSpec(base, new DataTableSpec(colums));
+	}
+
+	/**
+	 * Ensures that a cell is not a missing value. Throws
+	 * {@link MissingValueException} in case it is.
+	 * 
+	 * @param cell    The data cell
+	 * @param message The message provided to the {@link MissingValueException}.
+	 * @return The cell, if it is not missing.
+	 * @throws MissingValueException If the provided cell is a missing value.
+	 */
+	public static DataCell nonMissing(DataCell cell, String message) throws MissingValueException {
+		if (cell.isMissing()) {
+			throw new MissingValueException((MissingValue) cell, message);
+		}
+		return cell;
 	}
 }
