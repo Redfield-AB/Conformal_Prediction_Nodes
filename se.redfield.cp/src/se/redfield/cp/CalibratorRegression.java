@@ -23,27 +23,22 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.MissingValue;
-import org.knime.core.data.MissingValueException;
 import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.CellFactory;
-import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.data.def.DoubleCell;
-import org.knime.core.data.def.IntCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.sort.BufferedDataTableSorter;
 import org.knime.core.node.BufferedDataTable;
-import org.knime.core.node.CanceledExecutionException;
-import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.settings.CalibratorRegressionSettings;
+import se.redfield.cp.utils.KnimeUtils;
 
 /**
  * Class used by Conformal Calibrator Node to process input table into output
  * calibration table.
  *
  */
-public class CalibratorRegression {
+public class CalibratorRegression extends AbstractCalibrator {
 
 	private CalibratorRegressionSettings settings;
 
@@ -53,57 +48,13 @@ public class CalibratorRegression {
 	 * @param settings
 	 */
 	public CalibratorRegression(CalibratorRegressionSettings settings) {
+		super(settings.getKeepColumns());
 		this.settings = settings;
 	}
 
-	/**
-	 * Creates output calibration table spec.
-	 * 
-	 * @param inputTableSpec Input table spec.
-	 * @return
-	 */
-	public DataTableSpec createOutputSpec(DataTableSpec inputTableSpec) {
-		ColumnRearranger rearranger = new ColumnRearranger(inputTableSpec);
-		if (!settings.getKeepColumns().getKeepAllColumns()) {
-			rearranger.keepOnly(getRequiredColumnNames(inputTableSpec));
-		}
-		rearranger.append(createNonconformityCellFactory(inputTableSpec));
-		rearranger.append(createScoreCellFactory(inputTableSpec));
-		return rearranger.createSpec();
-	}
-
-	/**
-	 * Processes input table to sorted alpha scores for calibration set. Alpha score
-	 * column (default nonconformity is the absolute error) is appended to table.
-	 * 
-	 * @param inCalibrationTable Input table.
-	 * @param exec               Execution context.
-	 * @return
-	 * @throws CanceledExecutionException
-	 */
-	public BufferedDataTable process(BufferedDataTable inCalibrationTable, ExecutionContext exec)
-			throws CanceledExecutionException {
-
-		// collect targets and predictions and setup return table
-		ColumnRearranger appendProbabilityRearranger = new ColumnRearranger(inCalibrationTable.getDataTableSpec());
-
-		if (!settings.getKeepColumns().getKeepAllColumns()) {
-			appendProbabilityRearranger.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
-		}
-		// changed to createNonConformityCellFactory
-		appendProbabilityRearranger.append(createNonconformityCellFactory(inCalibrationTable.getDataTableSpec()));
-
-		BufferedDataTable appendedProbabilityTable = exec.createColumnRearrangeTable(inCalibrationTable,
-				appendProbabilityRearranger, exec.createSubProgress(0.25));
-
-		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable,
-				Arrays.asList(settings.getCalibrationAlphaColumnName()), new boolean[] { false });
-		BufferedDataTable sortedTable = sorter.sort(exec.createSubExecutionContext(0.5));
-
-		ColumnRearranger appendScoreRearranger = new ColumnRearranger(sortedTable.getDataTableSpec());
-		appendScoreRearranger.append(createScoreCellFactory(sortedTable.getSpec()));
-
-		return exec.createColumnRearrangeTable(sortedTable, appendScoreRearranger, exec.createSubProgress(0.25));
+	@Override
+	protected CellFactory createComputedColumn(DataTableSpec inTableSpec) {
+		return createNonconformityCellFactory(inTableSpec);
 	}
 
 	/**
@@ -113,9 +64,8 @@ public class CalibratorRegression {
 	 * @return
 	 */
 	private CellFactory createNonconformityCellFactory(DataTableSpec inputTableSpec) {
-		int targetColumnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName()); // get target column
-		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName()); // get prediction
-																										// column
+		int targetColumnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName());
+		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName());
 		int sigmaColumnIndex = inputTableSpec.findColumnIndex(settings.getRegressionSettings().getSigmaColumn());
 
 		return new AbstractCellFactory(
@@ -123,29 +73,16 @@ public class CalibratorRegression {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
-				DataCell targetDataCell = row.getCell(targetColumnIndex);
-				if (targetDataCell.isMissing()) {
-					throw new MissingValueException((MissingValue) targetDataCell,
-							"Target column contains missing values");
-				}
-				Double dTarget = getDoubleValueFromCell(targetDataCell, "Target column is not a numeric column");
-
-				DataCell predictionDataCell = row.getCell(predictionColumnIndex);
-				if (predictionDataCell.isMissing()) {
-					throw new MissingValueException((MissingValue) predictionDataCell,
-							"Prediction column contains missing values");
-				}
-				Double dPrediction = getDoubleValueFromCell(predictionDataCell,
-						"Prediction column is not double column");
+				double dTarget = KnimeUtils.getDouble(row.getCell(targetColumnIndex),
+						"Target column contains missing values");
+				double dPrediction = KnimeUtils.getDouble(row.getCell(predictionColumnIndex),
+						"Prediction column contains missing values");
 
 				double nonconformityScore = 0;
 				if (settings.getRegressionSettings().getNormalized()) {
-					DataCell sigmaDataCell = row.getCell(sigmaColumnIndex);
-					if (predictionDataCell.isMissing()) {
-						throw new MissingValueException((MissingValue) sigmaDataCell,
-								"Sigma column contains missing values");
-					}
-					Double dSigma = getDoubleValueFromCell(sigmaDataCell, "Sigma column is not double column");
+					double dSigma = KnimeUtils.getDouble(row.getCell(sigmaColumnIndex),
+							"Sigma column contains missing values");
+
 					nonconformityScore = Math.abs(dTarget - dPrediction)
 							/ (dSigma + settings.getRegressionSettings().getBeta());
 				} else
@@ -156,14 +93,8 @@ public class CalibratorRegression {
 		};
 	}
 
-	/**
-	 * Creates cell factory that appends ranks column. Rank is an index row has
-	 * inside each target's group sorted by probability column.
-	 * 
-	 * @param inputTableSpec Input table spec.
-	 * @return
-	 */
-	private CellFactory createScoreCellFactory(DataTableSpec inputTableSpec) {
+	@Override
+	protected CellFactory createRankColumn(DataTableSpec inputTableSpec) {
 		return new AbstractCellFactory(
 				new DataColumnSpecCreator(settings.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
 
@@ -176,22 +107,8 @@ public class CalibratorRegression {
 		};
 	}
 
-	private double getDoubleValueFromCell(DataCell cell, String errorMessage) {
-		if (cell.getType().getCellClass().equals((DoubleCell.class))) {
-			// Cast the cell as we know is must be a DoubleCell.
-			return ((DoubleCell) cell).getDoubleValue();
-		} else if (cell.getType().getCellClass().equals((IntCell.class))) {
-			// Cast the cell as we know is must be a IntCell.
-			return ((IntCell) cell).getIntValue();
-		} else if (cell.getType().getCellClass().equals((LongCell.class))) {
-			// Cast the cell as we know is must be a LongCell.
-			return ((LongCell) cell).getDoubleValue();
-		} else {
-			throw new MissingValueException((MissingValue) cell, errorMessage);
-		}
-	}
-
-	private String[] getRequiredColumnNames(DataTableSpec spec) {
+	@Override
+	protected String[] getRequiredColumnNames(DataTableSpec spec) {
 		List<String> columns = new ArrayList<>();
 		columns.add(settings.getTargetColumnName());
 		columns.add(settings.getPredictionColumnName());
@@ -202,5 +119,11 @@ public class CalibratorRegression {
 			columns.add(settings.getKeepColumns().getIdColumn());
 		}
 		return columns.toArray(new String[] {});
+	}
+
+	@Override
+	protected BufferedDataTableSorter createSorter(BufferedDataTable table) {
+		return new BufferedDataTableSorter(table, Arrays.asList(settings.getCalibrationAlphaColumnName()),
+				new boolean[] { false });
 	}
 }

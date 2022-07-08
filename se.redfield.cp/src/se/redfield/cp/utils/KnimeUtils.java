@@ -18,6 +18,7 @@ package se.redfield.cp.utils;
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DoubleValue;
 import org.knime.core.data.MissingValue;
 import org.knime.core.data.MissingValueException;
 import org.knime.core.data.RowKey;
@@ -81,5 +82,18 @@ public class KnimeUtils {
 			throw new MissingValueException((MissingValue) cell, message);
 		}
 		return cell;
+	}
+
+	/**
+	 * Gets the double value from the provided {@link DataCell}. Throws
+	 * {@link MissingValueException} in case the cell is a missing value.
+	 * 
+	 * @param cell    The data cell.
+	 * @param message The message provided to the {@link MissingValueException}.
+	 * @return The double value contained in the cell.
+	 * @throws MissingValueException If the provided cell is a missing value.
+	 */
+	public static double getDouble(DataCell cell, String message) throws MissingValueException {
+		return ((DoubleValue) nonMissing(cell, message)).getDoubleValue();
 	}
 }

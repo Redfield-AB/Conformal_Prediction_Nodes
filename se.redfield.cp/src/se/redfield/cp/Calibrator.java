@@ -24,27 +24,23 @@ import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.MissingValue;
-import org.knime.core.data.MissingValueException;
 import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.CellFactory;
-import org.knime.core.data.container.ColumnRearranger;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.LongCell;
 import org.knime.core.data.sort.BufferedDataTableSorter;
 import org.knime.core.node.BufferedDataTable;
-import org.knime.core.node.CanceledExecutionException;
-import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.settings.CalibratorSettings;
 import se.redfield.cp.settings.TargetSettings;
+import se.redfield.cp.utils.KnimeUtils;
 
 /**
  * Class used by Conformal Calibrator Node to process input table into output
  * calibration table.
  *
  */
-public class Calibrator {
+public class Calibrator extends AbstractCalibrator {
 
 	private CalibratorSettings settings;
 
@@ -54,56 +50,13 @@ public class Calibrator {
 	 * @param settings
 	 */
 	public Calibrator(CalibratorSettings settings) {
+		super(settings.getKeepColumns());
 		this.settings = settings;
 	}
 
-	/**
-	 * Creates output calibration table spec.
-	 * 
-	 * @param inputTableSpec Input table spec.
-	 * @return
-	 */
-	public DataTableSpec createOutputSpec(DataTableSpec inputTableSpec) {
-		ColumnRearranger rearranger = new ColumnRearranger(inputTableSpec);
-		if (!settings.getKeepColumns().getKeepAllColumns()) {
-			rearranger.keepOnly(getRequiredColumnNames(inputTableSpec));
-		}
-		rearranger.append(createPCellFactory(inputTableSpec));
-		rearranger.append(createScoreCellFactory(inputTableSpec));
-		return rearranger.createSpec();
-	}
-
-	/**
-	 * Processes input table to create calibration table. P column (probability for
-	 * a target class) is appended to table and then ranks are assigned based on P
-	 * column value.
-	 * 
-	 * @param inCalibrationTable Input table.
-	 * @param exec               Execution context.
-	 * @return
-	 * @throws CanceledExecutionException
-	 */
-	public BufferedDataTable process(BufferedDataTable inCalibrationTable, ExecutionContext exec)
-			throws CanceledExecutionException {
-		ColumnRearranger appendProbabilityRearranger = new ColumnRearranger(inCalibrationTable.getDataTableSpec());
-
-		if (!settings.getKeepColumns().getKeepAllColumns()) {
-			appendProbabilityRearranger.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
-		}
-		appendProbabilityRearranger.append(createPCellFactory(inCalibrationTable.getDataTableSpec()));
-
-		BufferedDataTable appendedProbabilityTable = exec.createColumnRearrangeTable(inCalibrationTable,
-				appendProbabilityRearranger, exec.createSubProgress(0.25));
-
-		BufferedDataTableSorter sorter = new BufferedDataTableSorter(appendedProbabilityTable, Arrays
-				.asList(settings.getTargetSettings().getTargetColumn(), settings.getCalibrationProbabilityColumnName()),
-				new boolean[] { true, false });
-		BufferedDataTable sortedTable = sorter.sort(exec.createSubExecutionContext(0.5));
-
-		ColumnRearranger appendScoreRearranger = new ColumnRearranger(sortedTable.getDataTableSpec());
-		appendScoreRearranger.append(createScoreCellFactory(sortedTable.getSpec()));
-
-		return exec.createColumnRearrangeTable(sortedTable, appendScoreRearranger, exec.createSubProgress(0.25));
+	@Override
+	protected CellFactory createComputedColumn(DataTableSpec inTableSpec) {
+		return createPCellFactory(inTableSpec);
 	}
 
 	/**
@@ -125,10 +78,8 @@ public class Calibrator {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
-				DataCell dataCell = row.getCell(columnIndex);
-				if (dataCell.isMissing()) {
-					throw new MissingValueException((MissingValue) dataCell, "Target column contains missing values");
-				}
+				DataCell dataCell = KnimeUtils.nonMissing(row.getCell(columnIndex),
+						"Target column contains missing values");
 				Integer probabilityCol = probabilityColumns.get(dataCell.toString());
 
 				return new DataCell[] { row.getCell(probabilityCol) };
@@ -143,7 +94,8 @@ public class Calibrator {
 	 * @param inputTableSpec Input table spec.
 	 * @return
 	 */
-	private CellFactory createScoreCellFactory(DataTableSpec inputTableSpec) {
+	@Override
+	protected CellFactory createRankColumn(DataTableSpec inputTableSpec) {
 		int columnIndex = inputTableSpec.findColumnIndex(settings.getTargetSettings().getTargetColumn());
 
 		return new AbstractCellFactory(
@@ -165,7 +117,8 @@ public class Calibrator {
 		};
 	}
 
-	private String[] getRequiredColumnNames(DataTableSpec spec) {
+	@Override
+	protected String[] getRequiredColumnNames(DataTableSpec spec) {
 		List<String> columns = spec.getColumnSpec(settings.getTargetSettings().getTargetColumn()).getDomain()
 				.getValues().stream().map(c -> settings.getTargetSettings().getProbabilityColumnName(c.toString()))
 				.collect(Collectors.toList());
@@ -174,5 +127,11 @@ public class Calibrator {
 			columns.add(settings.getKeepColumns().getIdColumn());
 		}
 		return columns.toArray(new String[] {});
+	}
+
+	@Override
+	protected BufferedDataTableSorter createSorter(BufferedDataTable table) {
+		return new BufferedDataTableSorter(table, Arrays.asList(settings.getTargetSettings().getTargetColumn(),
+				settings.getCalibrationProbabilityColumnName()), new boolean[] { true, false });
 	}
 }

@@ -113,16 +113,14 @@ public class PredictorRegression {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
-				DataCell predictionDataCell = KnimeUtils.nonMissing(row.getCell(predictionColumnIndex),
+				double dPrediction = KnimeUtils.getDouble(row.getCell(predictionColumnIndex),
 						"Prediction column contains missing values");
-				double dPrediction = ((DoubleValue) predictionDataCell).getDoubleValue();
 
 				double bound;
 
 				if (settings.getRegressionSettings().getNormalized()) {
-					DataCell sigmaDataCell = KnimeUtils.nonMissing(row.getCell(sigmaColumnIndex),
+					double dSigma = KnimeUtils.getDouble(row.getCell(sigmaColumnIndex),
 							"Sigma column contains missing values");
-					double dSigma = ((DoubleValue) sigmaDataCell).getDoubleValue();
 
 					if (isLower)
 						bound = dPrediction - alpha * (dSigma + settings.getRegressionSettings().getBeta());
