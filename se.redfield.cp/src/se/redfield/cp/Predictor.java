@@ -62,6 +62,12 @@ public class Predictor {
 	 */
 	public DataTableSpec createOuputTableSpec(DataTableSpec inCalibrationTableSpec,
 			DataTableSpec inPredictionTableSpecs) {
+		ColumnRearranger r = createRearranger(inCalibrationTableSpec, inPredictionTableSpecs, Collections.emptyMap());
+		return r.createSpec();
+	}
+
+	private ColumnRearranger createRearranger(DataTableSpec inCalibrationTableSpec,
+			DataTableSpec inPredictionTableSpecs, Map<String, List<Double>> calibrationProbabilities) {
 		ColumnRearranger r = new ColumnRearranger(inPredictionTableSpecs);
 		if (!settings.getKeepColumns().getKeepAllColumns()) {
 			r.keepOnly(getRequiredColumnNames(inCalibrationTableSpec));
@@ -70,10 +76,11 @@ public class Predictor {
 		Set<DataCell> values = inCalibrationTableSpec.getColumnSpec(settings.getTargetSettings().getTargetColumn())
 				.getDomain().getValues();
 		for (DataCell v : values) {
-			r.append(new ScoreCellFactory(v.toString(), inPredictionTableSpecs, null));
+			String val = v.toString();
+			r.append(new ScoreCellFactory(val, inPredictionTableSpecs, calibrationProbabilities.get(val)));
 		}
 
-		return r.createSpec();
+		return r;
 	}
 
 	private String[] getRequiredColumnNames(DataTableSpec inCalibrationTableSpec) {
@@ -100,20 +107,8 @@ public class Predictor {
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
 		Map<String, List<Double>> calibrationProbabilities = collectCalibrationProbabilities(inCalibrationTable, exec);
-		Set<DataCell> values = inCalibrationTable.getDataTableSpec()
-				.getColumnSpec(settings.getTargetSettings().getTargetColumn()).getDomain().getValues();
 
-		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
-
-		if (!settings.getKeepColumns().getKeepAllColumns()) {
-			r.keepOnly(getRequiredColumnNames(inCalibrationTable.getDataTableSpec()));
-		}
-
-		for (DataCell v : values) {
-			String val = v.toString();
-			r.append(new ScoreCellFactory(val, predictionTableSpec, calibrationProbabilities.get(val)));
-		}
-		return r;
+		return createRearranger(inCalibrationTable.getDataTableSpec(), predictionTableSpec, calibrationProbabilities);
 	}
 
 	/**
@@ -202,12 +197,10 @@ public class Predictor {
 		public DataCell[] getCells(DataRow row) {
 			double p = ((DoubleValue) row.getCell(pColumnIndex)).getDoubleValue();
 			int rank = getRank(p);
-			int[] ranks = getRanks(p);
-			// Does not take into consideration that many probabilities can be equal to p
-			// TODO adjust the calculation to calculate the exact p value
-			// FIXED
-			double score = (((double) probabilities.size() - ranks[1])
-					+ rand.nextDouble() * ((double) ranks[1] - ranks[0])) / (probabilities.size() + 1);
+			int smallerRank = getSmallerRank(rank, p);
+
+			double score = (((double) probabilities.size() - smallerRank)
+					+ rand.nextDouble() * ((double) smallerRank - rank)) / (probabilities.size() + 1);
 			DoubleCell scoreCell = new DoubleCell(score);
 
 			if (settings.getIncludeRankColumn()) {
@@ -238,22 +231,19 @@ public class Predictor {
 		}
 
 		/**
-		 * Calculated the rank for a given probability as well as the rank for the
-		 * nearest smaller value. Rank is the position probability would take in a
-		 * sorted list of probabilities from the calibration table.
+		 * Calculated the rank for the nearest smaller value. Rank is the position
+		 * probability would take in a sorted list of probabilities from the calibration
+		 * table.
 		 * 
 		 * @param p Probability.
-		 * @return [Rank, smaller rank].
+		 * @return smaller rank.
 		 */
-		protected int[] getRanks(double p) {
-			int[] idxs = new int[2];
-			idxs[0] = getRank(p);
-			int idx = idxs[0];
+		protected int getSmallerRank(int rank, double p) {
+			int idx = rank;
 			while (idx < probabilities.size() && probabilities.get(idx) == p) {
 				idx += 1;
 			}
-			idxs[1] = idx - 1;
-			return idxs;
+			return idx - 1;
 		}
 	}
 
