@@ -87,8 +87,7 @@ public class CompactConformalRegressionNodeModel extends NodeModel {
 
 	@Override
 	public InputPortRole[] getInputPortRoles() {
-		return new InputPortRole[] { InputPortRole.DISTRIBUTED_STREAMABLE,
-				InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, };
+		return new InputPortRole[] { InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, InputPortRole.DISTRIBUTED_STREAMABLE };
 	}
 
 	@Override
