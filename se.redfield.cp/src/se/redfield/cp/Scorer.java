@@ -172,7 +172,7 @@ public class Scorer {
 				double max = 0, second = 0, sum = 0;
 				for (Double p : pValues.values()) {
 					sum += p;
-					efficiencyScores.add(Metric.S, p);// Average Sum of p-values
+					efficiencyScores.add(Metric.SUM_OF_P_VALUES, p);// Average Sum of p-values
 					if (p > max) {
 						max = p;
 						second = max;
@@ -180,26 +180,26 @@ public class Scorer {
 						second = p;
 					}
 				}
-				efficiencyScores.add(Metric.U, second);// Unconfidence
-				efficiencyScores.add(Metric.F, sum - max);// Fuziness
-				efficiencyScores.add(Metric.N, classes.size());
+				efficiencyScores.add(Metric.UNCONFIDENCE, second);// Unconfidence
+				efficiencyScores.add(Metric.FUZZINESS, sum - max);// Fuziness
+				efficiencyScores.add(Metric.NUMBER_OF_LABELS, classes.size());
 				if (classes.size() > 1)
-					efficiencyScores.inc(Metric.M);
-				efficiencyScores.add(Metric.E, classes.size() - 1);
+					efficiencyScores.inc(Metric.MULTIPLE);
+				efficiencyScores.add(Metric.EXCESS, classes.size() - 1);
 				if (max == pValues.get(target))
-					efficiencyScores.add(Metric.OU, second);
+					efficiencyScores.add(Metric.OBSERVED_UNCONFIDENCE, second);
 				else
-					efficiencyScores.add(Metric.OU, max);
-				efficiencyScores.add(Metric.OF, sum - pValues.get(target));// Observed Fuziness
+					efficiencyScores.add(Metric.OBSERVED_UNCONFIDENCE, max);
+				efficiencyScores.add(Metric.OBSERVED_FUZZINESS, sum - pValues.get(target));// Observed Fuziness
 
 				if (classes.contains(target)) {
-					efficiencyScores.add(Metric.OE, classes.size() - 1);
+					efficiencyScores.add(Metric.OBSERVED_EXCESS, classes.size() - 1);
 					if (classes.size() > 1)
-						efficiencyScores.inc(Metric.OM);
+						efficiencyScores.inc(Metric.OBSERVED_MULTIPLE);
 				} else {
-					efficiencyScores.add(Metric.OE, classes.size());
+					efficiencyScores.add(Metric.OBSERVED_EXCESS, classes.size());
 					if (classes.size() > 0)
-						efficiencyScores.inc(Metric.OM);
+						efficiencyScores.inc(Metric.OBSERVED_MULTIPLE);
 				}
 
 			}
@@ -209,11 +209,6 @@ public class Scorer {
 		}
 
 		return createOutputTables(scores, efficiencyScores, exec);
-	}
-
-	private double getUnconfidence() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	/**
@@ -271,16 +266,16 @@ public class Scorer {
 			cells.add(new DoubleCell(empty));
 		}
 		if (model.isAdditionalEfficiencyMetricsMode()) {
-			cells.add(new DoubleCell(score.getS())); // Sum of p-values
-			cells.add(new DoubleCell(score.getU())); // Unconfidence
-			cells.add(new DoubleCell(score.getF())); // Fuzziness
-			cells.add(new DoubleCell(score.getOU())); // Observed unconfidence
-			cells.add(new DoubleCell(score.getOF())); // Observed Fuzziness
-			cells.add(new DoubleCell(score.getN())); // Number of Labels
-			cells.add(new DoubleCell(score.getM())); // Multiple
-			cells.add(new DoubleCell(score.getE())); // Excess
-			cells.add(new DoubleCell(score.getOM())); // Observed multiple
-			cells.add(new DoubleCell(score.getOE())); // Observed Excess
+			cells.add(new DoubleCell(score.getSumOfPValues()));
+			cells.add(new DoubleCell(score.getUnconfidence()));
+			cells.add(new DoubleCell(score.getFuzziness()));
+			cells.add(new DoubleCell(score.getObservedUnconfidence()));
+			cells.add(new DoubleCell(score.getObservedFuzziness()));
+			cells.add(new DoubleCell(score.getNumberOfLabels()));
+			cells.add(new DoubleCell(score.getMultiple()));
+			cells.add(new DoubleCell(score.getExcess()));
+			cells.add(new DoubleCell(score.getObservedMultiple()));
+			cells.add(new DoubleCell(score.getObservedExcess())); // Observed Excess
 		}
 		return new DefaultRow(RowKey.createRowKey(idx), cells);
 	}
@@ -343,44 +338,44 @@ public class Scorer {
 			this.metrics.put(m, value);
 		}
 
-		public double getOE() {
-			return get(Metric.OE) / get(Metric.COUNT);
+		public double getObservedExcess() {
+			return get(Metric.OBSERVED_EXCESS) / get(Metric.COUNT);
 		}
 
-		public double getOM() {
-			return get(Metric.OM) / get(Metric.COUNT);
+		public double getObservedMultiple() {
+			return get(Metric.OBSERVED_MULTIPLE) / get(Metric.COUNT);
 		}
 
-		public double getE() {
-			return get(Metric.E) / get(Metric.COUNT);
+		public double getExcess() {
+			return get(Metric.EXCESS) / get(Metric.COUNT);
 		}
 
-		public double getM() {
-			return get(Metric.M) / get(Metric.COUNT);
+		public double getMultiple() {
+			return get(Metric.MULTIPLE) / get(Metric.COUNT);
 		}
 
-		public double getN() {
-			return get(Metric.N) / get(Metric.COUNT);
+		public double getNumberOfLabels() {
+			return get(Metric.NUMBER_OF_LABELS) / get(Metric.COUNT);
 		}
 
-		public double getOF() {
-			return get(Metric.OF) / get(Metric.COUNT);
+		public double getObservedFuzziness() {
+			return get(Metric.OBSERVED_FUZZINESS) / get(Metric.COUNT);
 		}
 
-		public double getOU() {
-			return get(Metric.OU) / get(Metric.COUNT);
+		public double getObservedUnconfidence() {
+			return get(Metric.OBSERVED_UNCONFIDENCE) / get(Metric.COUNT);
 		}
 
-		public double getF() {
-			return get(Metric.F) / get(Metric.COUNT);
+		public double getFuzziness() {
+			return get(Metric.FUZZINESS) / get(Metric.COUNT);
 		}
 
-		public double getU() {
-			return get(Metric.U) / get(Metric.COUNT);
+		public double getUnconfidence() {
+			return get(Metric.UNCONFIDENCE) / get(Metric.COUNT);
 		}
 
-		public double getS() {
-			return get(Metric.S) / get(Metric.COUNT);
+		public double getSumOfPValues() {
+			return get(Metric.SUM_OF_P_VALUES) / get(Metric.COUNT);
 		}
 
 		public void inc(Metric m) {
@@ -408,15 +403,17 @@ public class Scorer {
 		}
 
 		public double getEfficiency() {
-			return (double) get(Metric.SINGLE_CLASS) / getTotal();
+			return get(Metric.SINGLE_CLASS) / getTotal();
 		}
 
 		public double getValidity() {
-			return (double) getTotalMatch() / getTotal();
+			return getTotalMatch() / getTotal();
 		}
 	}
 
 	private enum Metric {
-		STRICT_MATCH, SOFT_MATCH, ERROR, SINGLE_CLASS, NULL_CLASS, S, U, F, OU, OF, N, M, E, OM, OE, COUNT
+		STRICT_MATCH, SOFT_MATCH, ERROR, SINGLE_CLASS, NULL_CLASS, SUM_OF_P_VALUES, UNCONFIDENCE, FUZZINESS,
+		OBSERVED_UNCONFIDENCE, OBSERVED_FUZZINESS, NUMBER_OF_LABELS, MULTIPLE, EXCESS, OBSERVED_MULTIPLE,
+		OBSERVED_EXCESS, COUNT
 	}
 }
