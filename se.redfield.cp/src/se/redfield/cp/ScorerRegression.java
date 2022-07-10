@@ -25,6 +25,7 @@ import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DoubleValue;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.def.DefaultRow;
 import org.knime.core.data.def.DoubleCell;
@@ -77,58 +78,55 @@ public class ScorerRegression {
 	 */
 	public BufferedDataTable process(BufferedDataTable inTable, ExecutionContext exec)
 			throws CanceledExecutionException {
-		try {
-			RegressionScores score = new RegressionScores();
+		RegressionScores score = new RegressionScores();
 
-			DataTableSpec spec = inTable.getDataTableSpec();
-			int targetIdx = spec.findColumnIndex(model.getTargetColumn());
-			int upperboundIdx = spec.findColumnIndex(model.getUpperBoundColumnName());
-			int lowerboundIdx = spec.findColumnIndex(model.getLowerBoundColumnName());
-			double max_intervalsSize = 0.;
-			double min_intervalsSize = 1.;
+		DataTableSpec spec = inTable.getDataTableSpec();
+		int targetIdx = spec.findColumnIndex(model.getTargetColumn());
+		int upperboundIdx = spec.findColumnIndex(model.getUpperBoundColumnName());
+		int lowerboundIdx = spec.findColumnIndex(model.getLowerBoundColumnName());
+		double maxIntervalsSize = 0.;
+		double minIntervalsSize = 1.;
 
-			long total = inTable.size();
-			long count = 0;
+		long total = inTable.size();
+		long count = 0;
 
-			List<Double> interval = new ArrayList<>();
+		List<Double> interval = new ArrayList<>();
 
-			for (DataRow row : inTable) {
-				score.inc(Metric.COUNT);
+		for (DataRow row : inTable) {
+			score.inc(Metric.COUNT);
 
-				double c_REGRESSION = ((DoubleCell) row.getCell(targetIdx)).getDoubleValue();
-				double c_LowerboundREGRESSION = ((DoubleCell) row.getCell(lowerboundIdx)).getDoubleValue();
-				double c_UpperboundREGRESSION = ((DoubleCell) row.getCell(upperboundIdx)).getDoubleValue();
-				double intervalsSize = ((DoubleCell) row.getCell(upperboundIdx)).getDoubleValue()
-						- ((DoubleCell) row.getCell(lowerboundIdx)).getDoubleValue();// trouble!!!!
+			double regression = ((DoubleValue) row.getCell(targetIdx)).getDoubleValue();
+			double lowerboundRegression = ((DoubleValue) row.getCell(lowerboundIdx)).getDoubleValue();
+			double upperboundRegression = ((DoubleValue) row.getCell(upperboundIdx)).getDoubleValue();
+			double intervalsSize = upperboundRegression - lowerboundRegression;// trouble!!!!
 
-				if (intervalsSize > max_intervalsSize) {
-					max_intervalsSize = intervalsSize;
-					score.append(Metric.MAX_INTERVAL_SIZE, max_intervalsSize);
-				}
-				if (intervalsSize < min_intervalsSize) {
-					min_intervalsSize = intervalsSize;
-					score.append(Metric.MIN_INTERVAL_SIZE, min_intervalsSize);
-				}
-
-				if (c_REGRESSION >= c_LowerboundREGRESSION && c_REGRESSION <= c_UpperboundREGRESSION) {
-					score.inc(Metric.VALIDATE);
-				}
-
-				score.add(Metric.MEAN_INTERVAL_SIZE, intervalsSize);
-				interval.add((int) count, intervalsSize);
-				count++;
+			if (intervalsSize > maxIntervalsSize) {
+				maxIntervalsSize = intervalsSize;
+				score.set(Metric.MAX_INTERVAL_SIZE, maxIntervalsSize);
+			}
+			if (intervalsSize < minIntervalsSize) {
+				minIntervalsSize = intervalsSize;
+				score.set(Metric.MIN_INTERVAL_SIZE, minIntervalsSize);
 			}
 
-			interval.sort(null);
-			double median = interval.size() % 2 == 0 ? interval.get(interval.size() / 2)
-					: interval.get((interval.size() - 1) / 2);
-			score.append(Metric.MEDIAN_INTERVAL_SIZE, median);
+			if (regression >= lowerboundRegression && regression <= upperboundRegression) {
+				score.inc(Metric.VALIDATE);
+			}
+
+			score.add(Metric.MEAN_INTERVAL_SIZE, intervalsSize);
+			interval.add(intervalsSize);
+
 			exec.checkCanceled();
-			exec.setProgress((double) count++ / total);
-			return createOutputTable(score, exec);
-		} catch (Exception e) {
-			throw e;
+			exec.setProgress((double) count / total);
+			count++;
 		}
+
+		interval.sort(null);
+		double median = interval.get(interval.size() / 2);
+		score.set(Metric.MEDIAN_INTERVAL_SIZE, median);
+
+		return createOutputTable(score, exec);
+
 	}
 
 	/**
@@ -140,9 +138,7 @@ public class ScorerRegression {
 	 */
 	private BufferedDataTable createOutputTable(RegressionScores score, ExecutionContext exec) {
 		BufferedDataContainer cont = exec.createDataContainer(createOutputSpec());
-
-		long idx = 0;
-		cont.addRowToTable(createRow(score, idx++)); // only one row, as it is the total results we are calculating
+		cont.addRowToTable(createRow(score, 0)); // only one row, as it is the total results we are calculating
 		cont.close();
 		return cont.getTable();
 	}
@@ -177,16 +173,16 @@ public class ScorerRegression {
 			this.metrics = new EnumMap<>(Metric.class);
 		}
 
-		public void add(Metric m, double out_intervalsSize) {
-			metrics.compute(m, (k, v) -> v == null ? out_intervalsSize : v + out_intervalsSize);
+		public void add(Metric m, double value) {
+			metrics.compute(m, (k, v) -> v == null ? value : v + value);
 		}
 
 		public void inc(Metric m) {
 			metrics.compute(m, (k, v) -> v == null ? 1.0 : v + 1);
 		}
 
-		public void append(Metric m, double out_intervalsSize) {
-			metrics.compute(m, (k, v) -> v == null ? out_intervalsSize : out_intervalsSize);
+		public void set(Metric m, double value) {
+			metrics.put(m, value);
 		}
 
 		public double get(Metric m) {
@@ -194,24 +190,24 @@ public class ScorerRegression {
 		}
 
 		public double getErrorRate() {
-			return (double) 1 - get(Metric.VALIDATE) / get(Metric.COUNT);
+			return 1 - get(Metric.VALIDATE) / get(Metric.COUNT);
 		}
 
 		public double getMeanIntervalSize() {
-			return (double) get(Metric.MEAN_INTERVAL_SIZE) / get(Metric.COUNT);
+			return get(Metric.MEAN_INTERVAL_SIZE) / get(Metric.COUNT);
 		}
 
 		public double getMaxIntervalSize() {
-			return (double) get(Metric.MAX_INTERVAL_SIZE);
+			return get(Metric.MAX_INTERVAL_SIZE);
 		}
 
 		public double getMinIntervalSize() {
-			return (double) get(Metric.MIN_INTERVAL_SIZE);
+			return get(Metric.MIN_INTERVAL_SIZE);
 		}
 
 		public double getMedianIntervalSize() {
 
-			return (double) get(Metric.MEDIAN_INTERVAL_SIZE);
+			return get(Metric.MEDIAN_INTERVAL_SIZE);
 		}
 	}
 

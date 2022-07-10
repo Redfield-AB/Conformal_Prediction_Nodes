@@ -15,14 +15,10 @@
  */
 package se.redfield.cp.nodes;
 
-import org.knime.core.data.DataTableSpec;
-import org.knime.core.data.DataValue;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NotConfigurableException;
+import org.knime.core.data.DoubleValue;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
-import org.knime.core.node.defaultnodesettings.DialogComponentString;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
@@ -32,9 +28,6 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  */
 public class ConformalPredictorScorerRegressionNodeDialog extends DefaultNodeSettingsPane {
 
-	//private DataTableSpec spec;
-	private DialogComponentString stringSeparatorComp;
-
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorScorerRegressionNodeDialog() {
 		super();
@@ -43,28 +36,16 @@ public class ConformalPredictorScorerRegressionNodeDialog extends DefaultNodeSet
 		SettingsModelString upperboundColumnSettings = ConformalPredictorScorerRegressionNodeModel.createUpperBoundColumnSettings();
 		SettingsModelString lowerboundColumnSettings = ConformalPredictorScorerRegressionNodeModel.createLowerBoundColumnSettings();
 
-		SettingsModelString stringSeparatorSettings = ConformalPredictorScorerRegressionNodeModel
-				.createStringSeparatorSettings();
 		SettingsModelBoolean additionalInfoSettings = ConformalPredictorScorerRegressionNodeModel.createAdditionalInfoSettings();
 
-		stringSeparatorComp = new DialogComponentString(stringSeparatorSettings, "String separator:");
-		stringSeparatorComp.getComponentPanel().setVisible(false);
-
-		addDialogComponent(new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", 0, DataValue.class));
-		addDialogComponent(new DialogComponentColumnNameSelection(upperboundColumnSettings, "Upper bound:", 0, DataValue.class));
-		addDialogComponent(new DialogComponentColumnNameSelection(lowerboundColumnSettings, "Lower bound:", 0, DataValue.class));
-		addDialogComponent(stringSeparatorComp);
+		addDialogComponent(
+				new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", 0, DoubleValue.class));
+		addDialogComponent(
+				new DialogComponentColumnNameSelection(upperboundColumnSettings, "Upper bound:", 0, DoubleValue.class));
+		addDialogComponent(
+				new DialogComponentColumnNameSelection(lowerboundColumnSettings, "Lower bound:", 0, DoubleValue.class));
 		createNewGroup("Output");
 		addDialogComponent(new DialogComponentBoolean(additionalInfoSettings, "Additional prediction information"));
 	}
 
-	private void calcStringSeparatorVisibility() {
-	}
-
-	@Override
-	public void loadAdditionalSettingsFrom(NodeSettingsRO settings, DataTableSpec[] specs)
-			throws NotConfigurableException {
-		//this.spec = specs[0];
-		calcStringSeparatorVisibility();
-	}
 }
