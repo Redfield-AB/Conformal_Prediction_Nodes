@@ -173,14 +173,13 @@ public class Partitioner {
 	}
 
 	protected int computeK(int rowCount) {
-		int div = 100;
-		if (rowCount < 100 && rowCount >= 10)
-			div = 10;
 		if (rowCount < 10)
 			throw new UnsupportedOperationException("Calibration size cannot be smaller than 10.");
-		int k = 0;
-		while (k * div + div - 1 <= rowCount)
-			k += 1;
+
+		int div = rowCount < 100 ? 10 : 100;
+		int k = (rowCount + 1) / div;
+
 		return k * div - 1;
 	}
+
 }
