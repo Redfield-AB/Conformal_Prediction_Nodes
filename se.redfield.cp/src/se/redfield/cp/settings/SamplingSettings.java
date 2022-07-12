@@ -20,8 +20,19 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 
+/**
+ * The {@link SamplingNodeSettings} extended by validation methods.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class SamplingSettings extends SamplingNodeSettings {
-
+	/**
+	 * Validates settings stored in the provided {@link NodeSettingsRO}.
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		SamplingSettings temp = new SamplingSettings();
 		temp.loadSettingsFrom(settings, false);
@@ -53,6 +64,12 @@ public class SamplingSettings extends SamplingNodeSettings {
 		}
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpec Input table spec
+	 * @throws InvalidSettingsException
+	 */
 	public void validate(DataTableSpec inSpec) throws InvalidSettingsException {
 		validate();
 

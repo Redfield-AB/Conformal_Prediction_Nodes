@@ -28,6 +28,13 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.utils.PortDef;
 
+/**
+ * Target settings used by classification nodes. Consist of target column and
+ * probability columns format.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class TargetSettings {
 
 	private static final String KEY_TARGET_COLUMN_NAME = "targetColumn";
@@ -41,6 +48,10 @@ public class TargetSettings {
 	private final PortDef targetColumnTable;
 	private final PortDef[] probabilityColumnsTables;
 
+	/**
+	 * @param targetColumnTable        The table with target column.
+	 * @param probabilityColumnsTables The tables with probability columns.
+	 */
 	public TargetSettings(PortDef targetColumnTable, PortDef... probabilityColumnsTables) {
 		this.targetColumnTable = targetColumnTable;
 		this.probabilityColumnsTables = probabilityColumnsTables;
@@ -49,34 +60,63 @@ public class TargetSettings {
 		probabilityFormat = new SettingsModelString(KEY_PROBABILITY_COLUMN_FORMAT, DEFAULT_FORMAT);
 	}
 
+	/**
+	 * @return The target column settings model.
+	 */
 	public SettingsModelString getTargetColumnModel() {
 		return targetColumn;
 	}
 
+	/**
+	 * @return The target column name.
+	 */
 	public String getTargetColumn() {
 		return targetColumn.getStringValue();
 	}
 
+	/**
+	 * @return The probability columns format settings model.
+	 */
 	public SettingsModelString getProbabilityFormatModel() {
 		return probabilityFormat;
 	}
 
+	/**
+	 * @return The format string to construct probability column name for a
+	 *         particular class.
+	 */
 	public String getProbabilityFormat() {
 		return probabilityFormat.getStringValue();
 	}
 
+	/**
+	 * @param value The class value
+	 * @return The probability column name for a given value.
+	 */
 	public String getProbabilityColumnName(String value) {
 		return String.format(String.format(getProbabilityFormat(), getTargetColumn(), value));
 	}
 
+	/**
+	 * @return The table containing target column.
+	 */
 	public PortDef getTargetColumnTable() {
 		return targetColumnTable;
 	}
 
+	/**
+	 * @return The tables containing probability columns.
+	 */
 	public PortDef[] getProbabilityColumnsTables() {
 		return probabilityColumnsTables;
 	}
 
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetColumn.loadSettingsFrom(settings);
 		if (settings.containsKey(KEY_PROBABILITY_COLUMN_FORMAT)) {
@@ -84,11 +124,21 @@ public class TargetSettings {
 		}
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetColumn.saveSettingsTo(settings);
 		probabilityFormat.saveSettingsTo(settings);
 	}
 
+	/**
+	 * Validates internal consistency of the current settings
+	 * 
+	 * @throws InvalidSettingsException
+	 */
 	public void validate() throws InvalidSettingsException {
 		if (getTargetColumn().isEmpty()) {
 			throw new InvalidSettingsException("Class column is not selected");
@@ -99,6 +149,14 @@ public class TargetSettings {
 		}
 	}
 
+	/**
+	 * Validates the settings against input table spec. Makes an attempt to
+	 * auto-configure settings if the target column is not specified.
+	 * 
+	 * @param inSpecs     Input specs
+	 * @param msgConsumer Warning message consumer
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs, Consumer<String> msgConsumer)
 			throws InvalidSettingsException {
 		if (getTargetColumn().isEmpty()) {

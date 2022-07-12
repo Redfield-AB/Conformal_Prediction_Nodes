@@ -24,11 +24,20 @@ import org.knime.core.node.NodeSettingsWO;
 
 import se.redfield.cp.nodes.ConformalPredictorCalibratorNodeModel;
 
+/**
+ * The node settings for the {@link ConformalPredictorCalibratorNodeModel} node.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class CalibratorNodeSettings implements CalibratorSettings {
 
 	private final TargetSettings targetSettings;
 	private final KeepColumnsSettings keepColumns;
 
+	/**
+	 * Creates new instance
+	 */
 	public CalibratorNodeSettings() {
 		targetSettings = new TargetSettings(ConformalPredictorCalibratorNodeModel.PORT_INPUT_TABLE,
 				ConformalPredictorCalibratorNodeModel.PORT_INPUT_TABLE);
@@ -45,27 +54,56 @@ public class CalibratorNodeSettings implements CalibratorSettings {
 		return keepColumns;
 	}
 
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetSettings.loadSettingsFrom(settings);
 		keepColumns.loadSettingFrom(settings);
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetSettings.saveSettingsTo(settings);
 		keepColumns.saveSettingsTo(settings);
 	}
 
+	/**
+	 * Validates internal consistency of the current settings
+	 * 
+	 * @throws InvalidSettingsException
+	 */
 	private void validate() throws InvalidSettingsException {
 		targetSettings.validate();
 		keepColumns.validate();
 	}
 
+	/**
+	 * Validates settings stored in the provided {@link NodeSettingsRO}.
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		CalibratorNodeSettings temp = new CalibratorNodeSettings();
 		temp.loadSettingFrom(settings);
 		temp.validate();
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpecs     Input specs
+	 * @param msgConsumer Warning message consumer
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs, Consumer<String> msgConsumer)
 			throws InvalidSettingsException {
 		targetSettings.validateSettings(inSpecs, msgConsumer);

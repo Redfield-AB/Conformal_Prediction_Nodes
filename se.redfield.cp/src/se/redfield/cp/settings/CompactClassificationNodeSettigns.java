@@ -26,8 +26,15 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 
-import se.redfield.cp.nodes.ConformalPredictorLoopEndNodeModel;
+import se.redfield.cp.nodes.CompactConformalClassificationNodeModel;
 
+/**
+ * The node settings for the {@link CompactConformalClassificationNodeModel}
+ * node.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class CompactClassificationNodeSettigns implements CalibratorSettings, PredictorSettings {
 	private static final String KEY_INCLUDE_RANK_COLUMN = "includeRankColumn";
 
@@ -36,6 +43,9 @@ public class CompactClassificationNodeSettigns implements CalibratorSettings, Pr
 	private final SettingsModelBoolean includeRank;
 	private final ClassifierSettings classifierSettings;
 
+	/**
+	 * Creates new instance.
+	 */
 	public CompactClassificationNodeSettigns() {
 		targetSettings = new TargetSettings(PORT_CALIBRATION_TABLE, PORT_CALIBRATION_TABLE, PORT_PREDICTION_TABLE);
 		keepColumns = new KeepColumnsSettings(PORT_PREDICTION_TABLE);
@@ -53,6 +63,9 @@ public class CompactClassificationNodeSettigns implements CalibratorSettings, Pr
 		return keepColumns;
 	}
 
+	/**
+	 * @return The include rank column model
+	 */
 	public SettingsModelBoolean getIncludeRankModel() {
 		return includeRank;
 	}
@@ -62,14 +75,19 @@ public class CompactClassificationNodeSettigns implements CalibratorSettings, Pr
 		return includeRank.getBooleanValue();
 	}
 
+	/**
+	 * @return The classifier settings.
+	 */
 	public ClassifierSettings getClassifierSettings() {
 		return classifierSettings;
 	}
 
-	public String getScoreColumnPattern() {
-		return ConformalPredictorLoopEndNodeModel.P_VALUE_COLUMN_REGEX;
-	}
-
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetSettings.loadSettingsFrom(settings);
 		keepColumns.loadSettingFrom(settings);
@@ -77,6 +95,11 @@ public class CompactClassificationNodeSettigns implements CalibratorSettings, Pr
 		classifierSettings.loadSettingsFrom(settings);
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetSettings.saveSettingsTo(settings);
 		keepColumns.saveSettingsTo(settings);
@@ -90,12 +113,25 @@ public class CompactClassificationNodeSettigns implements CalibratorSettings, Pr
 		classifierSettings.validate();
 	}
 
+	/**
+	 * Validates settings stored in the provided {@link NodeSettingsRO}.
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		CompactClassificationNodeSettigns temp = new CompactClassificationNodeSettigns();
 		temp.loadSettingFrom(settings);
 		temp.validate();
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpecs     Input specs
+	 * @param msgConsumer Warning message consumer
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs, Consumer<String> msgConsumer)
 			throws InvalidSettingsException {
 		targetSettings.validateSettings(inSpecs, msgConsumer);

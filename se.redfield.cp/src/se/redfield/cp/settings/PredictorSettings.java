@@ -15,25 +15,55 @@
  */
 package se.redfield.cp.settings;
 
+/**
+ * Predictor configuration.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public interface PredictorSettings {
+	/**
+	 * The Rank column default format.
+	 */
 	public static final String PREDICTION_RANK_COLUMN_DEFAULT_FORMAT = "Rank (%s)";
-	public static final String PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT = "p-value (%s)";
+	/**
+	 * The p-value column default format.
+	 */
+	public static final String PREDICTION_P_VALUE_COLUMN_DEFAULT_FORMAT = "p-value (%s)";
 
+	/**
+	 * @return The target settings.
+	 */
 	public TargetSettings getTargetSettings();
 
+	/**
+	 * @return The keep columns settings.
+	 */
 	public KeepColumnsSettings getKeepColumns();
 
+	/**
+	 * @return Whether to include rank column
+	 */
 	public boolean getIncludeRankColumn();
 
+	/**
+	 * @return The probability column name from the calibration table.
+	 */
 	public default String getCalibrationProbabilityColumnName() {
 		return CalibratorSettings.CALIBRATION_P_COLUMN_DEFAULT_NAME;
 	}
 
+	/**
+	 * @return The Rank column format.
+	 */
 	public default String getPredictionRankColumnFormat() {
 		return PREDICTION_RANK_COLUMN_DEFAULT_FORMAT;
 	}
 
-	public default String getPredictionScoreColumnFormat() {
-		return PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT;
+	/**
+	 * @return The p-value column format.
+	 */
+	public default String getPredictionPValueColumnFormat() {
+		return PREDICTION_P_VALUE_COLUMN_DEFAULT_FORMAT;
 	}
 }

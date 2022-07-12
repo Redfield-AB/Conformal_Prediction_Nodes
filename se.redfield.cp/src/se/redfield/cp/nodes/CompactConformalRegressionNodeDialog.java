@@ -35,6 +35,9 @@ public class CompactConformalRegressionNodeDialog extends DefaultNodeSettingsPan
 
 	private CompactRegressionNodeSettings settings = new CompactRegressionNodeSettings();
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public CompactConformalRegressionNodeDialog() {
 		super();

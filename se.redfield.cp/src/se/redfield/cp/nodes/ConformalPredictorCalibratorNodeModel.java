@@ -38,6 +38,9 @@ import se.redfield.cp.utils.PortDef;
  *
  */
 public class ConformalPredictorCalibratorNodeModel extends NodeModel {
+	/**
+	 * Input table input port
+	 */
 	public static final PortDef PORT_INPUT_TABLE = new PortDef(0, "Input table");
 
 	private final CalibratorNodeSettings settings = new CalibratorNodeSettings();

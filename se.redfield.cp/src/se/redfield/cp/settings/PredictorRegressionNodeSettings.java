@@ -26,11 +26,20 @@ import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.nodes.ConformalPredictorRegressionNodeModel;
-import se.redfield.cp.utils.ValidationUtil;
+import se.redfield.cp.utils.KnimeUtils;
 
+/**
+ * The node settings for the {@link ConformalPredictorRegressionNodeModel} node.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class PredictorRegressionNodeSettings implements PredictorRegressionSettings {
 
 	private static final String KEY_PREDICTION_COLUMN_NAME = "predictionColumn";
+	/**
+	 * The error rate settings key.
+	 */
 	public static final String KEY_ERROR_RATE = "errorRate";
 
 	private static final double DEFAULT_ERROR_RATE = 0.05;
@@ -40,13 +49,19 @@ public class PredictorRegressionNodeSettings implements PredictorRegressionSetti
 	private final KeepColumnsSettings keepColumns;
 	private final SettingsModelDoubleBounded errorRate;
 
+	/**
+	 * Creates new instance.
+	 */
 	public PredictorRegressionNodeSettings() {
 		predictionColumn = new SettingsModelString(KEY_PREDICTION_COLUMN_NAME, "");
-		regressionSettings = new RegressionSettings(ConformalPredictorRegressionNodeModel.PORT_PREDICTION_TABLE);
-		keepColumns = new KeepColumnsSettings(ConformalPredictorRegressionNodeModel.PORT_PREDICTION_TABLE);
+		regressionSettings = new RegressionSettings(PORT_PREDICTION_TABLE);
+		keepColumns = new KeepColumnsSettings(PORT_PREDICTION_TABLE);
 		errorRate = new SettingsModelDoubleBounded(KEY_ERROR_RATE, DEFAULT_ERROR_RATE, 0, 1);
 	}
 
+	/**
+	 * @return The prediction column model.
+	 */
 	public SettingsModelString getPredictionColumnModel() {
 		return predictionColumn;
 	}
@@ -66,6 +81,9 @@ public class PredictorRegressionNodeSettings implements PredictorRegressionSetti
 		return keepColumns;
 	}
 
+	/**
+	 * @return The error rate model.
+	 */
 	public SettingsModelDoubleBounded getErrorRateModel() {
 		return errorRate;
 	}
@@ -75,6 +93,12 @@ public class PredictorRegressionNodeSettings implements PredictorRegressionSetti
 		return errorRate.getDoubleValue();
 	}
 
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		predictionColumn.loadSettingsFrom(settings);
 		regressionSettings.loadSettingFrom(settings);
@@ -82,6 +106,11 @@ public class PredictorRegressionNodeSettings implements PredictorRegressionSetti
 		errorRate.loadSettingsFrom(settings);
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		predictionColumn.saveSettingsTo(settings);
 		regressionSettings.saveSettingsTo(settings);
@@ -97,15 +126,27 @@ public class PredictorRegressionNodeSettings implements PredictorRegressionSetti
 		keepColumns.validate();
 	}
 
+	/**
+	 * Validates settings stored in the provided {@link NodeSettingsRO}.
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		PredictorRegressionNodeSettings temp = new PredictorRegressionNodeSettings();
 		temp.loadSettingFrom(settings);
 		temp.validate();
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpecs Input specs
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		ValidationUtil.validateDoubleColumn(PORT_PREDICTION_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
-		ValidationUtil.validateDoubleColumn(PORT_CALIBRATION_TABLE, inSpecs, getCalibrationAlphaColumnName(),
+		KnimeUtils.validateDoubleColumn(PORT_PREDICTION_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
+		KnimeUtils.validateDoubleColumn(PORT_CALIBRATION_TABLE, inSpecs, getCalibrationAlphaColumnName(),
 				"Alpha (Nonconformity)");
 
 		regressionSettings.validateSettings(inSpecs);

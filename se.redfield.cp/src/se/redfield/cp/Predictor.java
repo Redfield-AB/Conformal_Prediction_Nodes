@@ -50,15 +50,19 @@ public class Predictor {
 
 	private PredictorSettings settings;
 
-	public Predictor(PredictorSettings model) {
-		this.settings = model;
+	/**
+	 * @param settings The predictor settings.
+	 */
+	public Predictor(PredictorSettings settings) {
+		this.settings = settings;
 	}
 
 	/**
 	 * Creates output table spec.
 	 * 
+	 * @param inCalibrationTableSpec Input calibration table spec.
 	 * @param inPredictionTableSpecs Input prediction table spec.
-	 * @return
+	 * @return The output prediction table spec.
 	 */
 	public DataTableSpec createOuputTableSpec(DataTableSpec inCalibrationTableSpec,
 			DataTableSpec inPredictionTableSpecs) {
@@ -101,7 +105,7 @@ public class Predictor {
 	 * @param predictionTableSpec Input prediction table spec.
 	 * @param inCalibrationTable  Input calibration table.
 	 * @param exec                Execution context.
-	 * @return
+	 * @return The rearranger.
 	 * @throws CanceledExecutionException
 	 */
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
@@ -163,14 +167,14 @@ public class Predictor {
 	 * @param value
 	 * @return
 	 */
-	private DataColumnSpec[] createScoreColumnsSpecs(String value) {
+	private DataColumnSpec[] createScoreColumnsSpecs(String value) {// NOSONAR
 		List<DataColumnSpec> columns = new ArrayList<>();
 
 		if (settings.getIncludeRankColumn()) {
 			columns.add(new DataColumnSpecCreator(String.format(settings.getPredictionRankColumnFormat(), value),
 					LongCell.TYPE).createSpec());
 		}
-		columns.add(new DataColumnSpecCreator(String.format(settings.getPredictionScoreColumnFormat(), value),
+		columns.add(new DataColumnSpecCreator(String.format(settings.getPredictionPValueColumnFormat(), value),
 				DoubleCell.TYPE).createSpec());
 
 		return columns.toArray(new DataColumnSpec[] {});

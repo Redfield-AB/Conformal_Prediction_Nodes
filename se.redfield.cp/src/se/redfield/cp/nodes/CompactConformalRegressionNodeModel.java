@@ -44,11 +44,23 @@ import se.redfield.cp.settings.CompactRegressionNodeSettings;
 import se.redfield.cp.utils.PortDef;
 
 
+/**
+ * All-in-one Conformal Predictor for regression. Calculates the calibration
+ * table and then uses this table to calculates upper and lower bounds for the
+ * regression value.
+ *
+ */
 public class CompactConformalRegressionNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(CompactConformalRegressionNodeModel.class);
 
+	/**
+	 * Prediction table input port
+	 */
 	public static final PortDef PORT_PREDICTION_TABLE = new PortDef(1, "Prediction table");
+	/**
+	 * Calibration table input port
+	 */
 	public static final PortDef PORT_CALIBRATION_TABLE = new PortDef(0, "Calibration table");
 
 	private final CompactRegressionNodeSettings settings = new CompactRegressionNodeSettings();

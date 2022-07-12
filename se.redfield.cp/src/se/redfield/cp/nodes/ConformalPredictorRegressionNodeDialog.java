@@ -34,6 +34,9 @@ public class ConformalPredictorRegressionNodeDialog extends DefaultNodeSettingsP
 
 	private PredictorRegressionNodeSettings settings = new PredictorRegressionNodeSettings();
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorRegressionNodeDialog() {
 		super();

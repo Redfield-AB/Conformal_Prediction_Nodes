@@ -46,6 +46,9 @@ import se.redfield.cp.settings.SamplingSettings;
 public class ConformalPredictorTrainingLoopStartNodeModel extends NodeModel implements LoopStartNodeTerminator {
 
 	private static final String KEY_ITERATIONS = "iterations";
+	/**
+	 * The settings key for partition settings
+	 */
 	public static final String KEY_PARTITION_SETTINGS = "partitionSettings";
 
 	private static final String FW_ITERATION = "iteration";

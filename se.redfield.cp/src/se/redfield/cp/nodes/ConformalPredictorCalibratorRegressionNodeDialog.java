@@ -32,6 +32,9 @@ public class ConformalPredictorCalibratorRegressionNodeDialog extends DefaultNod
 
 	private final CalibratorRegressionNodeSettings settings = new CalibratorRegressionNodeSettings();
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorCalibratorRegressionNodeDialog() {
 		super();

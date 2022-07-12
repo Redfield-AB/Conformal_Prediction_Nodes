@@ -38,6 +38,13 @@ import org.knime.core.node.port.PortObjectSpec;
 import se.redfield.cp.settings.TargetSettings;
 import se.redfield.cp.utils.PortDef;
 
+/**
+ * Dialog component for editing the probability format setting of the
+ * {@link TargetSettings}.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class DialogComponentProbabilityFormat extends DialogComponent {
 
 	private final TargetSettings targetSettings;
@@ -45,6 +52,9 @@ public class DialogComponentProbabilityFormat extends DialogComponent {
 	private final JButton checkBtn;
 	private final JLabel statusLabel;
 
+	/**
+	 * @param settings The target settings
+	 */
 	public DialogComponentProbabilityFormat(TargetSettings settings) {
 		super(settings.getProbabilityFormatModel());
 		this.targetSettings = settings;
@@ -86,7 +96,7 @@ public class DialogComponentProbabilityFormat extends DialogComponent {
 		getComponentPanel().add(statusLabel);
 	}
 
-	private void onCheck(ActionEvent e) {
+	private void onCheck(@SuppressWarnings("unused") ActionEvent e) {
 		updateModel();
 
 		statusLabel.setText(performCheck());

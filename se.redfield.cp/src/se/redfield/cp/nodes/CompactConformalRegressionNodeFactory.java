@@ -20,7 +20,7 @@ import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
 
 /**
- * Factory class for Conformal Predictor Node.
+ * Factory class for {@link CompactConformalRegressionNodeModel} Node.
  *
  */
 public class CompactConformalRegressionNodeFactory extends NodeFactory<CompactConformalRegressionNodeModel> {

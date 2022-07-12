@@ -45,6 +45,9 @@ import se.redfield.cp.settings.ClassifierSettings;
 public class ClassifierCellFactory extends AbstractCellFactory {
 	private ClassifierSettings settings;
 
+	/**
+	 * @param settings The classifier settings.
+	 */
 	public ClassifierCellFactory(ClassifierSettings settings) {
 		super(createClassColumnSpec(settings));
 		this.settings = settings;

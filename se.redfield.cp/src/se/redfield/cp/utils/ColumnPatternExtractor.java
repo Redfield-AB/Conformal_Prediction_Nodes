@@ -29,7 +29,7 @@ import org.knime.core.data.DataTableSpec;
  */
 public class ColumnPatternExtractor {
 
-	public static final String DEF_GROUP_NAME = "value";
+	private static final String DEF_GROUP_NAME = "value";
 
 	private Pattern pattern;
 	private String groupName;

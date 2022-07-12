@@ -31,6 +31,9 @@ public class ConformalPredictorNodeDialog extends DefaultNodeSettingsPane {
 
 	private final PredictorNodeSettings settings = new PredictorNodeSettings();
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorNodeDialog() {
 		super();

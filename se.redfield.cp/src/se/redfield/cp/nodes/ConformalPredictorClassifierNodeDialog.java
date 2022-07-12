@@ -30,6 +30,9 @@ public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsP
 
 	private final ClassifierSettings settings = new ClassifierSettings();
 
+	/**
+	 * Creates new instance
+	 */
 	public ConformalPredictorClassifierNodeDialog() {
 		super();
 

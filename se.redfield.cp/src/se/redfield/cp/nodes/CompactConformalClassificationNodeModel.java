@@ -38,22 +38,29 @@ import se.redfield.cp.settings.CompactClassificationNodeSettigns;
 import se.redfield.cp.utils.PortDef;
 
 /**
- * Conformal Classifier node. Assigns predicted classes to each row based on
- * it's P-values and selected Significance Level. Works with classes column
- * represented as Collection or String column
+ * All-in-one Conformal Classifier node. Performs calibration, then uses
+ * calibration data to calculate Rank and P-value, and then assigns predicted
+ * classes to each row based on it's P-values and selected Significance Level.
+ * Works with classes column represented as Collection or String column
  *
  */
 public class CompactConformalClassificationNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(CompactConformalClassificationNodeModel.class);
 
+	/**
+	 * Prediction table input port
+	 */
 	public static final PortDef PORT_PREDICTION_TABLE = new PortDef(1, "Prediction table");
+	/**
+	 * Calibration table input port
+	 */
 	public static final PortDef PORT_CALIBRATION_TABLE = new PortDef(0, "Calibration table");
 
 	private CompactClassificationNodeSettigns settings = new CompactClassificationNodeSettigns();
 	private Calibrator calibrator = new Calibrator(settings);
 	private Predictor predictor = new Predictor(settings);
-	private ColumnRearranger rearranger;
+	private ColumnRearranger classifierRearranger;
 
 	protected CompactConformalClassificationNodeModel() {
 		super(2, 1);
@@ -73,7 +80,7 @@ public class CompactConformalClassificationNodeModel extends NodeModel {
 				exec.createSubExecutionContext(0.1));
 		inPredictionTable = exec.createColumnRearrangeTable(inPredictionTable, r, exec.createSubProgress(0.9));
 
-		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inPredictionTable, rearranger, exec) };
+		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inPredictionTable, classifierRearranger, exec) };
 	}
 
 	@Override
@@ -82,19 +89,12 @@ public class CompactConformalClassificationNodeModel extends NodeModel {
 		DataTableSpec predictionTableSpec = predictor.createOuputTableSpec(inSpecs[PORT_CALIBRATION_TABLE.getIdx()],
 				inSpecs[PORT_PREDICTION_TABLE.getIdx()]);
 
-		rearranger = createRearranger(predictionTableSpec);
+		classifierRearranger = createClassifierRearranger(predictionTableSpec);
 
-		return new DataTableSpec[] { rearranger.createSpec() };
+		return new DataTableSpec[] { classifierRearranger.createSpec() };
 	}
 
-	/**
-	 * Creates ColumnRearranger
-	 * 
-	 * @param inSpec Input table spec
-	 * @return rearranger
-	 * @throws InvalidSettingsException
-	 */
-	private ColumnRearranger createRearranger(DataTableSpec inSpec) throws InvalidSettingsException {
+	private ColumnRearranger createClassifierRearranger(DataTableSpec inSpec) throws InvalidSettingsException {
 		settings.getClassifierSettings().configure(inSpec);
 		ColumnRearranger r = new ColumnRearranger(inSpec);
 		r.append(new ClassifierCellFactory(settings.getClassifierSettings()));
@@ -130,7 +130,7 @@ public class CompactConformalClassificationNodeModel extends NodeModel {
 
 	@Override
 	protected void reset() {
-		rearranger = null;
+		classifierRearranger = null;
 	}
 
 }

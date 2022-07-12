@@ -42,7 +42,13 @@ import se.redfield.cp.IterationsTableSeparator;
  */
 public class ConformalPredictorLoopStartNodeModel extends NodeModel implements LoopStartNodeTerminator {
 
+	/**
+	 * Model table input port
+	 */
 	public static final int PORT_MODEL_TABLE = 0;
+	/**
+	 * Calibration table input port
+	 */
 	public static final int PORT_CALIBRATION_TABLE = 1;
 
 	private static final String KEY_MODEL_ITERATION_COLUMN = "modelIterationColumn";
@@ -85,7 +91,7 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 		return new DataTableSpec[] { inSpecs[PORT_MODEL_TABLE], inSpecs[PORT_CALIBRATION_TABLE] };
 	}
 
-	private void validateTableSpec(DataTableSpec spec, String iterationColumn, String title)
+	private static void validateTableSpec(DataTableSpec spec, String iterationColumn, String title)
 			throws InvalidSettingsException {
 		if (!spec.containsName(iterationColumn)) {
 			throw new InvalidSettingsException(title + " table is missing '" + iterationColumn + "' iteration column.");
@@ -124,7 +130,7 @@ public class ConformalPredictorLoopStartNodeModel extends NodeModel implements L
 	 * 
 	 * @throws IllegalArgumentException In case one of the tables is empty table.
 	 */
-	private void checkEmptyInput(BufferedDataTable inModelTable, BufferedDataTable inCalibrationTable) {
+	private static void checkEmptyInput(BufferedDataTable inModelTable, BufferedDataTable inCalibrationTable) {
 		if (inModelTable.size() == 0) {
 			throw new IllegalArgumentException("Model table is empty");
 		}

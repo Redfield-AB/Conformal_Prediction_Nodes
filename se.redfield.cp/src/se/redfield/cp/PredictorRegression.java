@@ -35,10 +35,18 @@ import org.knime.core.node.ExecutionContext;
 import se.redfield.cp.settings.PredictorRegressionSettings;
 import se.redfield.cp.utils.KnimeUtils;
 
+/**
+ * Predictor for the regression case. Computes upper and lower bounds for the
+ * regression value based on the calibration table.
+ *
+ */
 public class PredictorRegression {
 
 	private PredictorRegressionSettings settings;
 
+	/**
+	 * @param settings The settings.
+	 */
 	public PredictorRegression(PredictorRegressionSettings settings) {
 		this.settings = settings;
 	}
@@ -47,7 +55,7 @@ public class PredictorRegression {
 	 * Creates output table spec.
 	 * 
 	 * @param inPredictionTableSpecs Input prediction table spec.
-	 * @return
+	 * @return The output prediction table spec.
 	 */
 	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs) {
 		ColumnRearranger r = createRearranger(inPredictionTableSpecs, 0);
@@ -60,7 +68,7 @@ public class PredictorRegression {
 	 * @param predictionTableSpec Input prediction table spec.
 	 * @param inCalibrationTable  Input calibration table.
 	 * @param exec                Execution context.
-	 * @return
+	 * @return The rearranger.
 	 * @throws CanceledExecutionException
 	 */
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,

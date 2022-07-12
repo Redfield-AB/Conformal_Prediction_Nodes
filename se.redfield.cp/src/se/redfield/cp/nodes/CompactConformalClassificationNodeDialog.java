@@ -33,6 +33,9 @@ public class CompactConformalClassificationNodeDialog extends DefaultNodeSetting
 
 	private final CompactClassificationNodeSettigns settings = new CompactClassificationNodeSettigns();
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public CompactConformalClassificationNodeDialog() {
 		super();

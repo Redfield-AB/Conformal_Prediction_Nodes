@@ -23,9 +23,15 @@ import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
+import se.redfield.cp.utils.KnimeUtils;
 import se.redfield.cp.utils.PortDef;
-import se.redfield.cp.utils.ValidationUtil;
 
+/**
+ * The regression settings.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class RegressionSettings {
 	private static final String KEY_SIGMA_COLUMN_NAME = "sigma";
 	private static final String KEY_NORMALIZED = "normalized";
@@ -39,6 +45,9 @@ public class RegressionSettings {
 
 	private final PortDef[] tables;
 
+	/**
+	 * @param tables The input tables containing Sigma column
+	 */
 	public RegressionSettings(PortDef... tables) {
 		this.tables = tables;
 
@@ -54,52 +63,92 @@ public class RegressionSettings {
 		beta.setEnabled(getNormalized());
 	}
 
+	/**
+	 * @return The sigma column model.
+	 */
 	public SettingsModelString getSigmaColumnModel() {
 		return sigmaColumn;
 	}
 
+	/**
+	 * @return The sigma column name.
+	 */
 	public String getSigmaColumn() {
 		return sigmaColumn.getStringValue();
 	}
 
+	/**
+	 * @return The normalized model.
+	 */
 	public SettingsModelBoolean getNormalizedModel() {
 		return normalized;
 	}
 
+	/**
+	 * @return The normalized mode.
+	 */
 	public boolean getNormalized() {
 		return normalized.getBooleanValue();
 	}
 
+	/**
+	 * @return The beta settings model.
+	 */
 	public SettingsModelDoubleBounded getBetaModel() {
 		return beta;
 	}
 
+	/**
+	 * @return The beta value.
+	 */
 	public double getBeta() {
 		return beta.getDoubleValue();
 	}
 
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		sigmaColumn.loadSettingsFrom(settings);
 		normalized.loadSettingsFrom(settings);
 		beta.loadSettingsFrom(settings);
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		sigmaColumn.saveSettingsTo(settings);
 		normalized.saveSettingsTo(settings);
 		beta.saveSettingsTo(settings);
 	}
 
+	/**
+	 * Validates internal consistency of the current settings
+	 * 
+	 * @throws InvalidSettingsException
+	 */
 	public void validate() throws InvalidSettingsException {
 		if (getNormalized() && getSigmaColumn().isEmpty()) {
 			throw new InvalidSettingsException("Sigma column is not selected");
 		}
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpecs Input specs
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		if (getNormalized()) {
 			for (PortDef table : tables) {
-				ValidationUtil.validateDoubleColumn(table, inSpecs, getSigmaColumn(), "Sigma");
+				KnimeUtils.validateDoubleColumn(table, inSpecs, getSigmaColumn(), "Sigma");
 			}
 		}
 

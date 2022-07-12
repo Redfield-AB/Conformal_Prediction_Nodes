@@ -38,10 +38,11 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 	private DataTableSpec spec;
 	private SettingsModelString classesColumnSettings;
 	private DialogComponentString stringSeparatorComp;
-//	private ColumnSelectionPanel pValueSelectionPanel;
-//	private SettingsModelFilterString m_pValueCols;
 	private SettingsModelBoolean additionalEfficiencyMetricsSettings;
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorScorerNodeDialog() {
 		super();
@@ -58,9 +59,6 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 
 		classesColumnSettings.addChangeListener(e -> calcStringSeparatorVisibility());
 
-//		m_pValueCols = ConformalPredictorScorerNodeModel.createPValueSelectionSettings();
-//        additionalEfficiencyMetricsSettings.addChangeListener(e->calcPValueSelectionVisibilty());
-
 		addDialogComponent(
 				new DialogComponentColumnNameSelection(targetColumnSettings, "Target column:", 0, DataValue.class));
 		addDialogComponent(new DialogComponentColumnNameSelection(classesColumnSettings, "Classes column:", 0,
@@ -70,7 +68,6 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 		addDialogComponent(new DialogComponentBoolean(additionalInfoSettings, "Additional prediction information"));
 		addDialogComponent(
 				new DialogComponentBoolean(additionalEfficiencyMetricsSettings, "Additional efficiency metrics"));
-//		addDialogComponent(new DialogComponentColumnFilter(m_pValueCols,0));
 	}
 
 	private void calcStringSeparatorVisibility() {
@@ -86,10 +83,5 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 			throws NotConfigurableException {
 		this.spec = specs[0];
 		calcStringSeparatorVisibility();
-//		calcPValueSelectionVisibilty();
 	}
-//	
-//	private void calcPValueSelectionVisibilty() {
-//		m_pValueCols.setEnabled(additionalEfficiencyMetricsSettings.isEnabled());		
-//	}
 }

@@ -24,8 +24,15 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.nodes.ConformalPredictorCalibratorRegressionNodeModel;
-import se.redfield.cp.utils.ValidationUtil;
+import se.redfield.cp.utils.KnimeUtils;
 
+/**
+ * The node settings for the
+ * {@link ConformalPredictorCalibratorRegressionNodeModel} node.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class CalibratorRegressionNodeSettings implements CalibratorRegressionSettings {
 
 	private static final String KEY_TARGET_COLUMN_NAME = "targetColumn";
@@ -36,6 +43,9 @@ public class CalibratorRegressionNodeSettings implements CalibratorRegressionSet
 	private final RegressionSettings regressionSettings;
 	private final KeepColumnsSettings keepColumns;
 
+	/**
+	 * Creates new instance.
+	 */
 	public CalibratorRegressionNodeSettings() {
 		targetColumn = new SettingsModelString(KEY_TARGET_COLUMN_NAME, "");
 		predictionColumn = new SettingsModelString(KEY_PREDICTION_COLUMN_NAME, "");
@@ -43,6 +53,9 @@ public class CalibratorRegressionNodeSettings implements CalibratorRegressionSet
 		keepColumns = new KeepColumnsSettings(ConformalPredictorCalibratorRegressionNodeModel.PORT_INPUT_TABLE);
 	}
 
+	/**
+	 * @return The target column model
+	 */
 	public SettingsModelString getTargetColumnModel() {
 		return targetColumn;
 	}
@@ -52,6 +65,9 @@ public class CalibratorRegressionNodeSettings implements CalibratorRegressionSet
 		return targetColumn.getStringValue();
 	}
 
+	/**
+	 * @return The prediction column model
+	 */
 	public SettingsModelString getPredictionColumnModel() {
 		return predictionColumn;
 	}
@@ -71,6 +87,12 @@ public class CalibratorRegressionNodeSettings implements CalibratorRegressionSet
 		return keepColumns;
 	}
 
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetColumn.loadSettingsFrom(settings);
 		predictionColumn.loadSettingsFrom(settings);
@@ -78,6 +100,11 @@ public class CalibratorRegressionNodeSettings implements CalibratorRegressionSet
 		keepColumns.loadSettingFrom(settings);
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetColumn.saveSettingsTo(settings);
 		predictionColumn.saveSettingsTo(settings);
@@ -96,16 +123,28 @@ public class CalibratorRegressionNodeSettings implements CalibratorRegressionSet
 		keepColumns.validate();
 	}
 
+	/**
+	 * Validates settings stored in the provided {@link NodeSettingsRO}.
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		CalibratorRegressionNodeSettings temp = new CalibratorRegressionNodeSettings();
 		temp.loadSettingFrom(settings);
 		temp.validate();
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpecs Input specs
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs)
 			throws InvalidSettingsException {
-		ValidationUtil.validateDoubleColumn(PORT_INPUT_TABLE, inSpecs, getTargetColumnName(), "Target");
-		ValidationUtil.validateDoubleColumn(PORT_INPUT_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
+		KnimeUtils.validateDoubleColumn(PORT_INPUT_TABLE, inSpecs, getTargetColumnName(), "Target");
+		KnimeUtils.validateDoubleColumn(PORT_INPUT_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
 
 		regressionSettings.validateSettings(inSpecs);
 		keepColumns.validateSettings(inSpecs);

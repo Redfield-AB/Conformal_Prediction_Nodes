@@ -51,7 +51,13 @@ public class ConformalPredictorNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorNodeModel.class);
 
+	/**
+	 * Prediction table input port
+	 */
 	public static final PortDef PORT_PREDICTION_TABLE = new PortDef(0, "Prediction table");
+	/**
+	 * Calibration table input port
+	 */
 	public static final PortDef PORT_CALIBRATION_TABLE = new PortDef(1, "Calibration table");
 
 	private final PredictorNodeSettings settings = new PredictorNodeSettings();

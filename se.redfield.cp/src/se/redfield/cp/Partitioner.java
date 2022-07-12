@@ -67,11 +67,11 @@ public class Partitioner {
 	}
 
 	/**
-	 * Partitions provide table into 2 table based on a sampling settings.
+	 * Partitions provided table into 2 table based on a sampling settings.
 	 * 
 	 * @param inTable Input table.
 	 * @param exec    Execution context.
-	 * @return
+	 * @return The result of a partitioning.
 	 * @throws CanceledExecutionException
 	 */
 	public BufferedDataTable[] partition(BufferedDataTable inTable, ExecutionContext exec)
@@ -79,6 +79,15 @@ public class Partitioner {
 		return partition(inTable, exec, false);
 	}
 
+	/**
+	 * Partitions provided table into 2 table based on a sampling settings.
+	 * 
+	 * @param inTable  Input table.
+	 * @param exec     Execution context.
+	 * @param computeK
+	 * @return The result of a partitioning.
+	 * @throws CanceledExecutionException
+	 */
 	public BufferedDataTable[] partition(BufferedDataTable inTable, ExecutionContext exec, boolean computeK)
 			throws CanceledExecutionException {
 		IRowFilter filter = getRowFilter(inTable, exec, computeK);
@@ -107,7 +116,7 @@ public class Partitioner {
 				curContainer = putAllContainer;
 			}
 
-			curContainer.addRowToTable(row);
+			curContainer.addRowToTable(row);// NOSONAR curContainer is never null
 			count += 1;
 
 			exec.checkCanceled();

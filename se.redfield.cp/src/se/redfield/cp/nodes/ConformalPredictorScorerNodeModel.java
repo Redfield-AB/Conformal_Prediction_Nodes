@@ -88,7 +88,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		return new SettingsModelBoolean(KEY_ADDITIONAL_INFO, true);
 	}
 
-	public static SettingsModelBoolean createAdditionalEfficiencyMetricsSettings() {
+	static SettingsModelBoolean createAdditionalEfficiencyMetricsSettings() {
 		return new SettingsModelBoolean(KEY_EFFICIENCY_METRICS, true);
 	}
 
@@ -96,22 +96,37 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 		super(1, 2);
 	}
 
+	/**
+	 * @return The target column
+	 */
 	public String getTargetColumn() {
 		return targetColumnSettings.getStringValue();
 	}
 
+	/**
+	 * @return The classes column
+	 */
 	public String getClassesColumn() {
 		return classesColumnSettings.getStringValue();
 	}
 
+	/**
+	 * @return The string separator
+	 */
 	public String getStringSeparator() {
 		return stringSeparatorSettings.getStringValue();
 	}
 
+	/**
+	 * @return Whether additional info mode is enabled
+	 */
 	public boolean isAdditionalInfoMode() {
 		return additionalInfoSettings.getBooleanValue();
 	}
 
+	/**
+	 * @return Whether additional efficiency metrics mode is enabled
+	 */
 	public boolean isAdditionalEfficiencyMetricsMode() {
 		return additionalEfficiencyMetricsSettings.getBooleanValue();
 	}
@@ -124,7 +139,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 	 * @return probability column name
 	 */
 	public String getProbabilityColumnName(String val) {
-		return String.format(String.format(PredictorSettings.PREDICTION_SCORE_COLUMN_DEFAULT_FORMAT, val));
+		return String.format(String.format(PredictorSettings.PREDICTION_P_VALUE_COLUMN_DEFAULT_FORMAT, val));
 	}
 
 	@Override

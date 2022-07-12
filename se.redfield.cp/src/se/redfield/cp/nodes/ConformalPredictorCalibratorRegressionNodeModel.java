@@ -33,12 +33,15 @@ import se.redfield.cp.settings.CalibratorRegressionNodeSettings;
 import se.redfield.cp.utils.PortDef;
 
 /**
- * Conformal Calibrator node. Assign ranks to each row bases on prediction
- * probability.
+ * Conformal Calibrator node for regression. Assign ranks to each row bases on
+ * calculated nonconformity.
  *
  */
 public class ConformalPredictorCalibratorRegressionNodeModel extends NodeModel {
 
+	/**
+	 * Input table input port
+	 */
 	public static final PortDef PORT_INPUT_TABLE = new PortDef(0, "Input table");
 
 	private final CalibratorRegressionNodeSettings settings = new CalibratorRegressionNodeSettings();

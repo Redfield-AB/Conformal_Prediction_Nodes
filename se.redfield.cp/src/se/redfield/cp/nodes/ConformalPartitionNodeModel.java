@@ -30,9 +30,10 @@ import org.knime.core.node.NodeSettingsWO;
 
 import se.redfield.cp.Partitioner;
 import se.redfield.cp.settings.SamplingSettings;
+
 /**
  *
- * @author 
+ * The node performs the partitioning of the data in train- and test set.
  */
 public class ConformalPartitionNodeModel extends NodeModel {
     /** Outport for training data: 0. */
@@ -41,6 +42,9 @@ public class ConformalPartitionNodeModel extends NodeModel {
     /** Outport for test data: 1. */
     static final int OUTPORT_B = 1;
     
+	/**
+	 * The settings key for partitionSettings
+	 */
 	public static final String KEY_PARTITION_SETTINGS = "partitionSettings";
 
 	private final SamplingSettings partitionSettings = new SamplingSettings();

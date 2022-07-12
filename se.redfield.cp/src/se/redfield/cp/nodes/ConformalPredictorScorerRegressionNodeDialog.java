@@ -28,6 +28,9 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  */
 public class ConformalPredictorScorerRegressionNodeDialog extends DefaultNodeSettingsPane {
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorScorerRegressionNodeDialog() {
 		super();

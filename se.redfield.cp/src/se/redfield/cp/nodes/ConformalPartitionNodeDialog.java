@@ -51,8 +51,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import org.knime.base.node.preproc.sample.SamplingNodeDialogPanel;
-import org.knime.base.node.preproc.sample.SamplingNodeSettings;
-import org.knime.base.node.preproc.sample.SamplingNodeSettings.CountMethods;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeDialogPane;
@@ -60,7 +58,6 @@ import org.knime.core.node.NodeSettings;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.NotConfigurableException;
-import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
 
 /**
  * Dialog that allows to define the partitioning of the input table. It is
@@ -71,9 +68,11 @@ import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
 public class ConformalPartitionNodeDialog extends NodeDialogPane {
 	private SamplingNodeDialogPanel partitionPanel;
 
+	/**
+	 * Creates new instance
+	 */
 	public ConformalPartitionNodeDialog() {
 		super();
-
 
 		partitionPanel = new SamplingNodeDialogPanel();
 		partitionPanel.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5),

@@ -54,12 +54,17 @@ public class Scorer {
 
 	private ConformalPredictorScorerNodeModel model;
 
+	/**
+	 * @param conformalPredictorScorerNodeModel The node model
+	 */
 	public Scorer(ConformalPredictorScorerNodeModel conformalPredictorScorerNodeModel) {
 		this.model = conformalPredictorScorerNodeModel;
 	}
 
 	/**
 	 * Creates output table spec.
+	 * 
+	 * @return The output table spec.
 	 */
 	public DataTableSpec createOutputSpec() {
 		List<DataColumnSpec> specs = new ArrayList<>();
@@ -78,6 +83,9 @@ public class Scorer {
 		return new DataTableSpec(specs.toArray(new DataColumnSpec[] {}));
 	}
 
+	/**
+	 * @return The additional efficiency metrics table spec
+	 */
 	public DataTableSpec createAdditionalEfficiencyMetricSpec() {
 		List<DataColumnSpec> specs = new ArrayList<>();
 		specs.add(new DataColumnSpecCreator("Efficiency", DoubleCell.TYPE).createSpec());
@@ -382,8 +390,8 @@ public class Scorer {
 			metrics.compute(m, (k, v) -> v == null ? 1.0 : v + 1);
 		}
 
-		public void add(Metric m, double out_intervalsSize) {
-			metrics.compute(m, (k, v) -> v == null ? out_intervalsSize : v + out_intervalsSize);
+		public void add(Metric m, double value) {
+			metrics.compute(m, (k, v) -> v == null ? value : v + value);
 		}
 
 		public double get(Metric m) {

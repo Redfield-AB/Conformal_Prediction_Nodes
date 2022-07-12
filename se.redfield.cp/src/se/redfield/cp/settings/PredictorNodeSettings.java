@@ -26,6 +26,14 @@ import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 
+import se.redfield.cp.nodes.ConformalPredictorNodeModel;
+
+/**
+ * The node settings for the {@link ConformalPredictorNodeModel} node.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class PredictorNodeSettings implements PredictorSettings {
 
 	private static final String KEY_INCLUDE_RANK_COLUMN = "includeRankColumn";
@@ -34,6 +42,9 @@ public class PredictorNodeSettings implements PredictorSettings {
 	private final KeepColumnsSettings keepColumns;
 	private final SettingsModelBoolean includeRank;
 
+	/**
+	 * Creates new instance.
+	 */
 	public PredictorNodeSettings() {
 		targetSettings = new TargetSettings(PORT_CALIBRATION_TABLE, PORT_PREDICTION_TABLE);
 		keepColumns = new KeepColumnsSettings(PORT_PREDICTION_TABLE);
@@ -50,6 +61,9 @@ public class PredictorNodeSettings implements PredictorSettings {
 		return keepColumns;
 	}
 
+	/**
+	 * @return The include rank model.
+	 */
 	public SettingsModelBoolean getIncludeRankModel() {
 		return includeRank;
 	}
@@ -59,12 +73,23 @@ public class PredictorNodeSettings implements PredictorSettings {
 		return includeRank.getBooleanValue();
 	}
 
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetSettings.loadSettingsFrom(settings);
 		keepColumns.loadSettingFrom(settings);
 		includeRank.loadSettingsFrom(settings);
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetSettings.saveSettingsTo(settings);
 		keepColumns.saveSettingsTo(settings);
@@ -76,12 +101,25 @@ public class PredictorNodeSettings implements PredictorSettings {
 		keepColumns.validate();
 	}
 
+	/**
+	 * Validates settings stored in the provided {@link NodeSettingsRO}.
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		PredictorNodeSettings temp = new PredictorNodeSettings();
 		temp.loadSettingFrom(settings);
 		temp.validate();
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpecs     Input specs
+	 * @param msgConsumer Warning message consumer
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs, Consumer<String> msgConsumer)
 			throws InvalidSettingsException {
 		targetSettings.validateSettings(inSpecs, msgConsumer);

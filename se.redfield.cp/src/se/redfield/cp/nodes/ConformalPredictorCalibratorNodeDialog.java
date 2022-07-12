@@ -31,6 +31,9 @@ public class ConformalPredictorCalibratorNodeDialog extends DefaultNodeSettingsP
 
 	private final CalibratorNodeSettings settings = new CalibratorNodeSettings();
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorCalibratorNodeDialog() {
 		super();

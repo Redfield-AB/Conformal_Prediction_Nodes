@@ -64,7 +64,9 @@ public class IterationsTableSeparator implements Closeable {
 	 * 
 	 * @param exec Execution context.
 	 * @return Table with the next segment.
-	 * @throws NoSuchElementException If no next segment is available.
+	 * @throws CanceledExecutionException In case the node execution was canceled by
+	 *                                    the user.
+	 * @throws NoSuchElementException     If no next segment is available.
 	 */
 	public BufferedDataTable next(ExecutionContext exec) throws CanceledExecutionException {
 		iteration = getNextIteration();
@@ -82,7 +84,7 @@ public class IterationsTableSeparator implements Closeable {
 	}
 
 	/**
-	 * Returns <code>true</code> if there are next segment available.
+	 * @return <code>true</code> if there are next segment available.
 	 * 
 	 */
 	public boolean hasNext() {
@@ -127,6 +129,7 @@ public class IterationsTableSeparator implements Closeable {
 	/**
 	 * Closes internal {@link CloseableRowIterator} object.
 	 */
+	@Override
 	public void close() {
 		if (iterator != null) {
 			iterator.close();

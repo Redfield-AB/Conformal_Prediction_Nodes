@@ -15,20 +15,36 @@
  */
 package se.redfield.cp.utils;
 
+/**
+ * The node input port definition.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class PortDef {
 
 	private final int idx;
 	private final String name;
 
+	/**
+	 * @param idx  The port index.
+	 * @param name The port name.
+	 */
 	public PortDef(int idx, String name) {
 		this.idx = idx;
 		this.name = name;
 	}
 
+	/**
+	 * @return The port index.
+	 */
 	public int getIdx() {
 		return idx;
 	}
 
+	/**
+	 * @return The port name.
+	 */
 	public String getName() {
 		return name;
 	}

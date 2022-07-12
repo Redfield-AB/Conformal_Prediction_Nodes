@@ -15,22 +15,49 @@
  */
 package se.redfield.cp.settings;
 
+/**
+ * CalibratorRegression configuration
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public interface CalibratorRegressionSettings {
 
+	/**
+	 * Default Alpha column name
+	 */
 	public static final String CALIBRATION_ALHPA_COLUMN_DEFAULT_NAME = "Alpha";
 
+	/**
+	 * @return The target column name
+	 */
 	public String getTargetColumnName();
 
+	/**
+	 * @return The prediction column name
+	 */
 	public String getPredictionColumnName();
 
+	/**
+	 * @return The regression settings
+	 */
 	public RegressionSettings getRegressionSettings();
 
+	/**
+	 * @return The keep columns settings
+	 */
 	public KeepColumnsSettings getKeepColumns();
 
+	/**
+	 * @return The Alpha column name
+	 */
 	default String getCalibrationAlphaColumnName() {
 		return CALIBRATION_ALHPA_COLUMN_DEFAULT_NAME;
 	}
 
+	/**
+	 * @return The Rank column name
+	 */
 	public default String getCalibrationRankColumnName() {
 		return CalibratorSettings.CALIBRATION_RANK_COLUMN_DEFAULT_NAME;
 	}

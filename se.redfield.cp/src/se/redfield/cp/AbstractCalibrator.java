@@ -43,7 +43,7 @@ public abstract class AbstractCalibrator {
 	 * Creates output calibration table spec.
 	 * 
 	 * @param inputTableSpec Input table spec.
-	 * @return
+	 * @return The calibration table spec.
 	 */
 	public DataTableSpec createOutputSpec(DataTableSpec inputTableSpec) {
 		ColumnRearranger rearranger = createBaseRearranger(inputTableSpec);
@@ -65,7 +65,7 @@ public abstract class AbstractCalibrator {
 	 * 
 	 * @param inCalibrationTable Input table.
 	 * @param exec               Execution context.
-	 * @return
+	 * @return The calibration table.
 	 * @throws CanceledExecutionException
 	 */
 	public BufferedDataTable process(BufferedDataTable inCalibrationTable, ExecutionContext exec)

@@ -15,18 +15,42 @@
  */
 package se.redfield.cp.settings;
 
+/**
+ * Calibrator configuration.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public interface CalibratorSettings {
+	/**
+	 * The P column default name
+	 */
 	public static final String CALIBRATION_P_COLUMN_DEFAULT_NAME = "P";
+	/**
+	 * The Rank column default name
+	 */
 	public static final String CALIBRATION_RANK_COLUMN_DEFAULT_NAME = "Rank";
 
+	/**
+	 * @return The target settings.
+	 */
 	public TargetSettings getTargetSettings();
 
+	/**
+	 * @return The keep column settings
+	 */
 	public KeepColumnsSettings getKeepColumns();
 
+	/**
+	 * @return The P column name.
+	 */
 	public default String getCalibrationProbabilityColumnName() {
 		return CALIBRATION_P_COLUMN_DEFAULT_NAME;
 	}
 
+	/**
+	 * @return The Rank column name
+	 */
 	public default String getCalibrationRankColumnName() {
 		return CALIBRATION_RANK_COLUMN_DEFAULT_NAME;
 	}

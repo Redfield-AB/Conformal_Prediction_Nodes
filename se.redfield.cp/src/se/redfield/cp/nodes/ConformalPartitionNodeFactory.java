@@ -17,53 +17,35 @@ package se.redfield.cp.nodes;
 
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
-import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeView;
 
 /**
- * Factory to partition the data in train- and test set.
+ * Factory class for {@link ConformalPartitionNodeModel}.
  * 
- * @author
  */
-public class ConformalPartitionNodeFactory extends NodeFactory {
-    /**
-     * {@inheritDoc}
-     */
+public class ConformalPartitionNodeFactory extends NodeFactory<ConformalPartitionNodeModel> {
     @Override
-    public NodeModel createNodeModel() {
+	public ConformalPartitionNodeModel createNodeModel() {
         return new ConformalPartitionNodeModel();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getNrNodeViews() {
         return 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public NodeView<ConformalPartitionNodeModel> createNodeView(final int viewIndex,
-            final NodeModel nodeModel) {
-        throw new IndexOutOfBoundsException("No views available.");
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean hasDialog() {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public NodeDialogPane createNodeDialogPane() {
         return new ConformalPartitionNodeDialog();
     }
+
+	@Override
+	public NodeView<ConformalPartitionNodeModel> createNodeView(int viewIndex, ConformalPartitionNodeModel nodeModel) {
+		return null;
+	}
 }

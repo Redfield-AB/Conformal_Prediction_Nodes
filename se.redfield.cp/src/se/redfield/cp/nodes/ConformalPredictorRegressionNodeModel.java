@@ -43,11 +43,22 @@ import se.redfield.cp.settings.PredictorRegressionNodeSettings;
 import se.redfield.cp.utils.PortDef;
 
 
+/**
+ * Conformal Predictor node for regression. Uses calibration table to calculates
+ * upper and lower bounds for the regression value.
+ *
+ */
 public class ConformalPredictorRegressionNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(ConformalPredictorRegressionNodeModel.class);
 
+	/**
+	 * Prediction table input port
+	 */
 	public static final PortDef PORT_PREDICTION_TABLE = new PortDef(1, "Prediction table");
+	/**
+	 * Calibration table input port
+	 */
 	public static final PortDef PORT_CALIBRATION_TABLE = new PortDef(0, "Calibration table");
 
 	private final PredictorRegressionNodeSettings settings = new PredictorRegressionNodeSettings();
@@ -79,8 +90,7 @@ public class ConformalPredictorRegressionNodeModel extends NodeModel {
 
 	@Override
 	public InputPortRole[] getInputPortRoles() {
-		return new InputPortRole[] { InputPortRole.DISTRIBUTED_STREAMABLE,
-				InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, };
+		return new InputPortRole[] { InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, InputPortRole.DISTRIBUTED_STREAMABLE };
 	}
 
 	@Override

@@ -25,11 +25,22 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
-import se.redfield.cp.utils.ValidationUtil;
+import se.redfield.cp.nodes.CompactConformalClassificationNodeModel;
+import se.redfield.cp.utils.KnimeUtils;
 
+/**
+ * The node settings for the {@link CompactConformalClassificationNodeModel}
+ * node.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class CompactRegressionNodeSettings implements CalibratorRegressionSettings, PredictorRegressionSettings {
 	private static final String KEY_TARGET_COLUMN_NAME = "targetColumn";
 	private static final String KEY_PREDICTION_COLUMN_NAME = "predictionColumn";
+	/**
+	 * The errror rate settings key
+	 */
 	public static final String KEY_ERROR_RATE = "errorRate";
 
 	private static final double DEFAULT_ERROR_RATE = 0.05;
@@ -40,6 +51,9 @@ public class CompactRegressionNodeSettings implements CalibratorRegressionSettin
 	private final KeepColumnsSettings keepColumns;
 	private final SettingsModelDoubleBounded errorRate;
 
+	/**
+	 * Creates new instance.
+	 */
 	public CompactRegressionNodeSettings() {
 		targetColumn = new SettingsModelString(KEY_TARGET_COLUMN_NAME, "");
 		predictionColumn = new SettingsModelString(KEY_PREDICTION_COLUMN_NAME, "");
@@ -49,6 +63,9 @@ public class CompactRegressionNodeSettings implements CalibratorRegressionSettin
 	}
 
 
+	/**
+	 * @return The target column model.
+	 */
 	public SettingsModelString getTargetColumnModel() {
 		return targetColumn;
 	}
@@ -58,6 +75,9 @@ public class CompactRegressionNodeSettings implements CalibratorRegressionSettin
 		return targetColumn.getStringValue();
 	}
 
+	/**
+	 * @return The prediction column model.
+	 */
 	public SettingsModelString getPredictionColumnModel() {
 		return predictionColumn;
 	}
@@ -77,6 +97,9 @@ public class CompactRegressionNodeSettings implements CalibratorRegressionSettin
 		return keepColumns;
 	}
 
+	/**
+	 * @return The error rate model.
+	 */
 	public SettingsModelDoubleBounded getErrorRateModel() {
 		return errorRate;
 	}
@@ -96,6 +119,12 @@ public class CompactRegressionNodeSettings implements CalibratorRegressionSettin
 		return CalibratorRegressionSettings.super.getCalibrationRankColumnName();
 	}
 
+	/**
+	 * Loads settings from the provided {@link NodeSettingsRO}
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		targetColumn.loadSettingsFrom(settings);
 		predictionColumn.loadSettingsFrom(settings);
@@ -104,6 +133,11 @@ public class CompactRegressionNodeSettings implements CalibratorRegressionSettin
 		errorRate.loadSettingsFrom(settings);
 	}
 
+	/**
+	 * Saves current settings into the given {@link NodeSettingsWO}.
+	 * 
+	 * @param settings
+	 */
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		targetColumn.saveSettingsTo(settings);
 		predictionColumn.saveSettingsTo(settings);
@@ -123,16 +157,29 @@ public class CompactRegressionNodeSettings implements CalibratorRegressionSettin
 		keepColumns.validate();
 	}
 
+	/**
+	 * Validates settings stored in the provided {@link NodeSettingsRO}.
+	 * 
+	 * @param settings
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		CompactRegressionNodeSettings temp = new CompactRegressionNodeSettings();
 		temp.loadSettingFrom(settings);
 		temp.validate();
 	}
 
+	/**
+	 * Validates the settings against input table spec.
+	 * 
+	 * @param inSpecs     Input specs
+	 * @param msgConsumer Warning message consumer
+	 * @throws InvalidSettingsException
+	 */
 	public void validateSettings(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		ValidationUtil.validateDoubleColumn(PORT_CALIBRATION_TABLE, inSpecs, getTargetColumnName(), "Target");
-		ValidationUtil.validateDoubleColumn(PORT_CALIBRATION_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
-		ValidationUtil.validateDoubleColumn(PORT_PREDICTION_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
+		KnimeUtils.validateDoubleColumn(PORT_CALIBRATION_TABLE, inSpecs, getTargetColumnName(), "Target");
+		KnimeUtils.validateDoubleColumn(PORT_CALIBRATION_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
+		KnimeUtils.validateDoubleColumn(PORT_PREDICTION_TABLE, inSpecs, getPredictionColumnName(), "Prediction");
 
 		regressionSettings.validateSettings(inSpecs);
 		keepColumns.validateSettings(inSpecs);
