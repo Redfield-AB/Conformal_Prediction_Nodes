@@ -13,5 +13,6 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.13.0,4.0.0)",
 Bundle-ActivationPolicy: lazy
 Export-Package: se.redfield.cp,
  se.redfield.cp.nodes,
+ se.redfield.cp.settings,
  se.redfield.cp.utils
 

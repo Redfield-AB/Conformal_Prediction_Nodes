@@ -25,7 +25,6 @@ import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
-import se.redfield.cp.nodes.ConformalPredictorLoopEndNodeModel;
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
 /**
@@ -51,6 +50,11 @@ public class ClassifierSettings {
 	 * Default classes column name
 	 */
 	public static final String DEFAULT_CLASSES_COLUMN_NAME = "Classes";
+
+	/**
+	 * Regular expression to match p-value columns
+	 */
+	public static final String P_VALUE_COLUMN_REGEX = "^p-value \\((?<value>.+)\\)$";
 
 	private final SettingsModelDoubleBounded errorRate;
 	private final SettingsModelBoolean classesAsString;
@@ -193,6 +197,6 @@ public class ClassifierSettings {
 	}
 
 	private static String getScoreColumnPattern() {
-		return ConformalPredictorLoopEndNodeModel.P_VALUE_COLUMN_REGEX;
+		return P_VALUE_COLUMN_REGEX;
 	}
 }

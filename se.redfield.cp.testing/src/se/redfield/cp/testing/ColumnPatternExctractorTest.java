@@ -26,8 +26,7 @@ import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.def.StringCell;
-
-import se.redfield.cp.nodes.ConformalPredictorLoopEndNodeModel;
+import se.redfield.cp.settings.ClassifierSettings;
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
 class ColumnPatternExctractorTest {
@@ -41,7 +40,7 @@ class ColumnPatternExctractorTest {
 		DataColumnSpec c5 = new DataColumnSpecCreator("Some string", StringCell.TYPE).createSpec();
 		DataTableSpec spec = new DataTableSpec(c1, c2, c3, c4, c5);
 
-		ColumnPatternExtractor e = new ColumnPatternExtractor(ConformalPredictorLoopEndNodeModel.P_VALUE_COLUMN_REGEX);
+		ColumnPatternExtractor e = new ColumnPatternExtractor(ClassifierSettings.P_VALUE_COLUMN_REGEX);
 
 		Map<String, Integer> match = e.match(spec);
 		assertThat(match.size(), is(2));
