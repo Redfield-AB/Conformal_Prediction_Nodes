@@ -3,12 +3,12 @@
     <name>Conformal Calibration Loop End</name>
     
     <shortDescription>
-        Aggregates the results of conformal prediction training: calibration tables and models.
+        Aggregates the results of conformal prediction training for classification or regression: calibration tables and models.
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	Aggregates the results of conformal prediction training: calibration tables and models.
+        	Aggregates the results of conformal prediction training for classification or regression: calibration tables and models.
         </intro>
     </fullDescription>
     

@@ -3,12 +3,12 @@
     <name>Conformal Prediction Loop End</name>
     
     <shortDescription>
-        Aggregates the results of conformal prediction.
+        Aggregates the results of conformal prediction for conformal classification or conformal regression.
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	Aggregates the results of conformal prediction.
+        	Aggregates the results of conformal prediction for conformal classification or conformal regression.
         </intro>
     </fullDescription>
     

@@ -3,20 +3,36 @@
     <name>Conformal Predictor and Classifier (Regression)</name>
     
     <shortDescription>
-        Calculates the table with p-values for test data based on the provided calibration table.
+        The node returns the prediction of conformal regression model based on the
+        regression model and conformal regression calibration table.
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	Calculates the table with p-values for test data based on the provided calibration table.
-        	The p-value for a class is the fraction of entries from that class in the calibration set 
-        	that have a model probability less than or equal to the model probability for the record under consideration. 
-        	Small p-values indicate records that are nonconforming, larger p-values indicate records that are conforming. 
-        	(Reference: Vovk, V., Gammerman, A. and Shafer, G., 2005. Algorithmic learning in a random world. Springer Science &amp; Business Media.)  
+        	The node returns the prediction of conformal regression model based on the
+        	regression model and conformal regression calibration table.
+        	The purpose of this node is similar to Conformal Predictor.
+        	This node is supposed to be used WITH Conformal Calibration and Conformal Prediction loops.
         </intro>
             
-        <option name="Target column">
-        	A column with target column that is being predicted.
+        <option name="Prediction column">
+        	A column with predicted values.
+        </option>
+        <option name="Use normalization">
+        	In order to increase the informativeness, and to potentially minimize prediction regions,
+        	it is possible to obtain individual bounds for each sample, which is achieved using a normalized nonconformity function.
+        	In order to use normalization Prediction Variance or estimate of difficulty - Sigma (needs to be calculated separately)
+        	should be provided. 
+        </option>
+        <option name="Difficulty column">
+        	The column that contains the values defining the Sigma.
+        	By default it is advisable to use Prediction Variance values.
+        </option>
+        <option name="Beta">
+        	A sensitivity parameter determining the relative importance of the normalization term.
+        </option>
+        <option name="Error rate (significance level)">
+        	Defines the tolerable percentage of the prediction errors.
         </option>
         <option name="Keep All Columns">
         	If checked all columns from input table will be also included into output table along with calibration columns.
@@ -28,10 +44,12 @@
     </fullDescription>
     
     <ports>
-    	<inPort index="0" name="Calibration Table">Calibration Table</inPort>
-    	<inPort index="1" name="Prediction Table">Table with predictions and class probabilities. Target variable must have the same domain as the calibration table.</inPort>
+    	<inPort index="0" name="Calibration Table">Table with predictions and optionally difficulty estimates from the calibration set.</inPort>
+    	<inPort index="1" name="Prediction Table">
+    		Table provided by predictor nodes fitted predictions.
+    		Target variable must have the same domain as the calibration table.
+    	</inPort>
         
-        
-        <outPort index="0" name="Output">Table with calibrated predictions and p-values.</outPort>
+        <outPort index="0" name="Output">Table with estimated intervals for predicted values.</outPort>
     </ports>    
 </knimeNode>

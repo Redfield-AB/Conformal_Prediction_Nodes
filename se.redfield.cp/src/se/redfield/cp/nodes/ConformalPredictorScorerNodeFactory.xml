@@ -30,7 +30,7 @@
         	A column that contains predictions produced by Conformal Classifier. Could be both collection or string column type.
         </option>
         <option name="Additional prediction information">
-        	Includes additional columns with some prediction metrics to the per-class output table.
+        	Includes additional columns with some prediction metrics.
         	<ul>
         		<li>Exact match – number of correct predictions that belong to one class, and not belong to any mixed class.</li>
         		<li>Soft match - number of correct predictions that belong to one of the mixed classes.</li>
@@ -42,7 +42,7 @@
         	</ul>
         </option>
         <option name="Additional efficiency metrics">
-        	Adds additional columns with efficiency metrics to the total output table. The metrics are taken from the paper "Criteria of efficiency for set-valued classification" by Vovk et al. 
+        	Adds additional columns with efficiency metrics. The metrics are taken from the paper "Criteria of efficiency for set-valued classification" by Vovk et al. 
         	<ul>
         		<li>The S (“sum”) criterion measures efficiency by the average of the sum of p-values. Smaller values are preferable.</li>
         		<li>The N (“Number”) criterion uses the average size of the prediction sets. Smaller values are preferable.</li>
@@ -61,8 +61,7 @@
     <ports>
         <inPort index="0" name="Input">Table with ranked predictions and classes.</inPort>
         
-        <outPort index="0" name="Per-class results">The accuracy statistics table per class.</outPort>
+        <outPort index="0" name="Results">The accuracy statistics table</outPort>
         
-        <outPort index="1" name="Aggregated results">The accuracy statistics table in total.</outPort>
     </ports>    
 </knimeNode>

@@ -8,14 +8,28 @@
     
     <fullDescription>
         <intro>
-        	Creates a calibration table with ranking for further calibration of the test data sets.
-			Ranking is sorting by class probabilities provided by predictor nodes in descending order.
-			Note that predictor must provide the class probabilities for the predictions in order to apply conformal prediction.
+			Creates a calibration table with ranking for further calibration of the test data sets.
+			Ranking is sorting by absolute error (Alpha) provided by predictor nodes in descending order.
+			In order to use normalization Prediction Variance or estimate of difficulty - Sigma (needs to be calculated separately)
+			should be provided.
         </intro>
         
         
         <option name="Target column">
         	A column with target column that is being predicted.
+        </option>
+        <option name="Use normalization">
+        	in order to increase the informativeness, and to potentially minimize prediction regions,
+        	it is possible to obtain individual bounds for each sample, which is achieved using a normalized nonconformity function.
+        	In order to use normalization Prediction Variance or estimate of difficulty - Sigma (needs to be calculated separately)
+        	should be provided. 
+        </option>
+        <option name="Difficulty column">
+        	The column that contains the values defining the Sigma.
+        	By default it is advisable to use Prediction Variance values.
+        </option>
+        <option name="Beta">
+        	A sensitivity parameter determining the relative importance of the normalization term.
         </option>
         <option name="Keep All Columns">
         	If checked all columns from input table will be also included into output table along with calibration columns.
@@ -26,8 +40,8 @@
     </fullDescription>
     
     <ports>
-        <inPort index="0" name="Input">Table provided by predictor nodes with class probabilities.</inPort>
+        <inPort index="0" name="Input">Table provided by predictor nodes fitted predictions.</inPort>
         
-        <outPort index="0" name="Output">Calibration table with ranks for each class.</outPort>
+        <outPort index="0" name="Output">Calibration table with ranks for each sample.</outPort>
     </ports>    
 </knimeNode>
