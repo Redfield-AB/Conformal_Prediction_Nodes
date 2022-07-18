@@ -38,8 +38,8 @@ import org.knime.core.node.streamable.PortObjectInput;
 import org.knime.core.node.streamable.PortOutput;
 import org.knime.core.node.streamable.StreamableOperator;
 
-import se.redfield.cp.CalibratorRegression;
-import se.redfield.cp.PredictorRegression;
+import se.redfield.cp.core.calibration.CalibratorRegression;
+import se.redfield.cp.core.prediction.PredictorRegression;
 import se.redfield.cp.settings.CompactRegressionNodeSettings;
 import se.redfield.cp.utils.PortDef;
 

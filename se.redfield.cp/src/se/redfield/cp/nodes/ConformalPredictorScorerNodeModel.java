@@ -34,7 +34,7 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
-import se.redfield.cp.Scorer;
+import se.redfield.cp.core.scoring.Scorer;
 import se.redfield.cp.settings.ClassifierSettings;
 import se.redfield.cp.settings.PredictorSettings;
 

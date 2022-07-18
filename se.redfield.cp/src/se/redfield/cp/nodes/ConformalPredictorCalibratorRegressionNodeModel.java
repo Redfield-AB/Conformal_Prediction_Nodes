@@ -28,7 +28,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
-import se.redfield.cp.CalibratorRegression;
+import se.redfield.cp.core.calibration.CalibratorRegression;
 import se.redfield.cp.settings.CalibratorRegressionNodeSettings;
 import se.redfield.cp.utils.PortDef;
 

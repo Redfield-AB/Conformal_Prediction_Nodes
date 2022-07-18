@@ -33,7 +33,7 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 import org.knime.core.node.workflow.LoopStartNodeTerminator;
 
-import se.redfield.cp.IterationsTableSeparator;
+import se.redfield.cp.core.IterationsTableSeparator;
 
 /**
  * Conformal Predictor Loop Start Node. Takes calibration/model tables collected

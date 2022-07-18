@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp;
+package se.redfield.cp.core.scoring;
 
 import java.util.function.ToDoubleFunction;
 
@@ -24,7 +24,7 @@ import org.knime.core.data.DataType;
 import org.knime.core.data.def.DoubleCell;
 import org.knime.core.data.def.LongCell;
 
-import se.redfield.cp.Scores.Metric;
+import se.redfield.cp.core.scoring.Scores.Metric;
 
 /**
  * Class represents table column displaying score from the {@link Scores}

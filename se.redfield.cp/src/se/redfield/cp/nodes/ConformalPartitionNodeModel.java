@@ -28,7 +28,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
-import se.redfield.cp.Partitioner;
+import se.redfield.cp.core.Partitioner;
 import se.redfield.cp.settings.SamplingSettings;
 
 /**

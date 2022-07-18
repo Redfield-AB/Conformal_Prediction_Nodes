@@ -30,7 +30,7 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
-import se.redfield.cp.ScorerRegression;
+import se.redfield.cp.core.scoring.ScorerRegression;
 import se.redfield.cp.settings.PredictorRegressionSettings;
 import se.redfield.cp.utils.KnimeUtils;
 import se.redfield.cp.utils.PortDef;

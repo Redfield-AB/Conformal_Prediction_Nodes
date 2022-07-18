@@ -13,11 +13,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp;
+package se.redfield.cp.core.calibration;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
@@ -30,7 +31,8 @@ import org.knime.core.data.def.LongCell;
 import org.knime.core.data.sort.BufferedDataTableSorter;
 import org.knime.core.node.BufferedDataTable;
 
-import se.redfield.cp.settings.CalibratorRegressionSettings;
+import se.redfield.cp.settings.CalibratorSettings;
+import se.redfield.cp.settings.TargetSettings;
 import se.redfield.cp.utils.KnimeUtils;
 
 /**
@@ -38,70 +40,78 @@ import se.redfield.cp.utils.KnimeUtils;
  * calibration table.
  *
  */
-public class CalibratorRegression extends AbstractCalibrator {
+public class Calibrator extends AbstractCalibrator {
 
-	private CalibratorRegressionSettings settings;
+	private CalibratorSettings settings;
 
 	/**
 	 * Creates instance
 	 * 
 	 * @param settings
 	 */
-	public CalibratorRegression(CalibratorRegressionSettings settings) {
+	public Calibrator(CalibratorSettings settings) {
 		super(settings.getKeepColumns());
 		this.settings = settings;
 	}
 
 	@Override
 	protected CellFactory createComputedColumn(DataTableSpec inTableSpec) {
-		return createNonconformityCellFactory(inTableSpec);
+		return createPCellFactory(inTableSpec);
 	}
 
 	/**
-	 * Creates cell factory that appends the nonconformity column to input table.
+	 * Creates cell factory that appends P column to input table.
 	 * 
 	 * @param inputTableSpec Input table spec.
 	 * @return
 	 */
-	private CellFactory createNonconformityCellFactory(DataTableSpec inputTableSpec) {
-		int targetColumnIndex = inputTableSpec.findColumnIndex(settings.getTargetColumnName());
-		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName());
-		int sigmaColumnIndex = inputTableSpec.findColumnIndex(settings.getRegressionSettings().getSigmaColumn());
+	private CellFactory createPCellFactory(DataTableSpec inputTableSpec) {
+		TargetSettings targetSettings = settings.getTargetSettings();
+		int columnIndex = inputTableSpec.findColumnIndex(targetSettings.getTargetColumn());
+		Map<String, Integer> probabilityColumns = inputTableSpec.getColumnSpec(columnIndex).getDomain().getValues()
+				.stream().map(DataCell::toString).collect(Collectors.toMap(str -> str,
+						str -> inputTableSpec.findColumnIndex(targetSettings.getProbabilityColumnName(str))));
 
 		return new AbstractCellFactory(
-				new DataColumnSpecCreator(settings.getCalibrationAlphaColumnName(), DoubleCell.TYPE).createSpec()) {
+				new DataColumnSpecCreator(settings.getCalibrationProbabilityColumnName(), DoubleCell.TYPE)
+						.createSpec()) {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
-				double dTarget = KnimeUtils.getDouble(row.getCell(targetColumnIndex),
+				DataCell dataCell = KnimeUtils.nonMissing(row.getCell(columnIndex),
 						"Target column contains missing values");
-				double dPrediction = KnimeUtils.getDouble(row.getCell(predictionColumnIndex),
-						"Prediction column contains missing values");
+				Integer probabilityCol = probabilityColumns.get(dataCell.toString());
 
-				double nonconformityScore = 0;
-				if (settings.getRegressionSettings().getNormalized()) {
-					double dSigma = KnimeUtils.getDouble(row.getCell(sigmaColumnIndex),
-							"Sigma column contains missing values");
-
-					nonconformityScore = Math.abs(dTarget - dPrediction)
-							/ (dSigma + settings.getRegressionSettings().getBeta());
-				} else
-					nonconformityScore = Math.abs(dTarget - dPrediction);
-
-				return new DataCell[] { new DoubleCell(nonconformityScore) };
+				return new DataCell[] { row.getCell(probabilityCol) };
 			}
 		};
 	}
 
+	/**
+	 * Creates cell factory that appends ranks column. Rank is an index row has
+	 * inside each target's group sorted by probability column.
+	 * 
+	 * @param inputTableSpec Input table spec.
+	 * @return
+	 */
 	@Override
 	protected CellFactory createRankColumn(DataTableSpec inputTableSpec) {
+		int columnIndex = inputTableSpec.findColumnIndex(settings.getTargetSettings().getTargetColumn());
+
 		return new AbstractCellFactory(
 				new DataColumnSpecCreator(settings.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
 
 			private long counter = 0;
+			private String prevValue = null;
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
+				String value = row.getCell(columnIndex).toString();
+				if (prevValue == null || !prevValue.equals(value)) {
+					counter = 0;
+					prevValue = value;
+				}
+
 				return new DataCell[] { new LongCell(counter++) };
 			}
 		};
@@ -109,12 +119,10 @@ public class CalibratorRegression extends AbstractCalibrator {
 
 	@Override
 	protected String[] getRequiredColumnNames(DataTableSpec spec) {
-		List<String> columns = new ArrayList<>();
-		columns.add(settings.getTargetColumnName());
-		columns.add(settings.getPredictionColumnName());
-		if (settings.getRegressionSettings().getNormalized()) {
-			columns.add(settings.getRegressionSettings().getSigmaColumn());
-		}
+		List<String> columns = spec.getColumnSpec(settings.getTargetSettings().getTargetColumn()).getDomain()
+				.getValues().stream().map(c -> settings.getTargetSettings().getProbabilityColumnName(c.toString()))
+				.collect(Collectors.toList());
+		columns.add(settings.getTargetSettings().getTargetColumn());
 		if (settings.getKeepColumns().getKeepIdColumn()) {
 			columns.add(settings.getKeepColumns().getIdColumn());
 		}
@@ -123,7 +131,7 @@ public class CalibratorRegression extends AbstractCalibrator {
 
 	@Override
 	protected BufferedDataTableSorter createSorter(BufferedDataTable table) {
-		return new BufferedDataTableSorter(table, Arrays.asList(settings.getCalibrationAlphaColumnName()),
-				new boolean[] { false });
+		return new BufferedDataTableSorter(table, Arrays.asList(settings.getTargetSettings().getTargetColumn(),
+				settings.getCalibrationProbabilityColumnName()), new boolean[] { true, false });
 	}
 }

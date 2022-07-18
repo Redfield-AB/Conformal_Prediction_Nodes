@@ -30,7 +30,7 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.workflow.LoopStartNodeTerminator;
 
-import se.redfield.cp.Partitioner;
+import se.redfield.cp.core.Partitioner;
 import se.redfield.cp.settings.SamplingSettings;
 
 /**

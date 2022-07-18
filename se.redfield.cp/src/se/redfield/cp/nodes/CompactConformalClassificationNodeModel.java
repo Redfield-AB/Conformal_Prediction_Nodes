@@ -30,9 +30,9 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
-import se.redfield.cp.Calibrator;
-import se.redfield.cp.ClassifierCellFactory;
-import se.redfield.cp.Predictor;
+import se.redfield.cp.core.ClassifierCellFactory;
+import se.redfield.cp.core.calibration.Calibrator;
+import se.redfield.cp.core.prediction.Predictor;
 import se.redfield.cp.settings.ClassifierSettings;
 import se.redfield.cp.settings.CompactClassificationNodeSettigns;
 import se.redfield.cp.utils.PortDef;

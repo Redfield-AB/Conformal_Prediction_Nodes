@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp;
+package se.redfield.cp.core.calibration;
 
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.container.CellFactory;

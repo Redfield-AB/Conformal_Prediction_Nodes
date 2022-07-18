@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp;
+package se.redfield.cp.core.scoring;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -43,9 +43,9 @@ import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
-import se.redfield.cp.ScoreColumn.LongScoreColumn;
-import se.redfield.cp.Scores.ClassScores;
-import se.redfield.cp.Scores.Metric;
+import se.redfield.cp.core.scoring.ScoreColumn.LongScoreColumn;
+import se.redfield.cp.core.scoring.Scores.ClassScores;
+import se.redfield.cp.core.scoring.Scores.Metric;
 import se.redfield.cp.nodes.ConformalPredictorScorerNodeModel;
 
 /**

@@ -35,7 +35,7 @@ import org.knime.core.node.streamable.OutputPortRole;
 import org.knime.core.node.streamable.PartitionInfo;
 import org.knime.core.node.streamable.StreamableOperator;
 
-import se.redfield.cp.ClassifierCellFactory;
+import se.redfield.cp.core.ClassifierCellFactory;
 import se.redfield.cp.settings.ClassifierSettings;
 
 /**

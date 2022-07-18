@@ -38,7 +38,7 @@ import org.knime.core.node.streamable.PortObjectInput;
 import org.knime.core.node.streamable.PortOutput;
 import org.knime.core.node.streamable.StreamableOperator;
 
-import se.redfield.cp.Predictor;
+import se.redfield.cp.core.prediction.Predictor;
 import se.redfield.cp.settings.PredictorNodeSettings;
 import se.redfield.cp.utils.PortDef;
 
