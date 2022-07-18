@@ -186,12 +186,14 @@ public class Predictor {
 	 */
 	private class ScoreCellFactory extends AbstractCellFactory {
 
+		private final String value;
 		private final int pColumnIndex;
 		private final List<Double> probabilities;
 		private final Random rand;
 
 		public ScoreCellFactory(String value, DataTableSpec inSpec, List<Double> probabilities) {
 			super(createScoreColumnsSpecs(value));
+			this.value = value;
 			this.pColumnIndex = inSpec.findColumnIndex(settings.getTargetSettings().getProbabilityColumnName(value));
 			this.probabilities = probabilities;
 			rand = new Random();
@@ -222,6 +224,10 @@ public class Predictor {
 		 * @return Rank.
 		 */
 		protected int getRank(double p) {
+			if (probabilities == null) {
+				throw new PredictorException("Calibration table is missing data for target: " + value);
+			}
+
 			int idx = Collections.binarySearch(probabilities, p, Collections.reverseOrder());
 			if (idx < 0) {// insertion index
 				return -(idx + 1);
