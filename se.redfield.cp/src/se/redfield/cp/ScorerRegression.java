@@ -16,24 +16,23 @@
 package se.redfield.cp;
 
 import java.util.ArrayList;
-import java.util.EnumMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
-import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DoubleValue;
 import org.knime.core.data.RowKey;
 import org.knime.core.data.def.DefaultRow;
-import org.knime.core.data.def.DoubleCell;
 import org.knime.core.node.BufferedDataContainer;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
+import se.redfield.cp.Scores.Metric;
 import se.redfield.cp.nodes.ConformalPredictorScorerRegressionNodeModel;
 
 /**
@@ -44,48 +43,61 @@ import se.redfield.cp.nodes.ConformalPredictorScorerRegressionNodeModel;
 public class ScorerRegression {
 
 	private ConformalPredictorScorerRegressionNodeModel model;
+	private List<ScoreColumn> baseColumns;
+	private List<ScoreColumn> additionalColumns;
 
+	/**
+	 * @param conformalPredictorScorerRegressionNodeModel The node model.
+	 */
 	public ScorerRegression(ConformalPredictorScorerRegressionNodeModel conformalPredictorScorerRegressionNodeModel) {
 		this.model = conformalPredictorScorerRegressionNodeModel;
+
+		baseColumns = Arrays.asList(new ScoreColumn("Error rate",
+				s -> 1 - s.get(Scores.Metric.VALID) / s.get(Scores.Metric.COUNT)), //
+				new ScoreColumn("Mean interval size", Scores.Metric.INTERVAL_SIZE, true));
+
+		additionalColumns = Arrays.asList(
+				new ScoreColumn("Median interval size", Scores.Metric.MEDIAN_INTERVAL_SIZE), //
+				new ScoreColumn("Min interval size", Scores.Metric.MIN_INTERVAL_SIZE), //
+				new ScoreColumn("Max interval size", Scores.Metric.MAX_INTERVAL_SIZE));
 	}
 
 	/**
 	 * Creates output table spec.
+	 * 
+	 * @return The table spec.
 	 */
 	public DataTableSpec createOutputSpec() {
-		List<DataColumnSpec> specs = new ArrayList<>();
+		DataColumnSpec[] specs = getIncludedColumns().stream().map(ScoreColumn::createSpec)
+				.toArray(DataColumnSpec[]::new);
+		return new DataTableSpec(specs);
+	}
+
+	private List<ScoreColumn> getIncludedColumns() {
+		List<ScoreColumn> result = new ArrayList<>();
 		if (model.isAdditionalInfoMode()) {
-			specs.add(new DataColumnSpecCreator("Median interval size", DoubleCell.TYPE).createSpec());
-			specs.add(new DataColumnSpecCreator("Min interval size", DoubleCell.TYPE).createSpec());
-			specs.add(new DataColumnSpecCreator("Max interval size", DoubleCell.TYPE).createSpec());
+			result.addAll(additionalColumns);
 		}
-		specs.add(new DataColumnSpecCreator("Error rate", DoubleCell.TYPE).createSpec());
-		specs.add(new DataColumnSpecCreator("Mean interval size", DoubleCell.TYPE).createSpec());
-		return new DataTableSpec(specs.toArray(new DataColumnSpec[] {}));
+		result.addAll(baseColumns);
+		return result;
 	}
 
 	/**
-	 * Processes input table. Collects the following metrics for each row: *
-	 * <ul>
-	 * <li>Error rate =
-	 * <li>Efficiency =
-	 * </ul>
+	 * Processes input table and creates a table with scores.
 	 * 
 	 * @param inTable Input table.
 	 * @param exec    Execution context.
-	 * @return
+	 * @return The scores table.
 	 * @throws CanceledExecutionException
 	 */
 	public BufferedDataTable process(BufferedDataTable inTable, ExecutionContext exec)
 			throws CanceledExecutionException {
-		RegressionScores score = new RegressionScores();
+		Scores score = new Scores();
 
 		DataTableSpec spec = inTable.getDataTableSpec();
 		int targetIdx = spec.findColumnIndex(model.getTargetColumn());
 		int upperboundIdx = spec.findColumnIndex(model.getUpperBoundColumnName());
 		int lowerboundIdx = spec.findColumnIndex(model.getLowerBoundColumnName());
-		double maxIntervalsSize = 0.;
-		double minIntervalsSize = 1.;
 
 		long total = inTable.size();
 		long count = 0;
@@ -100,20 +112,14 @@ public class ScorerRegression {
 			double upperboundRegression = ((DoubleValue) row.getCell(upperboundIdx)).getDoubleValue();
 			double intervalsSize = upperboundRegression - lowerboundRegression;// trouble!!!!
 
-			if (intervalsSize > maxIntervalsSize) {
-				maxIntervalsSize = intervalsSize;
-				score.set(Metric.MAX_INTERVAL_SIZE, maxIntervalsSize);
-			}
-			if (intervalsSize < minIntervalsSize) {
-				minIntervalsSize = intervalsSize;
-				score.set(Metric.MIN_INTERVAL_SIZE, minIntervalsSize);
-			}
+			score.max(Metric.MAX_INTERVAL_SIZE, intervalsSize);
+			score.min(Metric.MIN_INTERVAL_SIZE, intervalsSize);
 
 			if (regression >= lowerboundRegression && regression <= upperboundRegression) {
-				score.inc(Metric.VALIDATE);
+				score.inc(Metric.VALID);
 			}
 
-			score.add(Metric.MEAN_INTERVAL_SIZE, intervalsSize);
+			score.add(Metric.INTERVAL_SIZE, intervalsSize);
 			interval.add(intervalsSize);
 
 			exec.checkCanceled();
@@ -129,90 +135,16 @@ public class ScorerRegression {
 
 	}
 
-	/**
-	 * Creates {@link BufferedDataTable} from collected scores.
-	 * 
-	 * @param scores Collected scores.
-	 * @param exec   Execution context.
-	 * @return
-	 */
-	private BufferedDataTable createOutputTable(RegressionScores score, ExecutionContext exec) {
+	private BufferedDataTable createOutputTable(Scores score, ExecutionContext exec) {
 		BufferedDataContainer cont = exec.createDataContainer(createOutputSpec());
-		cont.addRowToTable(createRow(score, 0)); // only one row, as it is the total results we are calculating
+		cont.addRowToTable(createRow(score));
 		cont.close();
 		return cont.getTable();
 	}
 
-	/**
-	 * Creates a single score row.
-	 * 
-	 * @param score Scores object.
-	 * @param idx   Row index.
-	 * @return Row.
-	 */
-	private DataRow createRow(RegressionScores score, long idx) {
-		List<DataCell> cells = new ArrayList<>();
-		if (model.isAdditionalInfoMode()) {
-			cells.add(new DoubleCell(score.getMedianIntervalSize()));
-			cells.add(new DoubleCell(score.getMinIntervalSize()));
-			cells.add(new DoubleCell(score.getMaxIntervalSize()));
-		}
-		cells.add(new DoubleCell(score.getErrorRate()));
-		cells.add(new DoubleCell(score.getMeanIntervalSize()));
-		return new DefaultRow(RowKey.createRowKey(idx), cells);
+	private DataRow createRow(Scores score) {
+		List<DataCell> cells = getIncludedColumns().stream().map(c -> c.createCell(score)).collect(Collectors.toList());
+		return new DefaultRow(RowKey.createRowKey(0L), cells);
 	}
 
-	/**
-	 * Class that holds all metrics calculated from input table.
-	 *
-	 */
-	private class RegressionScores {
-		private Map<Metric, Double> metrics;
-
-		public RegressionScores() {
-			this.metrics = new EnumMap<>(Metric.class);
-		}
-
-		public void add(Metric m, double value) {
-			metrics.compute(m, (k, v) -> v == null ? value : v + value);
-		}
-
-		public void inc(Metric m) {
-			metrics.compute(m, (k, v) -> v == null ? 1.0 : v + 1);
-		}
-
-		public void set(Metric m, double value) {
-			metrics.put(m, value);
-		}
-
-		public double get(Metric m) {
-			return metrics.getOrDefault(m, 0.0);
-		}
-
-		public double getErrorRate() {
-			return 1 - get(Metric.VALIDATE) / get(Metric.COUNT);
-		}
-
-		public double getMeanIntervalSize() {
-			return get(Metric.MEAN_INTERVAL_SIZE) / get(Metric.COUNT);
-		}
-
-		public double getMaxIntervalSize() {
-			return get(Metric.MAX_INTERVAL_SIZE);
-		}
-
-		public double getMinIntervalSize() {
-			return get(Metric.MIN_INTERVAL_SIZE);
-		}
-
-		public double getMedianIntervalSize() {
-
-			return get(Metric.MEDIAN_INTERVAL_SIZE);
-		}
-	}
-
-	private enum Metric {
-		VALIDATE, MEAN_INTERVAL_SIZE, MEDIAN_INTERVAL_SIZE, COUNT, ERROR_RATE, EFFICIENCY, MAX_INTERVAL_SIZE,
-		MIN_INTERVAL_SIZE
-	}
 }

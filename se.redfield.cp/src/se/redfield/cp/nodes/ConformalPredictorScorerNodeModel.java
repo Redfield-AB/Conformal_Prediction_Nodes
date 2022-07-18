@@ -93,7 +93,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 	}
 
 	protected ConformalPredictorScorerNodeModel() {
-		super(1, 2);
+		super(1, 1);
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 			attemptAutoconfig(inSpecs[0]);
 		}
 		validataSettings(inSpecs[0]);
-		return new DataTableSpec[] { scorer.createOutputSpec(), scorer.createAdditionalEfficiencyMetricSpec() };
+		return new DataTableSpec[] { scorer.createOutputSpec() };
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class ConformalPredictorScorerNodeModel extends NodeModel {
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		return scorer.process(inData[0], exec);
+		return new BufferedDataTable[] { scorer.process(inData[0], exec) };
 	}
 
 	@Override
