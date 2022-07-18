@@ -31,6 +31,7 @@ import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.ScorerRegression;
+import se.redfield.cp.settings.PredictorRegressionSettings;
 import se.redfield.cp.utils.KnimeUtils;
 import se.redfield.cp.utils.PortDef;
 
@@ -60,10 +61,12 @@ public class ConformalPredictorScorerRegressionNodeModel extends NodeModel {
 		return new SettingsModelString(KEY_TARGET_COLUMN, "");
 	}
 	static SettingsModelString createUpperBoundColumnSettings() {
-		return new SettingsModelString(KEY_UPPERBOUND_COLUMN, "");
+		return new SettingsModelString(KEY_UPPERBOUND_COLUMN,
+				PredictorRegressionSettings.PREDICTION_UPPER_COLUMN_DEFAULT_NAME);
 	}
 	static SettingsModelString createLowerBoundColumnSettings() {
-		return new SettingsModelString(KEY_LOWERBOUND_COLUMN, "");
+		return new SettingsModelString(KEY_LOWERBOUND_COLUMN,
+				PredictorRegressionSettings.PREDICTION_LOWER_COLUMN_DEFAULT_NAME);
 	}
 
 	static SettingsModelBoolean createAdditionalInfoSettings() {
