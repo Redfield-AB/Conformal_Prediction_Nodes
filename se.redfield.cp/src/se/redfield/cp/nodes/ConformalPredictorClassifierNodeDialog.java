@@ -15,16 +15,12 @@
  */
 package se.redfield.cp.nodes;
 
-import org.knime.core.data.DataTableSpec;
-import org.knime.core.node.NodeSettingsRO;
-import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
 import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
 import org.knime.core.node.defaultnodesettings.DialogComponentString;
-import org.knime.core.node.defaultnodesettings.SettingsModelBoolean;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
-import org.knime.core.node.defaultnodesettings.SettingsModelString;
+
+import se.redfield.cp.settings.ClassifierSettings;
 
 /**
  * Node dialog for Classifier node
@@ -32,29 +28,19 @@ import org.knime.core.node.defaultnodesettings.SettingsModelString;
  */
 public class ConformalPredictorClassifierNodeDialog extends DefaultNodeSettingsPane {
 
-	private SettingsModelBoolean classesAsStringSettings;
-	private SettingsModelString stringSeparatorSettings;
+	private final ClassifierSettings settings = new ClassifierSettings();
 
+	/**
+	 * Creates new instance
+	 */
 	public ConformalPredictorClassifierNodeDialog() {
 		super();
 
-		SettingsModelDoubleBounded errorRateSettings = ConformalPredictorClassifierNodeModel.createErrorRateSettings();
-		classesAsStringSettings = ConformalPredictorClassifierNodeModel.createClassesAsStringSettings();
-		stringSeparatorSettings = ConformalPredictorClassifierNodeModel.createStringSeparatorSettings();
-
-		classesAsStringSettings
-				.addChangeListener(e -> stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue()));
-
-		addDialogComponent(new DialogComponentNumber(errorRateSettings, "Error rate (significance level)", 0.01,
-				createFlowVariableModel(errorRateSettings)));
+		addDialogComponent(new DialogComponentNumber(settings.getErrorRateModel(), "Error rate (significance level)",
+				0.01, createFlowVariableModel(settings.getErrorRateModel())));
 		createNewGroup("Output");
-		addDialogComponent(new DialogComponentBoolean(classesAsStringSettings, "Output Classes as String"));
-		addDialogComponent(new DialogComponentString(stringSeparatorSettings, "String separator"));
+		addDialogComponent(new DialogComponentBoolean(settings.getClassesAsStringModel(), "Output Classes as String"));
+		addDialogComponent(new DialogComponentString(settings.getStringSeparatorModel(), "String separator"));
 	}
 
-	@Override
-	public void loadAdditionalSettingsFrom(NodeSettingsRO settings, DataTableSpec[] specs)
-			throws NotConfigurableException {
-		stringSeparatorSettings.setEnabled(classesAsStringSettings.getBooleanValue());
-	}
 }

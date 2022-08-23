@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/conformal_regression.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Regression</name>
+    
+    <shortDescription>
+    	This nodes combines the functions of Conformal Calibrator (Regression) and Conformal Predictor and Classifier (Regression) nodes.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        	This nodes combines the functions of Conformal Calibrator (Regression) and Conformal Predictor and Classifier (Regression) nodes.
+        	The purpose of it is to make it simple for users to apply conformal regression.
+        	The node returns the prediction of conformal regression model based on the
+        	regression model and conformal regression calibration table.
+        	This node is supposed to be used WITHOUT Conformal Calibration and Conformal Prediction loops.
+        </intro>
+            
+        <option name="Target column (calibration table)">
+        	A column with target column that is being predicted.
+        </option>
+        <option name="Prediction column">
+        	A column with predicted values.
+        </option>
+        <option name="Use normalization">
+        	In order to increase the informativeness, and to potentially minimize prediction regions,
+        	it is possible to obtain individual bounds for each sample, which is achieved using a normalized nonconformity function.
+        	In order to use normalization Prediction Variance or estimate of difficulty - Sigma (needs to be calculated separately)
+        	should be provided. 
+        </option>
+        <option name="Difficulty column">
+        	The column that contains the values defining the Sigma.
+        	By default it is advisable to use Prediction Variance values.
+        </option>
+        <option name="Beta">
+        	A sensitivity parameter determining the relative importance of the normalization term.
+        </option>
+        <option name="Error rate (significance level)">
+        	Defines the tolerable percentage of the prediction errors.
+        </option>
+        <option name="Keep All Columns">
+        	If checked all columns from input table will be also included into output table along with calibration columns.
+        </option>
+        <option name="Keep ID column">
+        	If checked selected ID column from input table will be included into output table.
+        </option>
+        
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Calibration Table">
+        	Table with predictions and optionally difficulty estimates from the calibration set.
+        </inPort>
+        <inPort index="1" name="Prediction Table">
+        	Table provided by predictor nodes fitted predictions.
+        	Target variable must have the same domain as the calibration table.
+        </inPort>
+        
+        <outPort index="0" name="Output">Table with calibrated prediction intervals.</outPort>
+    </ports>    
+</knimeNode>

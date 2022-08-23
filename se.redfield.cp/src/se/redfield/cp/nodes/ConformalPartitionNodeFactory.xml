@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE knimeNode PUBLIC "-//UNIKN//DTD KNIME Node 2.0//EN" "http://www.knime.org/Node.dtd">
+<knimeNode icon="./icons/conformal_partition.png" type="Manipulator">
+    <name>Conformal Partitioning</name>
+    <shortDescription>Splits table into two partitions, with the first adjusted for calibration.</shortDescription>
+    <fullDescription>
+        <intro>
+	        The input table is split into two partitions for calibration and train data (i.e. row-wise). 
+	        The difference to a normal partitioning node is that the calibration set is adjusted to: (largest lower value divisible by 100) -1. 
+			The two partitions are available at the
+			two output ports. The following options are available in the dialog:
+		</intro>
+		<option name="Absolute">
+			Specify the absolute number of rows in the calibration set (before adjustment). If there are
+			less rows than specified here, all rows are entered into the first 
+			table, while the second table contains no rows.
+		</option>
+		<option name="Relative">
+			The percentage of the number of rows in the input table that are
+			in the calibration set (before adjustment). It must be between 0 and 100, inclusively.
+		</option>
+        <option name="Take from top">
+        	This mode puts the top-most rows 
+        	into the calibration set and the remainder in the training set.</option>        
+        <option name="Linear sampling">
+            This mode always includes the first and the last row and selects the remaining rows linearly over the whole
+            table (e.g. every third row). 
+        </option>
+		<option name="Draw randomly">
+			Random sampling of all rows, you may optionally specify a fixed seed (see below).
+		</option>
+        <option name="Stratified sampling">
+            Check this button if you want stratified sampling, i.e. the distribution
+            of values in the selected column is (approximately) retained in 
+            the output tables. 
+            You may optionally specify a fixed seed (see below).
+        </option>
+        <option name="Use random seed">
+            If either random or stratified sampling is selected, you may enter a fixed seed here
+            in order to get reproducible results upon re-execution. If you do not specify a seed,
+            a new random seed is taken for each execution. 
+        </option>
+	</fullDescription>
+    <ports>
+        <inPort index="0" name="Table to partition">Table to partition.</inPort>
+        <outPort index="0" name="Calibration partition (as defined in dialog and adjusted)">
+	        Calibration partition (as defined in dialog and adjusted downwards to: (largest lower value divisible by 100) - 1).</outPort>
+        <outPort index="1" name="Training partition (remaining rows)">
+        	Training partition (remaining rows).</outPort>	
+	</ports>
+</knimeNode>

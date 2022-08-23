@@ -38,16 +38,21 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 	private DataTableSpec spec;
 	private SettingsModelString classesColumnSettings;
 	private DialogComponentString stringSeparatorComp;
+	private SettingsModelBoolean additionalEfficiencyMetricsSettings;
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorScorerNodeDialog() {
 		super();
 
 		SettingsModelString targetColumnSettings = ConformalPredictorScorerNodeModel.createTargetColumnSettings();
 		classesColumnSettings = ConformalPredictorScorerNodeModel.createClassesColumnSettings();
-		SettingsModelString stringSeparatorSettings = ConformalPredictorClassifierNodeModel
-				.createStringSeparatorSettings();
+		SettingsModelString stringSeparatorSettings = ConformalPredictorScorerNodeModel.createStringSeparatorSettings();
 		SettingsModelBoolean additionalInfoSettings = ConformalPredictorScorerNodeModel.createAdditionalInfoSettings();
+		additionalEfficiencyMetricsSettings = ConformalPredictorScorerNodeModel
+				.createAdditionalEfficiencyMetricsSettings();
 
 		stringSeparatorComp = new DialogComponentString(stringSeparatorSettings, "String separator:");
 		stringSeparatorComp.getComponentPanel().setVisible(false);
@@ -61,6 +66,8 @@ public class ConformalPredictorScorerNodeDialog extends DefaultNodeSettingsPane 
 		addDialogComponent(stringSeparatorComp);
 		createNewGroup("Output");
 		addDialogComponent(new DialogComponentBoolean(additionalInfoSettings, "Additional prediction information"));
+		addDialogComponent(
+				new DialogComponentBoolean(additionalEfficiencyMetricsSettings, "Additional efficiency metrics"));
 	}
 
 	private void calcStringSeparatorVisibility() {

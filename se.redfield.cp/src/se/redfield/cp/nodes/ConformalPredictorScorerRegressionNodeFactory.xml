@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/scorer_regression.png" type="Other" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Scorer (Regression)</name>
+    
+    <shortDescription>
+        Compares predictions made by Conformal Regressor with actual values.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        	Compares predictions made by Conformal Regressor with actual values. There are two types of scoring:
+        	<ul>
+        		<li>
+        			Error rate – the proportion of test instances where the true target is outside the prediction interval.
+        			Calculated as <tt>1 - Number of validate predictions/Total</tt><br/>
+        			See <b>Additional prediction information</b> option section for parameters description.
+        		</li>
+        		<li>
+        			Mean interval size - the value of mean prediction interval.
+        			Calculated as <tt>Sum of all interval sizes/Total</tt><br/>
+        			See <b>Additional prediction information</b> option section for parameters description.
+        		</li>
+        	</ul>
+        </intro>
+        <option name="Target column">
+        	A column that contains the real regression values of the data.
+        </option>
+        <option name="Upper bound">
+        	A column that contains prediction upper bounds produced by Conformal Regressor. Should be double column type.
+        </option>
+        <option name="Lower bound">
+        	A column that contains prediction lower bounds produced by Conformal Regressor. Should be double column type.
+        </option>
+        <option name="Additional prediction information">
+        	Includes additional columns with some prediction metrics to the output table.
+        	<ul>
+        		<li>Median interval size – the value of median prediction interval.</li>
+        		<li>Max interval size – the value of maximum prediction interval.</li>
+        		<li>Min interval size – the value of minimum prediction interval.</li>
+        	</ul>
+        </option>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Input">Table with predictions, upper bounds and lower bounds.</inPort>
+        
+        <outPort index="0" name="Output">The accuracy statistics table.</outPort>
+    </ports>    
+</knimeNode>

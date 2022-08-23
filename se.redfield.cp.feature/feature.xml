@@ -2,7 +2,7 @@
 <feature
       id="se.redfield.cp.feature"
       label="Redfield Conformal Prediction Nodes"
-      version="1.1.0.qualifier"
+      version="2.0.0.qualifier"
       provider-name="Redfield AB">
 
    <description>
@@ -693,6 +693,6 @@ Public License instead of this License.  But first, please read
          id="se.redfield.cp"
          download-size="0"
          install-size="0"
-         version="1.1.0.qualifier"/>
+         version="2.0.0.qualifier"/>
 
 </feature>

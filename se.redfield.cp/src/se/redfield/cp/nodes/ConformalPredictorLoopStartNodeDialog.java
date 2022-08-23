@@ -20,8 +20,17 @@ import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
+/**
+ * The node dialog for {@link ConformalPredictorLoopStartNodeModel} node.
+ * 
+ * @author Alexander Bondaletov
+ *
+ */
 public class ConformalPredictorLoopStartNodeDialog extends DefaultNodeSettingsPane {
 
+	/**
+	 * Creates new instance
+	 */
 	@SuppressWarnings("unchecked")
 	public ConformalPredictorLoopStartNodeDialog() {
 		super();

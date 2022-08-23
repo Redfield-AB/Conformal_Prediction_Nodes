@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/calibrator_loop_start.png" type="LoopStart" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Calibration Loop Start</name>
+    
+    <shortDescription>
+        Splits the input table into two new tables: training and calibration.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        	Splits the input table into two new tables: training and calibration.
+			The procedure is repeated several times for every loop iteration.
+        </intro>
+        
+        
+        <option name="Number of iterations">
+        	Defines the number of training/calibration splits and number of loop iterations.
+        </option>
+        <option name="Training/Calibration split">
+        	Similar to Partitioning node splits input table into two datasets.
+        </option>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Table to partition">Table to partition</inPort>
+        
+        <outPort index="0" name="Training Table">Training Table</outPort>
+        <outPort index="1" name="Calibration Table">Calibration Table</outPort>
+    </ports>    
+</knimeNode>

@@ -48,9 +48,18 @@ import se.redfield.cp.utils.KnimeUtils;
  */
 public class ConformalPredictorTrainingLoopEndNodeModel extends NodeModel implements LoopEndNode {
 
+	/**
+	 * Model table input port
+	 */
 	public static final int PORT_MODEL_TABLE = 0;
+	/**
+	 * Calibration table input port
+	 */
 	public static final int PORT_CALIBRATION_TABLE = 1;
 
+	/**
+	 * Default name for the appended iteration column
+	 */
 	public static final String DEFAULT_ITERATION_COLUMN_NAME = "Iteration";
 
 	private int iteration;
@@ -62,7 +71,7 @@ public class ConformalPredictorTrainingLoopEndNodeModel extends NodeModel implem
 				new PortType[] { BufferedDataTable.TYPE, BufferedDataTable.TYPE });
 	}
 
-	private String getIterationColumnName() {
+	private static String getIterationColumnName() {
 		return DEFAULT_ITERATION_COLUMN_NAME;
 	}
 
@@ -78,7 +87,7 @@ public class ConformalPredictorTrainingLoopEndNodeModel extends NodeModel implem
 	 * @param inSpec Input spec.
 	 * @return Result spec.
 	 */
-	private DataTableSpec appendIterationColumn(DataTableSpec inSpec) {
+	private static DataTableSpec appendIterationColumn(DataTableSpec inSpec) {
 		DataColumnSpec iterColumn = new DataColumnSpecCreator(getIterationColumnName(), IntCell.TYPE).createSpec();
 		return KnimeUtils.createSpec(inSpec, iterColumn);
 	}

@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.knime.base.data.aggregation.ColumnAggregator;
 import org.knime.base.data.aggregation.GlobalSettings;
@@ -35,6 +34,7 @@ import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DoubleValue;
 import org.knime.core.data.append.AppendedColumnRow;
 import org.knime.core.data.def.StringCell;
 import org.knime.core.data.filestore.FileStoreFactory;
@@ -56,19 +56,14 @@ import se.redfield.cp.utils.KnimeUtils;
  * Conformal Prediction Loop End Node. Works with corresponing Start Loop Node.
  * Collects prediction data.<br />
  * 
- * Prediction tables grouped by RowKey. Rank, P, and P-value columns are
+ * Prediction tables grouped by RowKey. All {@link DoubleValue} columns are
  * aggregated using median operator. The rest of the columns aggregated by
  * {@link FirstOperator}.<br />
  * 
  */
 public class ConformalPredictorLoopEndNodeModel extends NodeModel implements LoopEndNode {
-
-	public static final String P_COLUMN_REGEX = "^P \\((.+=.+)\\)$";
-	public static final String RANK_COLUMN_REGEX = "^Rank \\((.+)\\)$";
-	public static final String P_VALUE_COLUMN_REGEX = "^p-value \\((?<value>.+)\\)$";
-
 	private static final String ORIGINAL_ROWID_COLUMN_NAME = "Original RowId";
-
+	
 	private int iteration;
 	private BufferedDataContainer container;
 	private ColumnAggregator[] columnAggregators;
@@ -77,13 +72,13 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 		super(1, 1);
 	}
 
-	private List<String> getGroupByCols() {
+	private static List<String> getGroupByCols() {
 		return Arrays.asList(ORIGINAL_ROWID_COLUMN_NAME);
 	}
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
-		if (iteration == 0) {
+		if (columnAggregators == null) {
 			initColumnAggregators(inSpecs[0]);
 		}
 
@@ -107,7 +102,7 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 	 * @param inSpec Original spec.
 	 * @return Result spec.
 	 */
-	private DataTableSpec createConcatenatedTableSpec(DataTableSpec inSpec) {
+	private static DataTableSpec createConcatenatedTableSpec(DataTableSpec inSpec) {
 		DataColumnSpec origRowIdColumn = new DataColumnSpecCreator(ORIGINAL_ROWID_COLUMN_NAME, StringCell.TYPE)
 				.createSpec();
 		return new DataTableSpec(inSpec, new DataTableSpec(origRowIdColumn));
@@ -115,17 +110,13 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 
 	/**
 	 * Initializes column aggregator used to group predicton table. Rank, P and
-	 * P-value columns are aggregated using {@link MedianOperator}. Any additional
+	 * P-value columns (for classification) and Lower and Upper bound columns (for regression) are aggregated using {@link MedianOperator}. Any additional
 	 * columns are aggregated using {@link FirstOperator}.
 	 * 
 	 * @param inPredictionTableSpec Input prediction table spec.
 	 */
 	private void initColumnAggregators(DataTableSpec inPredictionTableSpec) {
 		List<ColumnAggregator> aggregators = new ArrayList<>();
-		List<Pattern> patterns = Arrays.asList(//
-				Pattern.compile(P_COLUMN_REGEX), //
-				Pattern.compile(RANK_COLUMN_REGEX), //
-				Pattern.compile(P_VALUE_COLUMN_REGEX));
 
 		DataTableSpec spec = createConcatenatedTableSpec(inPredictionTableSpec);
 
@@ -133,17 +124,18 @@ public class ConformalPredictorLoopEndNodeModel extends NodeModel implements Loo
 			DataColumnSpec colSpec = spec.getColumnSpec(i);
 			ColumnAggregator aggregator = null;
 
-			if (patterns.stream().anyMatch(p -> p.asPredicate().test(colSpec.getName()))) {
+			if (colSpec.getName().equals(ORIGINAL_ROWID_COLUMN_NAME)) {
+				// skip
+				continue;
+			} else if (colSpec.getType().isCompatible(DoubleValue.class)) {
 				aggregator = new ColumnAggregator(colSpec,
 						new MedianOperator(GlobalSettings.DEFAULT, new OperatorColumnSettings(false, colSpec)));
-			} else if (!colSpec.getName().equals(ORIGINAL_ROWID_COLUMN_NAME)) {
+			} else {
 				aggregator = new ColumnAggregator(colSpec,
 						new FirstOperator(GlobalSettings.DEFAULT, new OperatorColumnSettings(true, colSpec)));
 			}
 
-			if (aggregator != null) {
-				aggregators.add(aggregator);
-			}
+			aggregators.add(aggregator);
 		}
 
 		columnAggregators = aggregators.toArray(new ColumnAggregator[] {});

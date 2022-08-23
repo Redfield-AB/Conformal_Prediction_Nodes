@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/predictor_loop_end.png" type="LoopEnd" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Prediction Loop End</name>
+    
+    <shortDescription>
+        Aggregates the results of conformal prediction.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        	Aggregates the results of conformal prediction.
+        </intro>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Prediction Table">
+        	Scored prediction table based on test table. 
+        	This table is built using the calibration table and aggregated over all iterations using median P-values
+        </inPort>
+        
+        <outPort index="0" name="Prediction Table">Prediction Table</outPort>
+    </ports>    
+</knimeNode>

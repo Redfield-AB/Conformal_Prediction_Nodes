@@ -18,8 +18,6 @@ package se.redfield.cp.nodes;
 import java.io.File;
 import java.io.IOException;
 
-import org.knime.base.node.preproc.sample.SamplingNodeSettings;
-import org.knime.base.node.preproc.sample.SamplingNodeSettings.SamplingMethods;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
@@ -32,7 +30,8 @@ import org.knime.core.node.NodeSettingsWO;
 import org.knime.core.node.defaultnodesettings.SettingsModelIntegerBounded;
 import org.knime.core.node.workflow.LoopStartNodeTerminator;
 
-import se.redfield.cp.Partitioner;
+import se.redfield.cp.core.Partitioner;
+import se.redfield.cp.settings.SamplingSettings;
 
 /**
  * Conformal Predictor Training Loop Start Node. Separated input table into 2
@@ -47,13 +46,16 @@ import se.redfield.cp.Partitioner;
 public class ConformalPredictorTrainingLoopStartNodeModel extends NodeModel implements LoopStartNodeTerminator {
 
 	private static final String KEY_ITERATIONS = "iterations";
+	/**
+	 * The settings key for partition settings
+	 */
 	public static final String KEY_PARTITION_SETTINGS = "partitionSettings";
 
 	private static final String FW_ITERATION = "iteration";
 	private static final String FW_ITERATIONS_NUM = "iterationsNum";
 
 	private final SettingsModelIntegerBounded iterationsSettings = createIterationSettings();
-	private final SamplingNodeSettings partitionSettings = new SamplingNodeSettings();
+	private final SamplingSettings partitionSettings = new SamplingSettings();
 
 	private int iteration = 0;
 	private final Partitioner partitioner = new Partitioner(partitionSettings, true);
@@ -73,26 +75,8 @@ public class ConformalPredictorTrainingLoopStartNodeModel extends NodeModel impl
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		DataTableSpec in = inSpecs[0];
-		checkSettings(in);
+		partitionSettings.validate(in);
 		return new DataTableSpec[] { in, in };
-	}
-
-	/**
-	 * Validates sampling settings against input table spec.
-	 * 
-	 * @param partitionSettings Sampling settings.
-	 * @param inSpec            Input table spec.
-	 * @throws InvalidSettingsException
-	 */
-	private void checkSettings(DataTableSpec inSpec) throws InvalidSettingsException {
-		if (partitionSettings.countMethod() == null) {
-			throw new InvalidSettingsException("No sampling method selected");
-		}
-		if (partitionSettings.samplingMethod() == SamplingMethods.Stratified
-				&& !inSpec.containsName(partitionSettings.classColumn())) {
-			throw new InvalidSettingsException(
-					"Column '" + partitionSettings.classColumn() + "' for stratified sampling " + "does not exist");
-		}
 	}
 
 	@Override
@@ -120,37 +104,7 @@ public class ConformalPredictorTrainingLoopStartNodeModel extends NodeModel impl
 	@Override
 	protected void validateSettings(NodeSettingsRO settings) throws InvalidSettingsException {
 		iterationsSettings.validateSettings(settings);
-		validateSamplingSettings(settings.getNodeSettings(KEY_PARTITION_SETTINGS));
-	}
-
-	/**
-	 * Validates sampling settings consistency.
-	 * 
-	 * @param settings Settings to validate.
-	 * @throws InvalidSettingsException
-	 */
-	private void validateSamplingSettings(NodeSettingsRO settings) throws InvalidSettingsException {
-		SamplingNodeSettings tmp = new SamplingNodeSettings();
-		tmp.loadSettingsFrom(settings, false);
-
-		switch (tmp.countMethod()) {
-		case Absolute:
-			if (tmp.count() < 0) {
-				throw new InvalidSettingsException("Invalid count: " + tmp.count());
-			}
-			break;
-		case Relative:
-			if (tmp.fraction() < 0 || tmp.fraction() > 1) {
-				throw new InvalidSettingsException("Invalid fraction: " + tmp.fraction());
-			}
-			break;
-		default:
-			throw new InvalidSettingsException("Unknown counting method: " + tmp.countMethod());
-		}
-
-		if (tmp.samplingMethod() == SamplingMethods.Stratified && tmp.classColumn() == null) {
-			throw new InvalidSettingsException("Class column is not selected");
-		}
+		partitionSettings.validateSettings(settings.getNodeSettings(KEY_PARTITION_SETTINGS));
 	}
 
 	@Override

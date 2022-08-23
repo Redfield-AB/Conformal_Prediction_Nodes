@@ -38,6 +38,9 @@ public class ConformalPredictorTrainingLoopStartNodeDialog extends NodeDialogPan
 	private DialogComponentNumber iterationsInput;
 	private SamplingNodeDialogPanel partitionPanel;
 
+	/**
+	 * Creates new instance
+	 */
 	public ConformalPredictorTrainingLoopStartNodeDialog() {
 		super();
 
