@@ -84,6 +84,14 @@
             category-path="/community/conformalPrediction"
             factory-class="se.redfield.cp.nodes.ConformalPredictorScorerRegressionNodeFactory">
       </node>
+      <node
+            category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ps.regression.PredictiveSystemsRegressionNodeFactory">
+      </node>
+      <node
+            category-path="/community/conformalPrediction"
+            factory-class="se.redfield.cp.nodes.ps.compact.CompactPredictiveSystemsRegressionNodeFactory">
+      </node>
    </extension>
    <extension
          point="org.knime.workbench.repository.categories">
