@@ -69,6 +69,7 @@ public class CompactPredictiveSystemsRegressionNodeModel extends NodeModel {
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE.getIdx()];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE.getIdx()];
 
+		// Need to make sure that the calibration is done with signed errors
 		BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
 
 		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), calibrationTable,
