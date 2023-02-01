@@ -131,6 +131,7 @@ public class RegressionSettings {
 	public void loadSettingFrom(NodeSettingsRO settings) throws InvalidSettingsException {
 		sigmaColumn.loadSettingsFrom(settings);
 		normalized.loadSettingsFrom(settings);
+		predictiveSystems.loadSettingsFrom(settings);
 		beta.loadSettingsFrom(settings);
 	}
 
@@ -142,6 +143,7 @@ public class RegressionSettings {
 	public void saveSettingsTo(NodeSettingsWO settings) {
 		sigmaColumn.saveSettingsTo(settings);
 		normalized.saveSettingsTo(settings);
+		predictiveSystems.saveSettingsTo(settings);
 		beta.saveSettingsTo(settings);
 	}
 
