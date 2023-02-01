@@ -45,7 +45,10 @@ public class ConformalPredictorCalibratorRegressionNodeDialog extends DefaultNod
 		addDialogComponent(new DialogComponentColumnNameSelection(settings.getPredictionColumnModel(),
 				"Prediction column:", tableIndex, DoubleValue.class));
 
-		createNewGroup("Conformal Regression");
+		createNewGroup("Conformal Regression and Conformal Predictive Systems");
+		addDialogComponent(
+				new DialogComponentBoolean(settings.getRegressionSettings().getPredictiveSystemsModel(),
+						"Use Conformal Predictive Systems"));
 		addDialogComponent(
 				new DialogComponentBoolean(settings.getRegressionSettings().getNormalizedModel(), "Use Normalization"));
 

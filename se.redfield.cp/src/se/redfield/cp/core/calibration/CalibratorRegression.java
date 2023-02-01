@@ -85,8 +85,14 @@ public class CalibratorRegression extends AbstractCalibrator {
 
 					nonconformityScore = Math.abs(dTarget - dPrediction)
 							/ (dSigma + settings.getRegressionSettings().getBeta());
-				} else
+					if (settings.getRegressionSettings().getPredictiveSystems())
+						nonconformityScore = (dTarget - dPrediction)
+								/ (dSigma + settings.getRegressionSettings().getBeta());
+				} else {
 					nonconformityScore = Math.abs(dTarget - dPrediction);
+					if (settings.getRegressionSettings().getPredictiveSystems())
+						nonconformityScore = (dTarget - dPrediction);
+				}
 
 				return new DataCell[] { new DoubleCell(nonconformityScore) };
 			}

@@ -35,12 +35,14 @@ import se.redfield.cp.utils.PortDef;
 public class RegressionSettings {
 	private static final String KEY_SIGMA_COLUMN_NAME = "sigma";
 	private static final String KEY_NORMALIZED = "normalized";
+	private static final String KEY_PREDICTIVE_SYSTEMS = "predictiveSystems";
 	private static final String KEY_BETA = "beta";
 
 	private static final double DEFAULT_BETA = 0.25;
 
 	private final SettingsModelString sigmaColumn;
 	private final SettingsModelBoolean normalized;
+	private final SettingsModelBoolean predictiveSystems;
 	private final SettingsModelDoubleBounded beta;
 
 	private final PortDef[] tables;
@@ -53,6 +55,7 @@ public class RegressionSettings {
 
 		sigmaColumn = new SettingsModelString(KEY_SIGMA_COLUMN_NAME, "");
 		normalized = new SettingsModelBoolean(KEY_NORMALIZED, false);
+		predictiveSystems = new SettingsModelBoolean(KEY_PREDICTIVE_SYSTEMS, false);
 		beta = new SettingsModelDoubleBounded(KEY_BETA, DEFAULT_BETA, 0, 1);
 
 		normalized.addChangeListener(e -> {
@@ -75,6 +78,20 @@ public class RegressionSettings {
 	 */
 	public String getSigmaColumn() {
 		return sigmaColumn.getStringValue();
+	}
+
+	/**
+	 * @return The conformal predictive systemsmodel.
+	 */
+	public SettingsModelBoolean getPredictiveSystemsModel() {
+		return predictiveSystems;
+	}
+
+	/**
+	 * @return The conformal predictive systems mode.
+	 */
+	public boolean getPredictiveSystems() {
+		return predictiveSystems.getBooleanValue();
 	}
 
 	/**
