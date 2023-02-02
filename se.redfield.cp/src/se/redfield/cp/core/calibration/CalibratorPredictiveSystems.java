@@ -15,6 +15,10 @@
  */
 package se.redfield.cp.core.calibration;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataRow;
@@ -22,6 +26,9 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.container.AbstractCellFactory;
 import org.knime.core.data.container.CellFactory;
 import org.knime.core.data.def.DoubleCell;
+import org.knime.core.data.def.LongCell;
+import org.knime.core.data.sort.BufferedDataTableSorter;
+import org.knime.core.node.BufferedDataTable;
 
 import se.redfield.cp.settings.CalibratorRegressionSettings;
 import se.redfield.cp.utils.KnimeUtils;
@@ -31,7 +38,9 @@ import se.redfield.cp.utils.KnimeUtils;
  * calibration table.
  *
  */
-public class CalibratorPredictiveSystems extends CalibratorRegression {
+public class CalibratorPredictiveSystems extends AbstractCalibrator {
+
+	protected CalibratorRegressionSettings settings;
 
 	/**
 	 * Creates instance
@@ -39,7 +48,13 @@ public class CalibratorPredictiveSystems extends CalibratorRegression {
 	 * @param settings
 	 */
 	public CalibratorPredictiveSystems(CalibratorRegressionSettings settings) {
-		super(settings);
+		super(settings.getKeepColumns());
+		this.settings = settings;
+	}
+
+	@Override
+	protected CellFactory createComputedColumn(DataTableSpec inTableSpec) {
+		return createNonconformityCellFactory(inTableSpec);
 	}
 
 	/**
@@ -77,5 +92,39 @@ public class CalibratorPredictiveSystems extends CalibratorRegression {
 				return new DataCell[] { new DoubleCell(nonconformityScore) };
 			}
 		};
+	}
+
+	@Override
+	protected CellFactory createRankColumn(DataTableSpec inputTableSpec) {
+		return new AbstractCellFactory(
+				new DataColumnSpecCreator(settings.getCalibrationRankColumnName(), LongCell.TYPE).createSpec()) {
+
+			private long counter = 0;
+
+			@Override
+			public DataCell[] getCells(DataRow row) {
+				return new DataCell[] { new LongCell(counter++) };
+			}
+		};
+	}
+
+	@Override
+	protected String[] getRequiredColumnNames(DataTableSpec spec) {
+		List<String> columns = new ArrayList<>();
+		columns.add(settings.getTargetColumnName());
+		columns.add(settings.getPredictionColumnName());
+		if (settings.getRegressionSettings().getNormalized()) {
+			columns.add(settings.getRegressionSettings().getSigmaColumn());
+		}
+		if (settings.getKeepColumns().getKeepIdColumn()) {
+			columns.add(settings.getKeepColumns().getIdColumn());
+		}
+		return columns.toArray(new String[] {});
+	}
+
+	@Override
+	protected BufferedDataTableSorter createSorter(BufferedDataTable table) {
+		return new BufferedDataTableSorter(table, Arrays.asList(settings.getCalibrationAlphaColumnName()),
+				new boolean[] { false });
 	}
 }

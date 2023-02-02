@@ -28,7 +28,7 @@ import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
 
-import se.redfield.cp.core.calibration.CalibratorRegression;
+import se.redfield.cp.core.calibration.CalibratorPredictiveSystems;
 import se.redfield.cp.settings.CalibratorRegressionNodeSettings;
 import se.redfield.cp.utils.PortDef;
 
@@ -46,7 +46,7 @@ public class PredictiveSystemsCalibratorRegressionNodeModel extends NodeModel {
 
 	private final CalibratorRegressionNodeSettings settings = new CalibratorRegressionNodeSettings();
 
-	private final CalibratorRegression calibrator = new CalibratorRegression(settings);
+	private final CalibratorPredictiveSystems calibrator = new CalibratorPredictiveSystems(settings);
 
 	protected PredictiveSystemsCalibratorRegressionNodeModel() {
 		super(1, 1);

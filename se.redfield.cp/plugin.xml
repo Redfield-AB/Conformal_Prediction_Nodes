@@ -86,7 +86,17 @@
       </node>
       <node
             category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ps.regression.PredictiveSystemsCalibratorRegressionNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ps.regression.PredictiveSystemsCalibratorRegressionNodeFactory" 
+            category-path="/community/conformalPrediction/advanced"
             factory-class="se.redfield.cp.nodes.ps.regression.PredictiveSystemsRegressionNodeFactory">
+      </node>
+      <node
+            after="se.redfield.cp.nodes.ps.regression.PredictiveSystemsRegressionNodeFactory" 
+            category-path="/community/conformalPrediction/advanced"
+            factory-class="se.redfield.cp.nodes.ps.regression.PredictiveSystemsClassifierNodeFactory">
       </node>
       <node
             category-path="/community/conformalPrediction"
