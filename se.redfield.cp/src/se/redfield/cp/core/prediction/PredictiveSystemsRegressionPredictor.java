@@ -17,6 +17,7 @@ package se.redfield.cp.core.prediction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.settings.PredictiveSystemsRegressionSettings;
+import se.redfield.cp.utils.KnimeUtils;
 
 public class PredictiveSystemsRegressionPredictor {
 
@@ -56,7 +58,7 @@ public class PredictiveSystemsRegressionPredictor {
 	 * @return The output prediction table spec.
 	 */
 	public DataTableSpec createOuputTableSpec(DataTableSpec inPredictionTableSpecs) {
-		ColumnRearranger r = createRearranger(inPredictionTableSpecs, 0);
+		ColumnRearranger r = createRearranger(inPredictionTableSpecs, new ArrayList<Double>());
 		return r.createSpec();
 	}
 
@@ -71,12 +73,12 @@ public class PredictiveSystemsRegressionPredictor {
 	 */
 	public ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, BufferedDataTable inCalibrationTable,
 			ExecutionContext exec) throws CanceledExecutionException {
-		double alpha = getAlpha(inCalibrationTable, exec);
+		List<Double> alphas = getAlpha(inCalibrationTable, exec);
 
-		return createRearranger(predictionTableSpec, alpha);
+		return createRearranger(predictionTableSpec, alphas);
 	}
 
-	private ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, double alpha) {
+	private ColumnRearranger createRearranger(DataTableSpec predictionTableSpec, List<Double> alpha) {
 		ColumnRearranger r = new ColumnRearranger(predictionTableSpec);
 
 		if (!settings.getKeepColumns().getKeepAllColumns()) {
@@ -88,7 +90,7 @@ public class PredictiveSystemsRegressionPredictor {
 		return r;
 	}
 
-	private CellFactory createDistributionCellFactory(DataTableSpec inputTableSpec, double alpha) {
+	private CellFactory createDistributionCellFactory(DataTableSpec inputTableSpec, List<Double> alphas) {
 		int predictionColumnIndex = inputTableSpec.findColumnIndex(settings.getPredictionColumnName());
 		int sigmaColumnIndex = inputTableSpec.findColumnIndex(settings.getRegressionSettings().getSigmaColumn());
 
@@ -97,8 +99,21 @@ public class PredictiveSystemsRegressionPredictor {
 
 			@Override
 			public DataCell[] getCells(DataRow row) {
-				// TODO
-				double[] probabilities = new double[] { 0.0, 0.1, 0.2 };
+				double dPrediction = KnimeUtils.getDouble(row.getCell(predictionColumnIndex),
+						"Prediction column contains missing values");
+				double[] probabilities = new double[alphas.size()];
+				if (settings.getRegressionSettings().getNormalized()) {
+					double dSigma = KnimeUtils.getDouble(row.getCell(sigmaColumnIndex),
+							"Sigma column contains missing values");
+					for (int i = 0; i < alphas.size(); i++) {
+						probabilities[i] = dPrediction
+								+ alphas.get(i) * (dSigma + settings.getRegressionSettings().getBeta());
+					}
+				} else {
+					for (int i = 0; i < alphas.size(); i++) {
+						probabilities[i] = dPrediction + alphas.get(i);
+					}
+				}
 
 				ListCell cell = CollectionCellFactory.createListCell(
 						Arrays.stream(probabilities).mapToObj(DoubleCell::new).collect(Collectors.toList()));
@@ -113,11 +128,11 @@ public class PredictiveSystemsRegressionPredictor {
 	 *         calibration instances.
 	 * @throws CanceledExecutionException
 	 */
-	private double getAlpha(BufferedDataTable inCalibrationTable, ExecutionContext exec)
+	private List<Double> getAlpha(BufferedDataTable inCalibrationTable, ExecutionContext exec)
 			throws CanceledExecutionException {
 		int alphaColumnIndex = inCalibrationTable.getDataTableSpec()
 				.findColumnIndex(settings.getCalibrationAlphaColumnName()); // get target column
-		double errorRate = settings.getErrorRate();
+		// double errorRate = settings.getErrorRate();
 
 		List<Double> alphas = new ArrayList<>();
 		CloseableRowIterator rowIterator = inCalibrationTable.iterator();
@@ -129,9 +144,10 @@ public class PredictiveSystemsRegressionPredictor {
 			exec.checkCanceled();
 			exec.setProgress((double) alphas.size() / inCalibrationTable.size());
 		}
-		int index = (int) (alphas.size() * errorRate);
+		// int index = (int) (alphas.size() * errorRate);
+		Collections.sort(alphas);
 
-		return alphas.get(index);
+		return alphas;
 	}
 
 	private String[] getRequiredColumnNames() {
