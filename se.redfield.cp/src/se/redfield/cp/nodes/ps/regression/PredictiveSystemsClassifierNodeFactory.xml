@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<knimeNode icon="./icons/conformal_classification.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+    <name>Conformal Classifier</name>
+    
+    <shortDescription>
+        Produces predictions based on the calibration table and the significance level provided by the user.
+    </shortDescription>
+    
+    <fullDescription>
+        <intro>
+        	Produces predictions based on the calibration table and the significance level provided by the user.
+			The significance level defines the tolerable percentage of the prediction errors.
+			The node expects p-value columns for all the classes in target domain.
+        </intro>
+        
+        
+        <option name="Error rate (significance level)">Defines the tolerable percentage of the prediction errors.</option>
+        <option name="Output Classes as String">
+        	If checked classes column will be represented as String instead of Collection column.
+        </option>
+        <option name="String separator">
+        	Character used to separate different classes when string representation is selected.
+        </option>
+    </fullDescription>
+    
+    <ports>
+        <inPort index="0" name="Input">Table with calibrated predictions</inPort>
+        
+        <outPort index="0" name="Output">Table with ranked predictions and classes</outPort>
+    </ports>    
+</knimeNode>

@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp.nodes;
+package se.redfield.cp.nodes.ps.regression;
 
 import org.knime.core.data.DataValue;
 import org.knime.core.data.DoubleValue;
@@ -28,7 +28,7 @@ import se.redfield.cp.settings.CalibratorRegressionNodeSettings;
  * Node Dialog for Calibrator(Regression) node.
  *
  */
-public class ConformalPredictorCalibratorRegressionNodeDialog extends DefaultNodeSettingsPane {
+public class PredictiveSystemsCalibratorRegressionNodeDialog extends DefaultNodeSettingsPane {
 
 	private final CalibratorRegressionNodeSettings settings = new CalibratorRegressionNodeSettings();
 
@@ -36,16 +36,16 @@ public class ConformalPredictorCalibratorRegressionNodeDialog extends DefaultNod
 	 * Creates new instance
 	 */
 	@SuppressWarnings("unchecked")
-	public ConformalPredictorCalibratorRegressionNodeDialog() {
+	public PredictiveSystemsCalibratorRegressionNodeDialog() {
 		super();
-		int tableIndex = ConformalPredictorCalibratorRegressionNodeModel.PORT_INPUT_TABLE.getIdx();
+		int tableIndex = PredictiveSystemsCalibratorRegressionNodeModel.PORT_INPUT_TABLE.getIdx();
 
 		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "Target column:",
 				tableIndex, DoubleValue.class));
 		addDialogComponent(new DialogComponentColumnNameSelection(settings.getPredictionColumnModel(),
 				"Prediction column:", tableIndex, DoubleValue.class));
 
-		createNewGroup("Conformal Regression");
+		createNewGroup("Conformal Predictive Systems");
 		addDialogComponent(
 				new DialogComponentBoolean(settings.getRegressionSettings().getNormalizedModel(), "Use Normalization"));
 
