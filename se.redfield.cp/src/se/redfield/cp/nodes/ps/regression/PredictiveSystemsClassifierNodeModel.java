@@ -35,8 +35,7 @@ import org.knime.core.node.streamable.OutputPortRole;
 import org.knime.core.node.streamable.PartitionInfo;
 import org.knime.core.node.streamable.StreamableOperator;
 
-import se.redfield.cp.core.ClassifierCellFactory;
-import se.redfield.cp.settings.ClassifierSettings;
+import se.redfield.cp.core.PredictiveSystemsClassifierCellFactory;
 
 /**
  * Conformal Classifier node. Assigns predicted classes to each row based on
@@ -48,7 +47,7 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(PredictiveSystemsClassifierNodeModel.class);
 
-	private final ClassifierSettings settings = new ClassifierSettings();
+	private final PredictiveSystemsRegressionNodeSettings settings = new PredictiveSystemsRegressionNodeSettings();
 
 	private ColumnRearranger rearranger;
 
@@ -58,7 +57,8 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		pushFlowVariableDouble(ClassifierSettings.KEY_ERROR_RATE, settings.getErrorRate());
+		// pushFlowVariableDouble(PredictiveSystemsRegressionSettings.KEY_ERROR_RATE,
+		// settings.getErrorRate());
 		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inData[0], rearranger, exec) };
 	}
 
@@ -66,7 +66,7 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		DataTableSpec inSpec = inSpecs[0];
 
-		settings.configure(inSpec);
+		// settings.configure(inSpec);
 		rearranger = createRearranger(inSpec);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
@@ -80,7 +80,7 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 	 */
 	private ColumnRearranger createRearranger(DataTableSpec inSpec) {
 		ColumnRearranger r = new ColumnRearranger(inSpec);
-		r.append(new ClassifierCellFactory(settings));
+		r.append(new PredictiveSystemsClassifierCellFactory(settings));
 		return r;
 	}
 
@@ -112,7 +112,7 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		this.settings.loadSettingsFrom(settings);
+		// this.settings.loadSettingsFrom(settings);
 	}
 
 	@Override
