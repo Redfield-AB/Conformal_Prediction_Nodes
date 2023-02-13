@@ -17,6 +17,7 @@ package se.redfield.cp.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
@@ -38,12 +39,15 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 	private final int probabilityDistributionColumnIdx;
 	private final int targetColumnIdx;
 
+	private final Random random;
+
 	/**
 	 * @param settings The classifier settings.
 	 */
 	public PredictiveSystemsClassifierCellFactory(String probabilityDistributionColumn,
 			PredictiveSystemsClassifierSettings settings, DataTableSpec inputTableSpec) {
 		super(createOutputColumnSpec(settings));
+		random = new Random();
 
 		this.settings = settings;
 		probabilityDistributionColumnIdx = inputTableSpec.findColumnIndex(probabilityDistributionColumn);
@@ -107,14 +111,31 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 	}
 
 	private double getTargetValue(double target, List<Double> probabilities) {
-		return target;
+		long count = probabilities.stream().filter(p -> p < target).count();
+		double gamma = random.nextDouble();
+
+		return (count + gamma) / (probabilities.size() + 1);
 	}
 
 	private double getLowerPercentileValue(double percentile, List<Double> probabilities) {
-		return percentile;
+		int index = (int) Math.floor(percentile / 100 * (probabilities.size() + 1)) - 1;
+
+		return getProbability(probabilities, index);
 	}
 
 	private double getHigherPercentileValue(double percentile, List<Double> probabilities) {
-		return percentile;
+		int index = (int) Math.ceil(percentile / 100 * (probabilities.size() + 1)) - 1;
+
+		return getProbability(probabilities, index);
+	}
+
+	private double getProbability(List<Double> probabilities, int index) {
+		if (index < 0) {
+			return -Double.MAX_VALUE;
+		} else if (index > probabilities.size() - 1) {
+			return Double.MAX_VALUE;
+		} else {
+			return probabilities.get(index);
+		}
 	}
 }
