@@ -13,14 +13,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp.nodes.ps.regression;
+package se.redfield.cp.nodes.ps.classifier;
 
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
 
 /**
- * Factory class for Classifier node.
+ * Factory class for Predictive Systems Classifier node.
  *
  */
 public class PredictiveSystemsClassifierNodeFactory extends NodeFactory<PredictiveSystemsClassifierNodeModel> {

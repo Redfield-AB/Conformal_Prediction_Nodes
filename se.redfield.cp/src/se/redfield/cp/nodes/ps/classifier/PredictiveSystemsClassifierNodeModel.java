@@ -13,7 +13,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp.nodes.ps.regression;
+package se.redfield.cp.nodes.ps.classifier;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,18 +36,16 @@ import org.knime.core.node.streamable.PartitionInfo;
 import org.knime.core.node.streamable.StreamableOperator;
 
 import se.redfield.cp.core.PredictiveSystemsClassifierCellFactory;
+import se.redfield.cp.utils.PortDef;
 
-/**
- * Conformal Classifier node. Assigns predicted classes to each row based on
- * it's P-values and selected Significance Level. Works with classes column
- * represented as Collection or String column
- *
- */
+
 public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 	@SuppressWarnings("unused")
 	private static final NodeLogger LOGGER = NodeLogger.getLogger(PredictiveSystemsClassifierNodeModel.class);
 
-	private final PredictiveSystemsRegressionNodeSettings settings = new PredictiveSystemsRegressionNodeSettings();
+	static final PortDef INPUT_TABLE = new PortDef(0, "Input table");
+
+	private final PredictiveSystemsClassifierNodeSettings settings = new PredictiveSystemsClassifierNodeSettings();
 
 	private ColumnRearranger rearranger;
 
@@ -57,8 +55,6 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		// pushFlowVariableDouble(PredictiveSystemsRegressionSettings.KEY_ERROR_RATE,
-		// settings.getErrorRate());
 		return new BufferedDataTable[] { exec.createColumnRearrangeTable(inData[0], rearranger, exec) };
 	}
 
@@ -66,21 +62,15 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		DataTableSpec inSpec = inSpecs[0];
 
-		// settings.configure(inSpec);
 		rearranger = createRearranger(inSpec);
 
 		return new DataTableSpec[] { rearranger.createSpec() };
 	}
 
-	/**
-	 * Creates ColumnRearranger
-	 * 
-	 * @param inSpec Input table spec
-	 * @return rearranger
-	 */
 	private ColumnRearranger createRearranger(DataTableSpec inSpec) {
 		ColumnRearranger r = new ColumnRearranger(inSpec);
-		r.append(new PredictiveSystemsClassifierCellFactory(settings));
+		r.append(new PredictiveSystemsClassifierCellFactory(settings.getProbabilityDistributionColumn(),
+				settings.getClassifierSettings(), inSpec));
 		return r;
 	}
 
@@ -112,7 +102,7 @@ public class PredictiveSystemsClassifierNodeModel extends NodeModel {
 
 	@Override
 	protected void loadValidatedSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
-		// this.settings.loadSettingsFrom(settings);
+		this.settings.loadSettingsFrom(settings);
 	}
 
 	@Override

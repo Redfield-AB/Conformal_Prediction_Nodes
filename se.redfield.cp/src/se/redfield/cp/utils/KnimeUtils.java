@@ -17,11 +17,13 @@ package se.redfield.cp.utils;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
+import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DoubleValue;
 import org.knime.core.data.MissingValue;
 import org.knime.core.data.MissingValueException;
 import org.knime.core.data.RowKey;
+import org.knime.core.data.def.DoubleCell;
 import org.knime.core.node.InvalidSettingsException;
 
 /**
@@ -67,6 +69,16 @@ public class KnimeUtils {
 	 */
 	public static DataTableSpec createSpec(DataTableSpec base, DataColumnSpec... colums) {
 		return new DataTableSpec(base, new DataTableSpec(colums));
+	}
+
+	/**
+	 * Creates spec for a double column
+	 * 
+	 * @param name The column name
+	 * @return The column spec.
+	 */
+	public static DataColumnSpec createDoubleColumn(String name) {
+		return new DataColumnSpecCreator(name, DoubleCell.TYPE).createSpec();
 	}
 
 	/**

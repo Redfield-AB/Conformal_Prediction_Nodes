@@ -15,60 +15,106 @@
  */
 package se.redfield.cp.core;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataRow;
-import org.knime.core.data.MissingCell;
+import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DoubleValue;
+import org.knime.core.data.collection.CollectionDataValue;
 import org.knime.core.data.container.AbstractCellFactory;
+import org.knime.core.data.def.DoubleCell;
 
-import se.redfield.cp.settings.PredictiveSystemsRegressionSettings;
+import se.redfield.cp.settings.PredictiveSystemsClassifierSettings;
+import se.redfield.cp.utils.KnimeUtils;
 
-/**
- * CellFactory used to create Classes column. Collects all classes that has
- * P-value greater than selected threshold.
- * 
- * @author Alexander Bondaletov
- *
- */
+
 public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory {
-	private PredictiveSystemsRegressionSettings settings;
+
+	private final PredictiveSystemsClassifierSettings settings;
+	private final int probabilityDistributionColumnIdx;
+	private final int targetColumnIdx;
 
 	/**
 	 * @param settings The classifier settings.
 	 */
-	public PredictiveSystemsClassifierCellFactory(PredictiveSystemsRegressionSettings settings) {
+	public PredictiveSystemsClassifierCellFactory(String probabilityDistributionColumn,
+			PredictiveSystemsClassifierSettings settings, DataTableSpec inputTableSpec) {
 		super(createOutputColumnSpec(settings));
+
 		this.settings = settings;
+		probabilityDistributionColumnIdx = inputTableSpec.findColumnIndex(probabilityDistributionColumn);
+
+		if (settings.hasTargetColumn()) {
+			targetColumnIdx = inputTableSpec.findColumnIndex(settings.getTargetColumn());
+		} else {
+			targetColumnIdx = -1;
+		}
 	}
 
-	private static DataColumnSpec createOutputColumnSpec(PredictiveSystemsRegressionSettings settings) {
-		// TODO see comments to getCells below.
-		// DataType type = settings.getClassesAsString() ? StringCell.TYPE :
-		// SetCell.getCollectionType(StringCell.TYPE);
-		return null;// new DataColumnSpecCreator(settings.getClassesColumnName(),
-					// type).createSpec();
+	private static DataColumnSpec[] createOutputColumnSpec(PredictiveSystemsClassifierSettings settings) {
+		List<DataColumnSpec> columns = new ArrayList<>();
+
+		if (settings.hasTarget()) {
+			columns.add(KnimeUtils.createDoubleColumn(String.format("P(target<=%.2f)", settings.getTarget())));
+		}
+
+		if (settings.hasTargetColumn()) {
+			columns.add(KnimeUtils.createDoubleColumn(String.format("P(target<=[%s])", settings.getTargetColumn())));
+		}
+
+		for (double p : settings.getLowerPercentiles()) {
+			columns.add(KnimeUtils.createDoubleColumn(String.format("%.1f Lower Percentile", p)));
+		}
+
+		for (double p : settings.getHigherPercentiles()) {
+			columns.add(KnimeUtils.createDoubleColumn(String.format("%.1f Higher Percentile", p)));
+		}
+
+		return columns.toArray(new DataColumnSpec[] {});
 	}
 
 	@Override
 	public DataCell[] getCells(DataRow row) {
-		Set<String> classes = new HashSet<>();
+		List<Double> probabilityDistribution = ((CollectionDataValue) row.getCell(probabilityDistributionColumnIdx))
+				.stream() //
+				.map(c -> ((DoubleValue) c).getDoubleValue()) //
+				.collect(Collectors.toList());
 
-		// TODO
-		// if y-column is selected or fixed y-value assigned, then output p-values based
-		// on
-		// these
+		List<DataCell> result = new ArrayList<>();
 
-		// TODO
-		// if lower and upper percentiles are provided, output one column per provided
-		// percentile.
+		if (settings.hasTarget()) {
+			result.add(new DoubleCell(getTargetValue(settings.getTarget(), probabilityDistribution)));
+		}
 
-		DataCell result;
-		// TODO
-		result = new MissingCell("No class asigned");
+		if (settings.hasTargetColumn()) {
+			double target = ((DoubleValue) row.getCell(targetColumnIdx)).getDoubleValue();
+			result.add(new DoubleCell(getTargetValue(target, probabilityDistribution)));
+		}
 
-		return new DataCell[] { result };
+		for (double d : settings.getLowerPercentiles()) {
+			result.add(new DoubleCell(getLowerPercentileValue(d, probabilityDistribution)));
+		}
+
+		for (double d : settings.getHigherPercentiles()) {
+			result.add(new DoubleCell(getHigherPercentileValue(d, probabilityDistribution)));
+		}
+
+		return result.toArray(new DataCell[] {});
+	}
+
+	private double getTargetValue(double target, List<Double> probabilities) {
+		return target;
+	}
+
+	private double getLowerPercentileValue(double percentile, List<Double> probabilities) {
+		return percentile;
+	}
+
+	private double getHigherPercentileValue(double percentile, List<Double> probabilities) {
+		return percentile;
 	}
 }

@@ -96,7 +96,7 @@
       <node
             after="se.redfield.cp.nodes.ps.regression.PredictiveSystemsRegressionNodeFactory" 
             category-path="/community/conformalPrediction/advanced"
-            factory-class="se.redfield.cp.nodes.ps.regression.PredictiveSystemsClassifierNodeFactory">
+            factory-class="se.redfield.cp.nodes.ps.classifier.PredictiveSystemsClassifierNodeFactory">
       </node>
       <node
             category-path="/community/conformalPrediction"
