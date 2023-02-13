@@ -13,22 +13,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, see <http://www.gnu.org/licenses>.
  */
-package se.redfield.cp.nodes.ps.regression;
+package se.redfield.cp.nodes.ps.calibration;
 
 import org.knime.core.node.NodeDialogPane;
 import org.knime.core.node.NodeFactory;
 import org.knime.core.node.NodeView;
+
+import se.redfield.cp.nodes.ConformalPredictorCalibratorRegressionNodeDialog;
+import se.redfield.cp.nodes.ConformalPredictorCalibratorRegressionNodeModel;
 
 /**
  * Factory class for Calibrator node.
  *
  */
 public class PredictiveSystemsCalibratorRegressionNodeFactory
-		extends NodeFactory<PredictiveSystemsCalibratorRegressionNodeModel> {
+		extends NodeFactory<ConformalPredictorCalibratorRegressionNodeModel> {
 
 	@Override
-	public PredictiveSystemsCalibratorRegressionNodeModel createNodeModel() {
-		return new PredictiveSystemsCalibratorRegressionNodeModel();
+	public ConformalPredictorCalibratorRegressionNodeModel createNodeModel() {
+		return new ConformalPredictorCalibratorRegressionNodeModel(true);
 	}
 
 	@Override
@@ -37,8 +40,8 @@ public class PredictiveSystemsCalibratorRegressionNodeFactory
 	}
 
 	@Override
-	public NodeView<PredictiveSystemsCalibratorRegressionNodeModel> createNodeView(int viewIndex,
-			PredictiveSystemsCalibratorRegressionNodeModel nodeModel) {
+	public NodeView<ConformalPredictorCalibratorRegressionNodeModel> createNodeView(int viewIndex,
+			ConformalPredictorCalibratorRegressionNodeModel nodeModel) {
 		return null;
 	}
 
@@ -49,7 +52,7 @@ public class PredictiveSystemsCalibratorRegressionNodeFactory
 
 	@Override
 	protected NodeDialogPane createNodeDialogPane() {
-		return new PredictiveSystemsCalibratorRegressionNodeDialog();
+		return new ConformalPredictorCalibratorRegressionNodeDialog();
 	}
 
 }

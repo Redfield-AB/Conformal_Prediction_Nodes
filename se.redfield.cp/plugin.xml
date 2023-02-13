@@ -86,7 +86,7 @@
       </node>
       <node
             category-path="/community/conformalPrediction/advanced"
-            factory-class="se.redfield.cp.nodes.ps.regression.PredictiveSystemsCalibratorRegressionNodeFactory">
+            factory-class="se.redfield.cp.nodes.ps.calibration.PredictiveSystemsCalibratorRegressionNodeFactory">
       </node>
       <node
             after="se.redfield.cp.nodes.ps.regression.PredictiveSystemsCalibratorRegressionNodeFactory" 

@@ -46,10 +46,11 @@ public class ConformalPredictorCalibratorRegressionNodeModel extends NodeModel {
 
 	private final CalibratorRegressionNodeSettings settings = new CalibratorRegressionNodeSettings();
 
-	private final CalibratorRegression calibrator = new CalibratorRegression(settings);
+	private final CalibratorRegression calibrator;
 
-	protected ConformalPredictorCalibratorRegressionNodeModel() {
+	public ConformalPredictorCalibratorRegressionNodeModel(boolean signedErrors) {
 		super(1, 1);
+		calibrator = new CalibratorRegression(settings, signedErrors);
 	}
 
 	@Override

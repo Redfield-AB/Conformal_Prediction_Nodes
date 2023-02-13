@@ -41,14 +41,16 @@ import se.redfield.cp.utils.KnimeUtils;
 public class CalibratorRegression extends AbstractCalibrator {
 
 	protected CalibratorRegressionSettings settings;
+	private final boolean signedErrors;
 
 	/**
 	 * Creates instance
 	 * 
 	 * @param settings
 	 */
-	public CalibratorRegression(CalibratorRegressionSettings settings) {
+	public CalibratorRegression(CalibratorRegressionSettings settings, boolean signedErrors) {
 		super(settings.getKeepColumns());
+		this.signedErrors = signedErrors;
 		this.settings = settings;
 	}
 
@@ -78,20 +80,17 @@ public class CalibratorRegression extends AbstractCalibrator {
 				double dPrediction = KnimeUtils.getDouble(row.getCell(predictionColumnIndex),
 						"Prediction column contains missing values");
 
-				double nonconformityScore = 0;
+				double nonconformityScore = dTarget - dPrediction;
+
+				if (!signedErrors) {
+					nonconformityScore = Math.abs(nonconformityScore);
+				}
+
 				if (settings.getRegressionSettings().getNormalized()) {
 					double dSigma = KnimeUtils.getDouble(row.getCell(sigmaColumnIndex),
 							"Sigma column contains missing values");
 
-					nonconformityScore = Math.abs(dTarget - dPrediction)
-							/ (dSigma + settings.getRegressionSettings().getBeta());
-					// if (settings.getRegressionSettings().getPredictiveSystems())
-					// nonconformityScore = (dTarget - dPrediction)
-					// / (dSigma + settings.getRegressionSettings().getBeta());
-				} else {
-					nonconformityScore = Math.abs(dTarget - dPrediction);
-					// if (settings.getRegressionSettings().getPredictiveSystems())
-					// nonconformityScore = (dTarget - dPrediction);
+					nonconformityScore = nonconformityScore / (dSigma + settings.getRegressionSettings().getBeta());
 				}
 
 				return new DataCell[] { new DoubleCell(nonconformityScore) };

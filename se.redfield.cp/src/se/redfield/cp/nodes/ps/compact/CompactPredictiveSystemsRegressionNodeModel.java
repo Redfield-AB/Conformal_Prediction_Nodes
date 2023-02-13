@@ -54,7 +54,7 @@ public class CompactPredictiveSystemsRegressionNodeModel extends NodeModel {
 
 	private final CompactPredictiveSystemsRegressionNodeSettings settings = new CompactPredictiveSystemsRegressionNodeSettings();
 
-	private final CalibratorRegression calibrator = new CalibratorRegression(settings);
+	private final CalibratorRegression calibrator = new CalibratorRegression(settings, true);
 	private final PredictiveSystemsRegressionPredictor predictor = new PredictiveSystemsRegressionPredictor(settings);
 
 	protected CompactPredictiveSystemsRegressionNodeModel() {

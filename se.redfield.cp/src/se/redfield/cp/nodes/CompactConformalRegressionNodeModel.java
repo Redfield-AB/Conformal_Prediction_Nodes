@@ -65,7 +65,7 @@ public class CompactConformalRegressionNodeModel extends NodeModel {
 
 	private final CompactRegressionNodeSettings settings = new CompactRegressionNodeSettings();
 
-	private final CalibratorRegression calibrator = new CalibratorRegression(settings);
+	private final CalibratorRegression calibrator = new CalibratorRegression(settings, false);
 	private final PredictorRegression predictor = new PredictorRegression(settings);
 
 	protected CompactConformalRegressionNodeModel() {

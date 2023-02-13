@@ -28,7 +28,7 @@ public class ConformalPredictorCalibratorRegressionNodeFactory
 
 	@Override
 	public ConformalPredictorCalibratorRegressionNodeModel createNodeModel() {
-		return new ConformalPredictorCalibratorRegressionNodeModel();
+		return new ConformalPredictorCalibratorRegressionNodeModel(false);
 	}
 
 	@Override
