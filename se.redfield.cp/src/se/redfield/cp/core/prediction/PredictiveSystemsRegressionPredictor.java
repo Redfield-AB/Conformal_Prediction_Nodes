@@ -107,7 +107,7 @@ public class PredictiveSystemsRegressionPredictor {
 							"Sigma column contains missing values");
 					for (int i = 0; i < alphas.size(); i++) {
 						probabilities[i] = dPrediction
-								+ alphas.get(i) * (dSigma + settings.getRegressionSettings().getBeta());
+								+ (alphas.get(i) * (dSigma + settings.getRegressionSettings().getBeta()));
 					}
 				} else {
 					for (int i = 0; i < alphas.size(); i++) {

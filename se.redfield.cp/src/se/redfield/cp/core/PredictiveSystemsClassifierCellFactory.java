@@ -63,11 +63,11 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 		List<DataColumnSpec> columns = new ArrayList<>();
 
 		if (settings.hasTarget()) {
-			columns.add(KnimeUtils.createDoubleColumn(String.format("P(target<=%.2f)", settings.getTarget())));
+			columns.add(KnimeUtils.createDoubleColumn(String.format("P(cpds<=%.2f)", settings.getTarget())));
 		}
 
 		if (settings.hasTargetColumn()) {
-			columns.add(KnimeUtils.createDoubleColumn(String.format("P(target<=[%s])", settings.getTargetColumn())));
+			columns.add(KnimeUtils.createDoubleColumn(String.format("P(cpds<=[%s])", settings.getTargetColumn())));
 		}
 
 		for (double p : settings.getLowerPercentiles()) {
@@ -111,7 +111,7 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 	}
 
 	private double getTargetValue(double target, List<Double> probabilities) {
-		long count = probabilities.stream().filter(p -> p < target).count();
+		long count = probabilities.stream().filter(p -> p <= target).count();
 		double gamma = random.nextDouble();
 
 		return (count + gamma) / (probabilities.size() + 1);
