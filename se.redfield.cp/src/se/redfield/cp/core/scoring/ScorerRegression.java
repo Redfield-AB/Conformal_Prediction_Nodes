@@ -33,7 +33,7 @@ import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
 
 import se.redfield.cp.core.scoring.Scores.Metric;
-import se.redfield.cp.nodes.ConformalPredictorScorerRegressionNodeModel;
+import se.redfield.cp.settings.ConformalPredictorScorerRegressionSettings;
 
 /**
  * Class used by Regression Scorer node to calculate quality metrics for a given
@@ -42,15 +42,15 @@ import se.redfield.cp.nodes.ConformalPredictorScorerRegressionNodeModel;
  */
 public class ScorerRegression {
 
-	private ConformalPredictorScorerRegressionNodeModel model;
+	private ConformalPredictorScorerRegressionSettings settings;
 	private List<ScoreColumn> baseColumns;
 	private List<ScoreColumn> additionalColumns;
 
 	/**
-	 * @param conformalPredictorScorerRegressionNodeModel The node model.
+	 * @param settings The scorer settings.
 	 */
-	public ScorerRegression(ConformalPredictorScorerRegressionNodeModel conformalPredictorScorerRegressionNodeModel) {
-		this.model = conformalPredictorScorerRegressionNodeModel;
+	public ScorerRegression(ConformalPredictorScorerRegressionSettings settings) {
+		this.settings = settings;
 
 		baseColumns = Arrays.asList(new ScoreColumn("Error rate",
 				s -> 1 - s.get(Scores.Metric.VALID) / s.get(Scores.Metric.COUNT)), //
@@ -75,7 +75,7 @@ public class ScorerRegression {
 
 	private List<ScoreColumn> getIncludedColumns() {
 		List<ScoreColumn> result = new ArrayList<>();
-		if (model.isAdditionalInfoMode()) {
+		if (settings.isAdditionalInfoMode()) {
 			result.addAll(additionalColumns);
 		}
 		result.addAll(baseColumns);
@@ -95,9 +95,9 @@ public class ScorerRegression {
 		Scores score = new Scores();
 
 		DataTableSpec spec = inTable.getDataTableSpec();
-		int targetIdx = spec.findColumnIndex(model.getTargetColumn());
-		int upperboundIdx = spec.findColumnIndex(model.getUpperBoundColumnName());
-		int lowerboundIdx = spec.findColumnIndex(model.getLowerBoundColumnName());
+		int targetIdx = spec.findColumnIndex(settings.getTargetColumn());
+		int upperboundIdx = settings.hasUpperBound() ? spec.findColumnIndex(settings.getUpperBoundColumnName()) : -1;
+		int lowerboundIdx = settings.hasLowerBound() ? spec.findColumnIndex(settings.getLowerBoundColumnName()) : -1;
 
 		long total = inTable.size();
 		long count = 0;
@@ -108,8 +108,12 @@ public class ScorerRegression {
 			score.inc(Metric.COUNT);
 
 			double regression = ((DoubleValue) row.getCell(targetIdx)).getDoubleValue();
-			double lowerboundRegression = ((DoubleValue) row.getCell(lowerboundIdx)).getDoubleValue();
-			double upperboundRegression = ((DoubleValue) row.getCell(upperboundIdx)).getDoubleValue();
+			double lowerboundRegression = lowerboundIdx > -1
+					? ((DoubleValue) row.getCell(lowerboundIdx)).getDoubleValue()
+					: Double.NEGATIVE_INFINITY;
+			double upperboundRegression = upperboundIdx > -1
+					? ((DoubleValue) row.getCell(upperboundIdx)).getDoubleValue()
+					: Double.POSITIVE_INFINITY;
 			double intervalsSize = upperboundRegression - lowerboundRegression;// trouble!!!!
 
 			score.max(Metric.MAX_INTERVAL_SIZE, intervalsSize);
@@ -127,9 +131,11 @@ public class ScorerRegression {
 			count++;
 		}
 
-		interval.sort(null);
-		double median = interval.get(interval.size() / 2);
-		score.set(Metric.MEDIAN_INTERVAL_SIZE, median);
+		if (settings.isAdditionalInfoMode()) {
+			interval.sort(null);
+			double median = interval.get(interval.size() / 2);
+			score.set(Metric.MEDIAN_INTERVAL_SIZE, median);
+		}
 
 		return createOutputTable(score, exec);
 
