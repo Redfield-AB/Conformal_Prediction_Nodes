@@ -59,7 +59,6 @@ public class PredictiveSystemsRegressionNodeModel extends NodeModel {
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-		pushFlowVariableDouble(PredictiveSystemsRegressionNodeSettings.KEY_ERROR_RATE, settings.getErrorRate());
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE.getIdx()];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE.getIdx()];
 		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), inCalibrationTable,

@@ -64,6 +64,13 @@ public class RegressionSettings {
 	}
 
 	/**
+	 * @return The tables
+	 */
+	public PortDef[] getTables() {
+		return tables;
+	}
+
+	/**
 	 * @return The sigma column model.
 	 */
 	public SettingsModelString getSigmaColumnModel() {

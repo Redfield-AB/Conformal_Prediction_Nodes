@@ -22,7 +22,6 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.settings.KeepColumnsSettings;
@@ -39,17 +38,10 @@ import se.redfield.cp.utils.KnimeUtils;
  */
 public class PredictiveSystemsRegressionNodeSettings implements PredictiveSystemsRegressionSettings {
 	private static final String KEY_PREDICTION_COLUMN_NAME = "predictionColumn";
-	/**
-	 * The error rate settings key.
-	 */
-	public static final String KEY_ERROR_RATE = "errorRate";
-
-	private static final double DEFAULT_ERROR_RATE = 0.05;
 
 	private final SettingsModelString predictionColumn;
 	private final RegressionSettings regressionSettings;
 	private final KeepColumnsSettings keepColumns;
-	private final SettingsModelDoubleBounded errorRate;
 
 	/**
 	 * Creates new instance.
@@ -58,7 +50,6 @@ public class PredictiveSystemsRegressionNodeSettings implements PredictiveSystem
 		predictionColumn = new SettingsModelString(KEY_PREDICTION_COLUMN_NAME, "");
 		regressionSettings = new RegressionSettings(PORT_PREDICTION_TABLE);
 		keepColumns = new KeepColumnsSettings(PORT_PREDICTION_TABLE);
-		errorRate = new SettingsModelDoubleBounded(KEY_ERROR_RATE, DEFAULT_ERROR_RATE, 0, 1);
 	}
 
 	/**
@@ -84,18 +75,6 @@ public class PredictiveSystemsRegressionNodeSettings implements PredictiveSystem
 	}
 
 	/**
-	 * @return The error rate model.
-	 */
-	public SettingsModelDoubleBounded getErrorRateModel() {
-		return errorRate;
-	}
-
-	@Override
-	public double getErrorRate() {
-		return errorRate.getDoubleValue();
-	}
-
-	/**
 	 * Loads settings from the provided {@link NodeSettingsRO}
 	 * 
 	 * @param settings
@@ -105,7 +84,6 @@ public class PredictiveSystemsRegressionNodeSettings implements PredictiveSystem
 		predictionColumn.loadSettingsFrom(settings);
 		regressionSettings.loadSettingFrom(settings);
 		keepColumns.loadSettingFrom(settings);
-		errorRate.loadSettingsFrom(settings);
 	}
 
 	/**
@@ -117,7 +95,6 @@ public class PredictiveSystemsRegressionNodeSettings implements PredictiveSystem
 		predictionColumn.saveSettingsTo(settings);
 		regressionSettings.saveSettingsTo(settings);
 		keepColumns.saveSettingsTo(settings);
-		errorRate.saveSettingsTo(settings);
 	}
 
 	private void validate() throws InvalidSettingsException {

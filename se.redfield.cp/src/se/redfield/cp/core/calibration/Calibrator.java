@@ -16,8 +16,8 @@
 package se.redfield.cp.core.calibration;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
@@ -119,9 +119,9 @@ public class Calibrator extends AbstractCalibrator {
 
 	@Override
 	protected String[] getRequiredColumnNames(DataTableSpec spec) {
-		List<String> columns = spec.getColumnSpec(settings.getTargetSettings().getTargetColumn()).getDomain()
+		Set<String> columns = spec.getColumnSpec(settings.getTargetSettings().getTargetColumn()).getDomain()
 				.getValues().stream().map(c -> settings.getTargetSettings().getProbabilityColumnName(c.toString()))
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 		columns.add(settings.getTargetSettings().getTargetColumn());
 		if (settings.getKeepColumns().getKeepIdColumn()) {
 			columns.add(settings.getKeepColumns().getIdColumn());

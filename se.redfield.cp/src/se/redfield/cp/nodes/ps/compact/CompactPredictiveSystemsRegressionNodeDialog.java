@@ -16,14 +16,29 @@
 package se.redfield.cp.nodes.ps.compact;
 
 import static se.redfield.cp.nodes.ps.compact.CompactPredictiveSystemsRegressionNodeModel.PORT_CALIBRATION_TABLE;
-import static se.redfield.cp.nodes.ps.compact.CompactPredictiveSystemsRegressionNodeModel.PORT_PREDICTION_TABLE;
 
-import org.knime.core.data.DataValue;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.DoubleValue;
-import org.knime.core.node.defaultnodesettings.DefaultNodeSettingsPane;
-import org.knime.core.node.defaultnodesettings.DialogComponentBoolean;
+import org.knime.core.node.InvalidSettingsException;
+import org.knime.core.node.NodeDialogPane;
+import org.knime.core.node.NodeSettingsRO;
+import org.knime.core.node.NodeSettingsWO;
+import org.knime.core.node.NotConfigurableException;
 import org.knime.core.node.defaultnodesettings.DialogComponentColumnNameSelection;
-import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
+
+import se.redfield.cp.settings.ui.KeepColumnsEditor;
+import se.redfield.cp.settings.ui.PredictiveSystemsClassifierSettingsEditor;
+import se.redfield.cp.settings.ui.RegressionSettingsEditor;
 
 /**
  * The node dialog for the {@link CompactPredictiveSystemsRegressionNodeModel}
@@ -32,9 +47,15 @@ import org.knime.core.node.defaultnodesettings.DialogComponentNumber;
  * @author Alexander Bondaletov
  *
  */
-public class CompactPredictiveSystemsRegressionNodeDialog extends DefaultNodeSettingsPane {
+public class CompactPredictiveSystemsRegressionNodeDialog extends NodeDialogPane {
 
 	private final CompactPredictiveSystemsRegressionNodeSettings settings = new CompactPredictiveSystemsRegressionNodeSettings();
+
+	private final DialogComponentColumnNameSelection targetColumn;
+	private final DialogComponentColumnNameSelection predictionColumn;
+	private final RegressionSettingsEditor regressionPanel;
+	private final KeepColumnsEditor keepColumnPanel;
+	private final PredictiveSystemsClassifierSettingsEditor classifierPanel;
 
 	/**
 	 * Creates new instance
@@ -42,53 +63,81 @@ public class CompactPredictiveSystemsRegressionNodeDialog extends DefaultNodeSet
 	@SuppressWarnings("unchecked")
 	public CompactPredictiveSystemsRegressionNodeDialog() {
 		super();
+		targetColumn = new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "",
+				PORT_CALIBRATION_TABLE.getIdx(), DoubleValue.class);
+		predictionColumn = new DialogComponentColumnNameSelection(settings.getPredictionColumnModel(), "",
+				PORT_CALIBRATION_TABLE.getIdx(), DoubleValue.class);
+		regressionPanel = new RegressionSettingsEditor(settings.getRegressionSettings(), this::createFlowVariableModel);
+		keepColumnPanel = new KeepColumnsEditor(settings.getKeepColumns());
+		classifierPanel = new PredictiveSystemsClassifierSettingsEditor(settings.getClassifierSettings());
+		classifierPanel.setBorder(BorderFactory.createTitledBorder("Classification settings"));
 
-		addDialogComponent(new DialogComponentColumnNameSelection(settings.getTargetColumnModel(), "Target column:",
-				PORT_CALIBRATION_TABLE.getIdx(), DoubleValue.class));
-		addDialogComponent(new DialogComponentColumnNameSelection(settings.getPredictionColumnModel(),
-				"Prediction column:", PORT_CALIBRATION_TABLE.getIdx(), DoubleValue.class));
+		addTab("Settings", createSettingsTab());
+	}
 
-		createNewGroup("Conformal Regression");
-		addDialogComponent(
-				new DialogComponentBoolean(settings.getRegressionSettings().getNormalizedModel(), "Use Normalization"));
+	private Component createSettingsTab() {
+		JPanel panel = new JPanel(new GridBagLayout());
+		addRow(0, panel, "Target column", targetColumn.getComponentPanel());
+		addRow(1, panel, "Prediction column", predictionColumn.getComponentPanel());
 
-		addDialogComponent(
-				new DialogComponentColumnNameSelection(settings.getRegressionSettings().getSigmaColumnModel(),
-						"Difficulty column:", PORT_CALIBRATION_TABLE.getIdx(), false, DoubleValue.class));
-		addDialogComponent(new DialogComponentNumber(settings.getRegressionSettings().getBetaModel(), "Beta", 0.05,
-				createFlowVariableModel(settings.getRegressionSettings().getBetaModel())));
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 1;
+		c.gridwidth = 3;
+		c.gridx = 0;
+		c.gridy = 2;
+		panel.add(regressionPanel, c);
 
-		// Instead of just an error rate, I think it would make more sense to provide
-		// sets of lower and upper percentiles.
-		// Compare with the example in 3.2 in the juptyer nootebook for crepes:
-		// results = cps_mond_norm.predict(y_hat=y_hat_test,
-		// sigmas=sigmas_test_knn,
-		// bins=bins_test,
-		// y=y_test,
-		// lower_percentiles=[2.5, 5],
-		// higher_percentiles=[95, 97.5])
+		c.gridy += 1;
+		panel.add(keepColumnPanel, c);
 
-		// We should also consider adding the option of either pointing out a y-column
-		// or set a constant y-value to calculate the p-values:
-		// The output of the `predict` method of a `ConformalPredictiveSystem` will
-		// depend on how we specify the input.
-		// If we provide specific target values (using the parameter `y`), the method
-		// will output a p-value for each test instance, i.e.,
-		// the probability that the true target is less than or equal to the provided
-		// values. The method assumes that either one value is
-		// provided for each test instance or that the same (single) value is provided
-		// for all test instances.
+		c.gridy += 1;
+		panel.add(classifierPanel, c);
 
-		createNewGroup("User defined error rate");
-		addDialogComponent(new DialogComponentNumber(settings.getErrorRateModel(), "Error rate (significance level)",
-				0.05, createFlowVariableModel(settings.getErrorRateModel())));
+		c.gridy += 1;
+		c.fill = GridBagConstraints.BOTH;
+		c.weighty = 1;
+		panel.add(Box.createVerticalGlue(), c);
+		return panel;
+	}
 
-		createNewGroup("Define output");
-		addDialogComponent(
-				new DialogComponentBoolean(settings.getKeepColumns().getKeepAllColumnsModel(), "Keep All Columns"));
-		addDialogComponent(
-				new DialogComponentBoolean(settings.getKeepColumns().getKeepIdColumnModel(), "Keep ID column"));
-		addDialogComponent(new DialogComponentColumnNameSelection(settings.getKeepColumns().getIdColumnModel(),
-				"ID column:", PORT_PREDICTION_TABLE.getIdx(), DataValue.class));
+	private static void addRow(int row, JPanel panel, String label, Component comp) {
+		GridBagConstraints c = new GridBagConstraints();
+		c.anchor = GridBagConstraints.WEST;
+		c.fill = GridBagConstraints.NONE;
+		c.gridx = 0;
+		c.gridy = row;
+		c.insets = new Insets(5, 10, 0, 0);
+
+		panel.add(new JLabel(label), c);
+
+		c.gridx += 1;
+		panel.add(comp, c);
+
+		c.gridx += 1;
+		c.weightx = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		panel.add(Box.createHorizontalGlue(), c);
+	}
+
+	@Override
+	protected void loadSettingsFrom(NodeSettingsRO settings, DataTableSpec[] specs) throws NotConfigurableException {
+		try {
+			this.settings.loadSettingFrom(settings);
+		} catch (InvalidSettingsException e) {
+			// ignore
+		}
+		targetColumn.loadSettingsFrom(settings, specs);
+		predictionColumn.loadSettingsFrom(settings, specs);
+		regressionPanel.loadSettingsFrom(settings, specs);
+		keepColumnPanel.loadSettingsFrom(settings, specs);
+		classifierPanel.loadSettingsFrom(settings, specs);
+	}
+
+	@Override
+	protected void saveSettingsTo(NodeSettingsWO settings) throws InvalidSettingsException {
+		classifierPanel.updateModel();
+		this.settings.saveSettingsTo(settings);
 	}
 }

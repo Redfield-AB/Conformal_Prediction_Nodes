@@ -63,6 +63,13 @@ public class KeepColumnsSettings {
 	}
 
 	/**
+	 * @return the table
+	 */
+	public PortDef getTable() {
+		return table;
+	}
+
+	/**
 	 * @return The keepAllColumns settings model.
 	 */
 	public SettingsModelBoolean getKeepAllColumnsModel() {

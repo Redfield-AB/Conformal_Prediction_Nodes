@@ -22,38 +22,43 @@ import org.knime.core.data.DataTableSpec;
 import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.defaultnodesettings.SettingsModelDoubleBounded;
 import org.knime.core.node.defaultnodesettings.SettingsModelString;
 
 import se.redfield.cp.settings.CalibratorRegressionSettings;
 import se.redfield.cp.settings.KeepColumnsSettings;
+import se.redfield.cp.settings.PredictiveSystemsClassifierSettings;
 import se.redfield.cp.settings.PredictiveSystemsRegressionSettings;
 import se.redfield.cp.settings.RegressionSettings;
 import se.redfield.cp.utils.KnimeUtils;
 
+/**
+ * The node settings for the {@link CompactPredictiveSystemsRegressionNodeModel}
+ * node.
+ * 
+ * @author Alexander Bondaletov, Redfield SE
+ *
+ */
 public class CompactPredictiveSystemsRegressionNodeSettings
 		implements CalibratorRegressionSettings, PredictiveSystemsRegressionSettings {
 	private static final String KEY_TARGET_COLUMN_NAME = "targetColumn";
 	private static final String KEY_PREDICTION_COLUMN_NAME = "predictionColumn";
-	/**
-	 * The errror rate settings key
-	 */
-	public static final String KEY_ERROR_RATE = "errorRate";
-
-	private static final double DEFAULT_ERROR_RATE = 0.05;
+	private static final String KEY_CLASSIFIER = "classifier";
 
 	private final SettingsModelString targetColumn;
 	private final SettingsModelString predictionColumn;
 	private final RegressionSettings regressionSettings;
 	private final KeepColumnsSettings keepColumns;
-	private final SettingsModelDoubleBounded errorRate;
+	private final PredictiveSystemsClassifierSettings classifierSettings;
 
+	/**
+	 * Creates new instance
+	 */
 	public CompactPredictiveSystemsRegressionNodeSettings() {
 		targetColumn = new SettingsModelString(KEY_TARGET_COLUMN_NAME, "");
 		predictionColumn = new SettingsModelString(KEY_PREDICTION_COLUMN_NAME, "");
 		regressionSettings = new RegressionSettings(PORT_CALIBRATION_TABLE, PORT_PREDICTION_TABLE);
 		keepColumns = new KeepColumnsSettings(PORT_PREDICTION_TABLE);
-		errorRate = new SettingsModelDoubleBounded(KEY_ERROR_RATE, DEFAULT_ERROR_RATE, 0, 1);
+		classifierSettings = new PredictiveSystemsClassifierSettings(PORT_PREDICTION_TABLE);
 	}
 
 	/**
@@ -91,15 +96,10 @@ public class CompactPredictiveSystemsRegressionNodeSettings
 	}
 
 	/**
-	 * @return The error rate model.
+	 * @return the classifier settings.
 	 */
-	public SettingsModelDoubleBounded getErrorRateModel() {
-		return errorRate;
-	}
-
-	@Override
-	public double getErrorRate() {
-		return errorRate.getDoubleValue();
+	public PredictiveSystemsClassifierSettings getClassifierSettings() {
+		return classifierSettings;
 	}
 
 	@Override
@@ -123,7 +123,7 @@ public class CompactPredictiveSystemsRegressionNodeSettings
 		predictionColumn.loadSettingsFrom(settings);
 		regressionSettings.loadSettingFrom(settings);
 		keepColumns.loadSettingFrom(settings);
-		errorRate.loadSettingsFrom(settings);
+		classifierSettings.loadSettingsFrom(settings.getNodeSettings(KEY_CLASSIFIER));
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class CompactPredictiveSystemsRegressionNodeSettings
 		predictionColumn.saveSettingsTo(settings);
 		regressionSettings.saveSettingsTo(settings);
 		keepColumns.saveSettingsTo(settings);
-		errorRate.saveSettingsTo(settings);
+		classifierSettings.saveSettingsTo(settings.addNodeSettings(KEY_CLASSIFIER));
 	}
 
 	private void validate() throws InvalidSettingsException {
@@ -148,6 +148,7 @@ public class CompactPredictiveSystemsRegressionNodeSettings
 		}
 		regressionSettings.validate();
 		keepColumns.validate();
+		classifierSettings.validate();
 	}
 
 	/**

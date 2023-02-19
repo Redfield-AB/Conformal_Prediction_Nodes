@@ -15,9 +15,9 @@
  */
 package se.redfield.cp.core.calibration;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.knime.core.data.DataCell;
 import org.knime.core.data.DataColumnSpecCreator;
@@ -46,7 +46,8 @@ public class CalibratorRegression extends AbstractCalibrator {
 	/**
 	 * Creates instance
 	 * 
-	 * @param settings
+	 * @param settings     The calibrator settings
+	 * @param signedErrors Whether to use signer or absolute errors.
 	 */
 	public CalibratorRegression(CalibratorRegressionSettings settings, boolean signedErrors) {
 		super(settings.getKeepColumns());
@@ -114,7 +115,7 @@ public class CalibratorRegression extends AbstractCalibrator {
 
 	@Override
 	protected String[] getRequiredColumnNames(DataTableSpec spec) {
-		List<String> columns = new ArrayList<>();
+		Set<String> columns = new HashSet<>();
 		columns.add(settings.getTargetColumnName());
 		columns.add(settings.getPredictionColumnName());
 		if (settings.getRegressionSettings().getNormalized()) {

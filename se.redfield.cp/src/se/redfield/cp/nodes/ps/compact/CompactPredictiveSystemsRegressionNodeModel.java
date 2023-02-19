@@ -28,15 +28,8 @@ import org.knime.core.node.InvalidSettingsException;
 import org.knime.core.node.NodeModel;
 import org.knime.core.node.NodeSettingsRO;
 import org.knime.core.node.NodeSettingsWO;
-import org.knime.core.node.port.PortObjectSpec;
-import org.knime.core.node.streamable.InputPortRole;
-import org.knime.core.node.streamable.OutputPortRole;
-import org.knime.core.node.streamable.PartitionInfo;
-import org.knime.core.node.streamable.PortInput;
-import org.knime.core.node.streamable.PortObjectInput;
-import org.knime.core.node.streamable.PortOutput;
-import org.knime.core.node.streamable.StreamableOperator;
 
+import se.redfield.cp.core.PredictiveSystemsClassifierCellFactory;
 import se.redfield.cp.core.calibration.CalibratorRegression;
 import se.redfield.cp.core.prediction.PredictiveSystemsRegressionPredictor;
 import se.redfield.cp.utils.PortDef;
@@ -56,6 +49,7 @@ public class CompactPredictiveSystemsRegressionNodeModel extends NodeModel {
 
 	private final CalibratorRegression calibrator = new CalibratorRegression(settings, true);
 	private final PredictiveSystemsRegressionPredictor predictor = new PredictiveSystemsRegressionPredictor(settings);
+	private ColumnRearranger classifierRearranger;
 
 	protected CompactPredictiveSystemsRegressionNodeModel() {
 		super(2, 1);
@@ -63,57 +57,35 @@ public class CompactPredictiveSystemsRegressionNodeModel extends NodeModel {
 
 	@Override
 	protected BufferedDataTable[] execute(BufferedDataTable[] inData, ExecutionContext exec) throws Exception {
-
-		pushFlowVariableDouble(CompactPredictiveSystemsRegressionNodeSettings.KEY_ERROR_RATE, settings.getErrorRate());
-
 		BufferedDataTable inCalibrationTable = inData[PORT_CALIBRATION_TABLE.getIdx()];
 		BufferedDataTable inPredictionTable = inData[PORT_PREDICTION_TABLE.getIdx()];
 
-		// Need to make sure that the calibration is done with signed errors
 		BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
 
 		ColumnRearranger r = predictor.createRearranger(inPredictionTable.getDataTableSpec(), calibrationTable,
 				exec.createSubExecutionContext(0.1));
+		BufferedDataTable predictionTable = exec.createColumnRearrangeTable(inPredictionTable, r,
+				exec.createSubProgress(0.45));
 
 		return new BufferedDataTable[] {
-				exec.createColumnRearrangeTable(inPredictionTable, r, exec.createSubProgress(0.9)) };
+				exec.createColumnRearrangeTable(predictionTable, classifierRearranger, exec.createSubProgress(0.45)) };
 	}
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
 		settings.validateSettings(inSpecs);
 
-		return new DataTableSpec[] { predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE.getIdx()]) };
+		DataTableSpec predictionTableSpec = predictor.createOuputTableSpec(inSpecs[PORT_PREDICTION_TABLE.getIdx()]);
+		classifierRearranger = createClassifierRearranger(predictionTableSpec);
+
+		return new DataTableSpec[] { classifierRearranger.createSpec() };
 	}
 
-	@Override
-	public InputPortRole[] getInputPortRoles() {
-		return new InputPortRole[] { InputPortRole.NONDISTRIBUTED_NONSTREAMABLE, InputPortRole.DISTRIBUTED_STREAMABLE };
-	}
-
-	@Override
-	public OutputPortRole[] getOutputPortRoles() {
-		return new OutputPortRole[] { OutputPortRole.DISTRIBUTED };
-	}
-
-	@Override
-	public StreamableOperator createStreamableOperator(PartitionInfo partitionInfo, PortObjectSpec[] inSpecs)
-			throws InvalidSettingsException {
-		return new StreamableOperator() {
-
-			@Override
-			public void runFinal(PortInput[] inputs, PortOutput[] outputs, ExecutionContext exec) throws Exception {
-				BufferedDataTable inCalibrationTable = (BufferedDataTable) ((PortObjectInput) inputs[PORT_CALIBRATION_TABLE
-						.getIdx()]).getPortObject();
-				BufferedDataTable calibrationTable = calibrator.process(inCalibrationTable, exec);
-
-				ColumnRearranger rearranger = predictor.createRearranger(
-						(DataTableSpec) inSpecs[PORT_PREDICTION_TABLE.getIdx()], calibrationTable,
-						exec.createSubExecutionContext(0.1));
-				rearranger.createStreamableFunction(PORT_PREDICTION_TABLE.getIdx(), 0).runFinal(inputs, outputs,
-						exec.createSubExecutionContext(0.9));
-			}
-		};
+	private ColumnRearranger createClassifierRearranger(DataTableSpec inSpec) {
+		ColumnRearranger r = new ColumnRearranger(inSpec);
+		r.append(new PredictiveSystemsClassifierCellFactory(settings.getDistributionColumnName(),
+				settings.getClassifierSettings(), inSpec));
+		return r;
 	}
 
 	@Override

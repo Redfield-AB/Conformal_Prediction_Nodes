@@ -131,9 +131,9 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 
 	private double getProbability(List<Double> probabilities, int index) {
 		if (index < 0) {
-			return -Double.MAX_VALUE;
+			return Double.NEGATIVE_INFINITY;
 		} else if (index > probabilities.size() - 1) {
-			return Double.MAX_VALUE;
+			return Double.POSITIVE_INFINITY;
 		} else {
 			return probabilities.get(index);
 		}

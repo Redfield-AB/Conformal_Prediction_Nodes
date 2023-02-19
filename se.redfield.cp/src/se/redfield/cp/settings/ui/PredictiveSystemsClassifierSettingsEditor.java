@@ -56,8 +56,8 @@ public class PredictiveSystemsClassifierSettingsEditor extends JPanel {
 				settings.getTable().getIdx(), DoubleValue.class);
 		targetColumn.getComponentPanel().setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		lowerPercentiles = new PercentilesEditor("Lower percentiles");
-		higherPercentiles = new PercentilesEditor("Higher percentiles");
+		lowerPercentiles = new PercentilesEditor("Lower percentiles (%)");
+		higherPercentiles = new PercentilesEditor("Higher percentiles (%)");
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -110,9 +110,13 @@ public class PredictiveSystemsClassifierSettingsEditor extends JPanel {
 		higherPercentiles.setPercentiles(this.settings.getHigherPercentiles());
 	}
 
-	public void saveSettingsTo(NodeSettingsWO setitngs) {
+	public void updateModel() {
 		this.settings.setLowerPercentiles(lowerPercentiles.getPercentiles());
 		this.settings.setHigherPercentiles(higherPercentiles.getPercentiles());
+	}
+
+	public void saveSettingsTo(NodeSettingsWO setitngs) {
+		updateModel();
 		this.settings.saveSettingsTo(setitngs);
 	}
 }

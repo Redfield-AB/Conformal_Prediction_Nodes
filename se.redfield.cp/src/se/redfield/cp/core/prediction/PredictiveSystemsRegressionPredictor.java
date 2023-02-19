@@ -18,7 +18,9 @@ package se.redfield.cp.core.prediction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.knime.core.data.DataCell;
@@ -151,7 +153,7 @@ public class PredictiveSystemsRegressionPredictor {
 	}
 
 	private String[] getRequiredColumnNames() {
-		List<String> columns = new ArrayList<>();
+		Set<String> columns = new HashSet<>();
 		columns.add(settings.getPredictionColumnName());
 		if (settings.getRegressionSettings().getNormalized()) {
 			columns.add(settings.getRegressionSettings().getSigmaColumn());

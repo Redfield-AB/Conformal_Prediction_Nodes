@@ -52,10 +52,6 @@ public class PredictiveSystemsRegressionNodeDialog extends DefaultNodeSettingsPa
 		addDialogComponent(new DialogComponentNumber(settings.getRegressionSettings().getBetaModel(), "Beta", 0.05,
 				createFlowVariableModel(settings.getRegressionSettings().getBetaModel())));
 
-		createNewGroup("User defined error rate");
-		addDialogComponent(new DialogComponentNumber(settings.getErrorRateModel(), "Error rate (significance level)",
-				0.05, createFlowVariableModel(settings.getErrorRateModel())));
-
 		createNewGroup("Define output");
 		addDialogComponent(
 				new DialogComponentBoolean(settings.getKeepColumns().getKeepAllColumnsModel(), "Keep All Columns"));

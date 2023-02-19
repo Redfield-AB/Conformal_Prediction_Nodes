@@ -88,10 +88,10 @@ public class Predictor {
 	}
 
 	private String[] getRequiredColumnNames(DataTableSpec inCalibrationTableSpec) {
-		List<String> columns = inCalibrationTableSpec.getColumnSpec(settings.getTargetSettings().getTargetColumn())
+		Set<String> columns = inCalibrationTableSpec.getColumnSpec(settings.getTargetSettings().getTargetColumn())
 				.getDomain().getValues().stream()
 				.map(c -> settings.getTargetSettings().getProbabilityColumnName(c.toString()))
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 
 		if (settings.getKeepColumns().getKeepIdColumn()) {
 			columns.add(settings.getKeepColumns().getIdColumn());

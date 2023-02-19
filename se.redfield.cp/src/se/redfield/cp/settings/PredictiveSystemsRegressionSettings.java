@@ -16,7 +16,7 @@
 package se.redfield.cp.settings;
 
 public interface PredictiveSystemsRegressionSettings {
-	public static final String DISTRIBUTION_COLUMN_DEFAULT_NAME = "Prediction Destribution";
+	public static final String DISTRIBUTION_COLUMN_DEFAULT_NAME = "Prediction Distribution";
 
 	/**
 	 * @return The prediction column name.
@@ -32,11 +32,6 @@ public interface PredictiveSystemsRegressionSettings {
 	 * @return The keep columns settings.
 	 */
 	public KeepColumnsSettings getKeepColumns();
-
-	/**
-	 * @return The error rate.
-	 */
-	public double getErrorRate();
 
 	/**
 	 * @return The Alpha column name.
