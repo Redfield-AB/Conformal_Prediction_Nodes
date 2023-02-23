@@ -125,6 +125,8 @@ public class CompactPredictiveSystemsRegressionNodeDialog extends NodeDialogPane
 	protected void loadSettingsFrom(NodeSettingsRO settings, DataTableSpec[] specs) throws NotConfigurableException {
 		try {
 			this.settings.loadSettingFrom(settings);
+			classifierPanel.loadSettingsFrom(
+					settings.getNodeSettings(CompactPredictiveSystemsRegressionNodeSettings.KEY_CLASSIFIER), specs);
 		} catch (InvalidSettingsException e) {
 			// ignore
 		}
@@ -132,7 +134,6 @@ public class CompactPredictiveSystemsRegressionNodeDialog extends NodeDialogPane
 		predictionColumn.loadSettingsFrom(settings, specs);
 		regressionPanel.loadSettingsFrom(settings, specs);
 		keepColumnPanel.loadSettingsFrom(settings, specs);
-		classifierPanel.loadSettingsFrom(settings, specs);
 	}
 
 	@Override

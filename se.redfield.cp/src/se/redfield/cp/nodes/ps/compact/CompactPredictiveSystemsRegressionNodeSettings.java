@@ -42,7 +42,10 @@ public class CompactPredictiveSystemsRegressionNodeSettings
 		implements CalibratorRegressionSettings, PredictiveSystemsRegressionSettings {
 	private static final String KEY_TARGET_COLUMN_NAME = "targetColumn";
 	private static final String KEY_PREDICTION_COLUMN_NAME = "predictionColumn";
-	private static final String KEY_CLASSIFIER = "classifier";
+	/**
+	 * The key to store classifier settings.
+	 */
+	public static final String KEY_CLASSIFIER = "classifier";
 
 	private final SettingsModelString targetColumn;
 	private final SettingsModelString predictionColumn;
