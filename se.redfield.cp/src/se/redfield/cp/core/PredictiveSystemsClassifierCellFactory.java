@@ -75,7 +75,7 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 		}
 
 		for (double p : settings.getHigherPercentiles()) {
-			columns.add(KnimeUtils.createDoubleColumn(String.format("%.1f Higher Percentile", p)));
+			columns.add(KnimeUtils.createDoubleColumn(String.format("%.1f Upper Percentile", p)));
 		}
 
 		return columns.toArray(new DataColumnSpec[] {});
