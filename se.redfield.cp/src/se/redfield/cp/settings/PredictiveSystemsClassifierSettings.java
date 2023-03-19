@@ -29,7 +29,7 @@ public class PredictiveSystemsClassifierSettings {
 	private static final String KEY_TARGET = "target";
 	private static final String KEY_TARGET_COLUMN = "targetColumn";
 	private static final String KEY_LOWER_PERCENTILES = "lowerPercentiles";
-	private static final String KEY_HIGHER_PERCENTILES = "higherPercentiles";
+	private static final String KEY_UPPER_PERCENTILES = "upperPercentiles";
 	private static final String KEY_HAS_TARGET = "hasTarget";
 	private static final String KEY_HAS_TARGET_COLUMN = "hasTargetColumn";
 
@@ -39,7 +39,7 @@ public class PredictiveSystemsClassifierSettings {
 	private final SettingsModelBoolean hasTargetColumn;
 
 	private double[] lowerPercentiles;
-	private double[] higherPercentiles;
+	private double[] upperPercentiles;
 
 	private final PortDef table;
 
@@ -50,7 +50,7 @@ public class PredictiveSystemsClassifierSettings {
 		hasTarget = new SettingsModelBoolean(KEY_HAS_TARGET, false);
 		hasTargetColumn = new SettingsModelBoolean(KEY_HAS_TARGET_COLUMN, false);
 		lowerPercentiles = new double[0];
-		higherPercentiles = new double[0];
+		upperPercentiles = new double[0];
 
 		hasTarget.addChangeListener(e -> target.setEnabled(hasTarget.getBooleanValue()));
 		hasTargetColumn.addChangeListener(e -> targetColumn.setEnabled(hasTargetColumn.getBooleanValue()));
@@ -103,12 +103,12 @@ public class PredictiveSystemsClassifierSettings {
 		this.lowerPercentiles = lowerPercentiles;
 	}
 
-	public double[] getHigherPercentiles() {
-		return higherPercentiles;
+	public double[] getUpperPercentiles() {
+		return upperPercentiles;
 	}
 
-	public void setHigherPercentiles(double[] higherPercentiles) {
-		this.higherPercentiles = higherPercentiles;
+	public void setUpperPercentiles(double[] upperPercentiles) {
+		this.upperPercentiles = upperPercentiles;
 	}
 
 	public void loadSettingsFrom(NodeSettingsRO settings) throws InvalidSettingsException {
@@ -117,7 +117,7 @@ public class PredictiveSystemsClassifierSettings {
 		hasTarget.loadSettingsFrom(settings);
 		hasTargetColumn.loadSettingsFrom(settings);
 		lowerPercentiles = settings.getDoubleArray(KEY_LOWER_PERCENTILES);
-		higherPercentiles = settings.getDoubleArray(KEY_HIGHER_PERCENTILES);
+		upperPercentiles = settings.getDoubleArray(KEY_UPPER_PERCENTILES);
 	}
 
 	public void saveSettingsTo(NodeSettingsWO settings) {
@@ -126,11 +126,11 @@ public class PredictiveSystemsClassifierSettings {
 		hasTarget.saveSettingsTo(settings);
 		hasTargetColumn.saveSettingsTo(settings);
 		settings.addDoubleArray(KEY_LOWER_PERCENTILES, lowerPercentiles);
-		settings.addDoubleArray(KEY_HIGHER_PERCENTILES, higherPercentiles);
+		settings.addDoubleArray(KEY_UPPER_PERCENTILES, upperPercentiles);
 	}
 
 	public void validate() throws InvalidSettingsException {
-		if (!hasTarget() && !hasTargetColumn() && lowerPercentiles.length == 0 && higherPercentiles.length == 0) {
+		if (!hasTarget() && !hasTargetColumn() && lowerPercentiles.length == 0 && upperPercentiles.length == 0) {
 			throw new InvalidSettingsException("No targets or percentiles selected");
 		}
 

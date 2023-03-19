@@ -74,7 +74,7 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 			columns.add(KnimeUtils.createDoubleColumn(String.format("%.1f Lower Percentile", p)));
 		}
 
-		for (double p : settings.getHigherPercentiles()) {
+		for (double p : settings.getUpperPercentiles()) {
 			columns.add(KnimeUtils.createDoubleColumn(String.format("%.1f Upper Percentile", p)));
 		}
 
@@ -103,8 +103,8 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 			result.add(new DoubleCell(getLowerPercentileValue(d, probabilityDistribution)));
 		}
 
-		for (double d : settings.getHigherPercentiles()) {
-			result.add(new DoubleCell(getHigherPercentileValue(d, probabilityDistribution)));
+		for (double d : settings.getUpperPercentiles()) {
+			result.add(new DoubleCell(getUpperPercentileValue(d, probabilityDistribution)));
 		}
 
 		return result.toArray(new DataCell[] {});
@@ -123,7 +123,7 @@ public class PredictiveSystemsClassifierCellFactory extends AbstractCellFactory 
 		return getProbability(probabilities, index);
 	}
 
-	private double getHigherPercentileValue(double percentile, List<Double> probabilities) {
+	private double getUpperPercentileValue(double percentile, List<Double> probabilities) {
 		int index = (int) Math.ceil(percentile / 100 * (probabilities.size() + 1)) - 1;
 
 		return getProbability(probabilities, index);

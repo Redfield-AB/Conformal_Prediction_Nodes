@@ -41,7 +41,7 @@ public class PredictiveSystemsClassifierSettingsEditor extends JPanel {
 	private final DialogComponentColumnNameSelection targetColumn;
 
 	private final PercentilesEditor lowerPercentiles;
-	private final PercentilesEditor higherPercentiles;
+	private final PercentilesEditor upperPercentiles;
 
 	@SuppressWarnings("unchecked")
 	public PredictiveSystemsClassifierSettingsEditor(PredictiveSystemsClassifierSettings settings) {
@@ -57,7 +57,7 @@ public class PredictiveSystemsClassifierSettingsEditor extends JPanel {
 		targetColumn.getComponentPanel().setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		lowerPercentiles = new PercentilesEditor("Lower percentiles (%)");
-		higherPercentiles = new PercentilesEditor("Higher percentiles (%)");
+		upperPercentiles = new PercentilesEditor("Upper percentiles (%)");
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -90,7 +90,7 @@ public class PredictiveSystemsClassifierSettingsEditor extends JPanel {
 		add(lowerPercentiles, c);
 
 		c.gridy += 1;
-		add(higherPercentiles, c);
+		add(upperPercentiles, c);
 
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
@@ -107,12 +107,12 @@ public class PredictiveSystemsClassifierSettingsEditor extends JPanel {
 		}
 
 		lowerPercentiles.setPercentiles(this.settings.getLowerPercentiles());
-		higherPercentiles.setPercentiles(this.settings.getHigherPercentiles());
+		upperPercentiles.setPercentiles(this.settings.getUpperPercentiles());
 	}
 
 	public void updateModel() {
 		this.settings.setLowerPercentiles(lowerPercentiles.getPercentiles());
-		this.settings.setHigherPercentiles(higherPercentiles.getPercentiles());
+		this.settings.setUpperPercentiles(upperPercentiles.getPercentiles());
 	}
 
 	public void saveSettingsTo(NodeSettingsWO setitngs) {
