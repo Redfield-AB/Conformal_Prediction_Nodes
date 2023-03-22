@@ -1,31 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/conformal_classification.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./classifier.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Predictive Systems Classifier</name>
     
     <shortDescription>
-        Produces predictions based on the calibration table and the significance level provided by the user.
+        The node returns values from CDF that correspond to provided percentile values.
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	Produces predictions based on the calibration table and the significance level provided by the user.
-			The significance level defines the tolerable percentage of the prediction errors.
-			The node expects p-value columns for all the classes in target domain.
+        	The node returns values from CDF that correspond to provided percentile values,
+        	the probabilities of value being within quantiles,
+        	less the fixed values and less than test value depending the provided settings.
+        	This node is supposed to be used WITH Conformal Calibration and Conformal Prediction loops.
         </intro>
         
-        
-        <option name="Error rate (significance level)">Defines the tolerable percentage of the prediction errors.</option>
-        <option name="Output Classes as String">
-        	If checked classes column will be represented as String instead of Collection column.
-        </option>
-        <option name="String separator">
-        	Character used to separate different classes when string representation is selected.
-        </option>
+        <tab name="Settings">
+        	<option name="Probability distribution column">
+        		The column that contains the CDF values for the samples to be predicted.
+        	</option>
+        	<option name="Target value">
+        		A fixed value to compare prediction with.
+				As the output there will be a calculated probability that the predicted values are lower than this fixed value.
+        	</option>
+        	<option name="Target column">
+        		Column that contains values to compare with (test set).
+        		As the output there will be a calculated probability that the predicted values are
+        		lower than corresponding values from the selected column.
+        	</option>
+        	<option name="Lower percentiles (%)">
+        		The desired percentile cutoff that controls the lower border of the interval from which the predictions could be sampled.
+        		The interval is used for estimating the range of possible errors.
+        		As the output there will be a calculated probability that the predicted values are
+        		higher than the border value corresponding to the percentile.
+        		Multiple lower percentiles are allowed, setting the lower interval is optional.
+        	</option>
+        	<option name="Upper percentiles (%)">
+        		The desired percentile cutoff that controls the upper border of the interval from which the predictions could be sampled.
+        		The interval is used for estimating the range of possible errors.
+        		As the output there will be a calculated probability that the predicted values are
+        		lower than the border value corresponding to the percentile.
+        		Multiple higher intervals are allowed, setting the upper interval is optional.
+        	</option>        	        	        	        	
+        </tab>
     </fullDescription>
     
     <ports>
         <inPort index="0" name="Input">Table with calibrated predictions</inPort>
         
-        <outPort index="0" name="Output">Table with ranked predictions and classes</outPort>
+        <outPort index="0" name="Output">Table with ranked predictions</outPort>
     </ports>    
 </knimeNode>

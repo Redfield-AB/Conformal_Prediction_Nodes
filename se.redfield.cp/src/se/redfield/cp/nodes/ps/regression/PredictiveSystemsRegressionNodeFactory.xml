@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/conformal_regression.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./predictor.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Predictive Systems Predictor (Regression)</name>
     
     <shortDescription>
-
+		The node returns cumulative distribution function (CDF) for each sample as List column.
     </shortDescription>
     
     <fullDescription>
         <intro>
-
+			The node returns cumulative distribution function (CDF) for each sample as List column.
+			CDF for the sample is calculated with predictions and conformal regression calibration table.
+			It is optionally available to to predictions normalization with difficulty measure - Sigma (needs to be calculated separately).
+			The purpose of this node is similar to Conformal Predictor or Conformal Predictor and Classifier (Regression) nodes.
+			This node is supposed to be used WITH Conformal Calibration and Conformal Prediction loops.
         </intro>
             
         <option name="Prediction column">

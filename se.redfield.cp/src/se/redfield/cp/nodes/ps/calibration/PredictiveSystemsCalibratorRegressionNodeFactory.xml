@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/calibrator.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./calibrator.png" type="Manipulator" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Predictive Systems Calibrator (Regression)</name>
     
     <shortDescription>
@@ -9,9 +9,10 @@
     <fullDescription>
         <intro>
 			Creates a calibration table with ranking for further calibration of the test data sets.
-			Ranking is sorting by absolute error (Alpha) provided by predictor nodes in descending order.
+			Ranking is a sorting by absolute error (Alpha) provided by predictor nodes in descending order.
 			In order to use normalization Prediction Variance or estimate of difficulty - Sigma (needs to be calculated separately)
-			should be provided.
+			should be provided. Alpha values are used for further cumulative distribution function (CDF) calculation.
+			This node is supposed to be used WITH Conformal Calibration and Conformal Prediction loops.
         </intro>
         
         

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<knimeNode icon="./icons/conformal_regression.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
+<knimeNode icon="./classifier.png" type="Predictor" xmlns="http://knime.org/node/v2.8" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://knime.org/node/v2.10 http://knime.org/node/v2.10.xsd">
     <name>Predictive Systems Regression</name>
     
     <shortDescription>
-    	
+    	The node returns values from CDF that correspond to provided percentile values.
     </shortDescription>
     
     <fullDescription>
         <intro>
-        	
+        	The node returns values from CDF that correspond to provided percentile values,
+        	the probabilities of value being within quantiles,
+        	less the fixed values and less than test value depending the provided settings.
         </intro>
             
         <option name="Target column (calibration table)">
@@ -30,16 +32,38 @@
         <option name="Beta">
         	A sensitivity parameter determining the relative importance of the normalization term.
         </option>
-        <option name="Error rate (significance level)">
-        	Defines the tolerable percentage of the prediction errors.
-        </option>
         <option name="Keep All Columns">
         	If checked all columns from input table will be also included into output table along with calibration columns.
         </option>
         <option name="Keep ID column">
         	If checked selected ID column from input table will be included into output table.
         </option>
-        
+        <option name="Probability distribution column">
+        	The column that contains the CDF values for the samples to be predicted.
+        </option>
+        <option name="Target value">
+        	A fixed value to compare prediction with.
+			As the output there will be a calculated probability that the predicted values are lower than this fixed value.
+        </option>
+        <option name="Target column">
+        	Column that contains values to compare with (test set).
+        	As the output there will be a calculated probability that the predicted values are
+        	lower than corresponding values from the selected column.
+        </option>
+        <option name="Lower percentiles (%)">
+        	The desired percentile cutoff that controls the lower border of the interval from which the predictions could be sampled.
+        	The interval is used for estimating the range of possible errors.
+        	As the output there will be a calculated probability that the predicted values are
+        	higher than the border value corresponding to the percentile.
+        	Multiple lower percentiles are allowed, setting the lower interval is optional.
+        </option>
+        <option name="Upper percentiles (%)">
+        	The desired percentile cutoff that controls the upper border of the interval from which the predictions could be sampled.
+        	The interval is used for estimating the range of possible errors.
+        	As the output there will be a calculated probability that the predicted values are
+        	lower than the border value corresponding to the percentile.
+        	Multiple higher intervals are allowed, setting the upper interval is optional.
+        </option>          
     </fullDescription>
     
     <ports>
