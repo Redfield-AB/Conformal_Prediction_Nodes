@@ -54,10 +54,8 @@ public class ConformalPredictorScorerRegressionSettings {
 	 */
 	public ConformalPredictorScorerRegressionSettings() {
 		targetColumn = new SettingsModelString(KEY_TARGET_COLUMN, "");
-		upperboundColumn = new SettingsModelString(KEY_UPPERBOUND_COLUMN,
-				PredictorRegressionSettings.PREDICTION_UPPER_COLUMN_DEFAULT_NAME);
-		lowerboundColumn = new SettingsModelString(KEY_LOWERBOUND_COLUMN,
-				PredictorRegressionSettings.PREDICTION_LOWER_COLUMN_DEFAULT_NAME);
+		upperboundColumn = new SettingsModelString(KEY_UPPERBOUND_COLUMN, "");
+		lowerboundColumn = new SettingsModelString(KEY_LOWERBOUND_COLUMN, "");
 		additionalInfo = new SettingsModelBoolean(KEY_ADDITIONAL_INFO, true);
 		hasUpperBound = new SettingsModelBoolean(KEY_HAS_UPPER_BOUND, true);
 		hasLowerBound = new SettingsModelBoolean(KEY_HAS_LOWER_BOUND, true);

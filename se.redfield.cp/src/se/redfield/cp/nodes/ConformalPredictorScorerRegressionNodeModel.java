@@ -18,7 +18,9 @@ package se.redfield.cp.nodes;
 import java.io.File;
 import java.io.IOException;
 
+import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataTableSpec;
+import org.knime.core.data.DoubleValue;
 import org.knime.core.node.BufferedDataTable;
 import org.knime.core.node.CanceledExecutionException;
 import org.knime.core.node.ExecutionContext;
@@ -30,6 +32,7 @@ import org.knime.core.node.NodeSettingsWO;
 
 import se.redfield.cp.core.scoring.ScorerRegression;
 import se.redfield.cp.settings.ConformalPredictorScorerRegressionSettings;
+import se.redfield.cp.settings.PredictorRegressionSettings;
 import se.redfield.cp.utils.PortDef;
 
 /**
@@ -52,8 +55,30 @@ public class ConformalPredictorScorerRegressionNodeModel extends NodeModel {
 
 	@Override
 	protected DataTableSpec[] configure(DataTableSpec[] inSpecs) throws InvalidSettingsException {
+		if (settings.getLowerBoundColumnName().isEmpty() && settings.getUpperBoundColumnName().isEmpty()) {
+			tryToAutoconfigure(inSpecs[0]);
+		}
+
 		settings.validataSettings(inSpecs);
 		return new DataTableSpec[] { scorer.createOutputSpec() };
+	}
+
+	private void tryToAutoconfigure(DataTableSpec inSpec) {
+		for (DataColumnSpec c : inSpec) {
+			if (c.getType().isCompatible(DoubleValue.class)) {
+				String colName = c.getName();
+
+				if (colName.equals(PredictorRegressionSettings.PREDICTION_LOWER_COLUMN_DEFAULT_NAME)
+						|| colName.contains("Lower Percentile")) {
+					settings.getLowerboundColumnModel().setStringValue(colName);
+				} else if (colName.equals(PredictorRegressionSettings.PREDICTION_UPPER_COLUMN_DEFAULT_NAME)
+						|| colName.contains("Upper Percentile")) {
+					settings.getUpperboundColumnModel().setStringValue(colName);
+				} else if (settings.getTargetColumn().isEmpty()) {
+					settings.getTargetColumnModel().setStringValue(colName);
+				}
+			}
+		}
 	}
 
 	@Override
