@@ -43,7 +43,7 @@ public class ConformalPredictorRegressionNodeDialog extends DefaultNodeSettingsP
 		addDialogComponent(new DialogComponentColumnNameSelection(settings.getPredictionColumnModel(),
 				"Prediction column:", PORT_PREDICTION_TABLE.getIdx(), DoubleValue.class));
 
-		createNewGroup("Conformal Regression");
+		createNewGroup("Normalization");
 		addDialogComponent(
 				new DialogComponentBoolean(settings.getRegressionSettings().getNormalizedModel(), "Use Normalization"));
 

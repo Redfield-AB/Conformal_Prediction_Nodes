@@ -82,7 +82,7 @@ public class RegressionSettingsEditor extends JPanel {
 		addRow(1, "Difficulty column:", sigmaColumn.getComponentPanel());
 		addRow(2, "Beta", beta.getComponentPanel());
 
-		setBorder(BorderFactory.createTitledBorder("Conformal Regression"));
+		setBorder(BorderFactory.createTitledBorder("Normalization"));
 	}
 
 	private void addRow(int row, String label, Component comp) {
