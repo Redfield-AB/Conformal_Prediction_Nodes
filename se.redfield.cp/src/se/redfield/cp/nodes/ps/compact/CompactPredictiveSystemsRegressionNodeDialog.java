@@ -70,7 +70,7 @@ public class CompactPredictiveSystemsRegressionNodeDialog extends NodeDialogPane
 		regressionPanel = new RegressionSettingsEditor(settings.getRegressionSettings(), this::createFlowVariableModel);
 		keepColumnPanel = new KeepColumnsEditor(settings.getKeepColumns());
 		classifierPanel = new PredictiveSystemsClassifierSettingsEditor(settings.getClassifierSettings());
-		classifierPanel.setBorder(BorderFactory.createTitledBorder("Classification settings"));
+		classifierPanel.setBorder(BorderFactory.createTitledBorder("Conformal predictive systems settings"));
 
 		addTab("Settings", createSettingsTab());
 	}
