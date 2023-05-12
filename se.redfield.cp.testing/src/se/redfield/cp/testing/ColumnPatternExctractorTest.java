@@ -17,15 +17,16 @@ package se.redfield.cp.testing;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
-import org.junit.jupiter.api.Test;
+import org.hamcrest.MatcherAssert;
+import org.junit.Test;
 import org.knime.core.data.DataColumnSpec;
 import org.knime.core.data.DataColumnSpecCreator;
 import org.knime.core.data.DataTableSpec;
 import org.knime.core.data.def.StringCell;
+
 import se.redfield.cp.settings.ClassifierSettings;
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
@@ -43,9 +44,9 @@ class ColumnPatternExctractorTest {
 		ColumnPatternExtractor e = new ColumnPatternExtractor(ClassifierSettings.P_VALUE_COLUMN_REGEX);
 
 		Map<String, Integer> match = e.match(spec);
-		assertThat(match.size(), is(2));
-		assertThat(match.get("1"), equalTo(0));
-		assertThat(match.get("4"), equalTo(3));
+		MatcherAssert.assertThat(match.size(), is(2));
+		MatcherAssert.assertThat(match.get("1"), equalTo(0));
+		MatcherAssert.assertThat(match.get("4"), equalTo(3));
 	}
 
 }
