@@ -1,9 +1,9 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Testing
-Bundle-SymbolicName: se.redfield.cp.testing;singleton:=true
-Bundle-Version: 1.0.0.qualifier
-Automatic-Module-Name: se.redfield.cp.testing
+Bundle-SymbolicName: se.redfield.cp.tests;singleton:=true
+Bundle-Version: 2.1.0.qualifier
+Automatic-Module-Name: se.redfield.cp.tests
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.knime.core;bundle-version="[5.0.0,6.0.0)",
  org.junit;bundle-version="[4.12.0,5.0.0)",

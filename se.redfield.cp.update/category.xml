@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature id="se.redfield.cp.feature" version="0.0.0">
+       <category name="se-redfield-conformal-prediction-nodes" />
+   </feature>
+
+   <category-def name="se-redfield-conformal-prediction-nodes" label="Redfield Conformal Prediction Nodes">
+       <description>Redfield Conformal Prediction Nodes</description>
+   </category-def>
+</site>

@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Conformal Prediction extension for KNIME Workbench
 Bundle-SymbolicName: se.redfield.cp; singleton:=true
 Bundle-Version: 2.1.0.qualifier
-Bundle-ClassPath: conformalpredictioncalibrator.jar
+Bundle-ClassPath: .
 Bundle-Activator: se.redfield.cp.ConformalPredictionPlugin
 Bundle-Vendor: Redfield AB
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.13.0,4.0.0)",
