@@ -24,7 +24,6 @@
                 <version>${tycho.version}</version>
                 <configuration>
                     <useUIHarness>true</useUIHarness>
-                    <argLine>-XstartOnFirstThread</argLine>
                 </configuration>
             </plugin>
             <plugin>
