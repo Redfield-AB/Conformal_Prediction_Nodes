@@ -30,14 +30,14 @@ import org.knime.core.data.def.StringCell;
 import se.redfield.cp.settings.ClassifierSettings;
 import se.redfield.cp.utils.ColumnPatternExtractor;
 
-class ColumnPatternExctractorTest {
+public class ColumnPatternExctractorTest {
 
 	@Test
-	void test() {
-		DataColumnSpec c1 = new DataColumnSpecCreator("P-value (1)", StringCell.TYPE).createSpec();
-		DataColumnSpec c2 = new DataColumnSpecCreator("P-value(2)", StringCell.TYPE).createSpec();
-		DataColumnSpec c3 = new DataColumnSpecCreator("P-value ()", StringCell.TYPE).createSpec();
-		DataColumnSpec c4 = new DataColumnSpecCreator("P-value (4)", StringCell.TYPE).createSpec();
+	public void test() {
+		DataColumnSpec c1 = new DataColumnSpecCreator("p-value (1)", StringCell.TYPE).createSpec();
+		DataColumnSpec c2 = new DataColumnSpecCreator("p-value(2)", StringCell.TYPE).createSpec();
+		DataColumnSpec c3 = new DataColumnSpecCreator("p-value ()", StringCell.TYPE).createSpec();
+		DataColumnSpec c4 = new DataColumnSpecCreator("p-value (4)", StringCell.TYPE).createSpec();
 		DataColumnSpec c5 = new DataColumnSpecCreator("Some string", StringCell.TYPE).createSpec();
 		DataTableSpec spec = new DataTableSpec(c1, c2, c3, c4, c5);
 
